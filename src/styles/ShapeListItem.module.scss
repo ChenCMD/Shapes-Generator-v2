@@ -1,5 +1,9 @@
 .item {
     outline: 1px solid var(--border-color);
+    &:first-child,
+    &:last-child {
+        border-radius: 0;
+    }
 }
 
 .text {
