@@ -1,18 +1,19 @@
-import { DownloadIcon, GlobeIcon, OcticonProps, UploadIcon } from '@primer/octicons-react';
+import { CheckIcon, DownloadIcon, GlobeIcon, IconProps, UploadIcon } from '@primer/octicons-react';
 import React from 'react';
 
 const icons = {
     globe: GlobeIcon,
     upload: UploadIcon,
-    download: DownloadIcon
+    download: DownloadIcon,
+    check: CheckIcon
 } as const;
 
 export type Icons = keyof typeof icons;
 
-interface IconProps extends OcticonProps {
+interface OIconProps extends IconProps {
     i: Icons
 }
 
-const Icon = ({i, ...props }: IconProps): JSX.Element => React.createElement(icons[i], props);
+const Icon = ({i, ...props }: OIconProps): JSX.Element => React.createElement(icons[i], props);
 
 export default React.memo(Icon);
