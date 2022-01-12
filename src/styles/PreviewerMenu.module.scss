@@ -3,51 +3,48 @@
     background-color: var(--window-bg-color);
     border: 1px solid var(--border-color);
     border-radius: 0.25rem;
-    min-height: calc(50vh - 1px * 2 - 10px - 8px * 2);
-    max-height: calc(50vh - 1px * 2 - 10px - 8px * 2);
-    overflow: auto;
-    scrollbar-width: thin;
-    &::-webkit-scrollbar {
-        width: 4px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: var(--scrollbar-color);
-        border-radius: 0.25rem;
-    }
+    height: 54px;
 }
 
-.line {
-    color: var(--border-color);
-    background-color: var(--border-color);
-    height: 1px;
-    margin: 5px 0 5px 0;
-}
+.contents {
+    display: flex;
+    align-items: center;
+    padding: 8px 2px;
 
-.selection {
-    background-color: var(--window-gb-color);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    &:hover {
-        background-color: var(--hover-highlight);
-        border-color: var(--border-color);
+    & > * {
         color: var(--text-color);
-    }
-    &:active,
-    &.active,
-    &:focus {
-        background-color: var(--window-bg-color);
-        border-color: var(--border-color);
-        color: var(--text-color);
-        box-shadow: none;
+        margin: 0 8px !important;
+        max-width: 100%;
+        width: 100%;
+        position: relative;
     }
 }
 
-.text {
-    color: var(--text-color);
-    font-size: 1.15rem;
-    padding-bottom: 5px;
-}
+.button-group {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    bottom: 100%;
+    right: 10px;
+    left: 10px;
+    margin-bottom: 8px;
 
-.button {
-    width: 77px !important;
+    & > * {
+        z-index: 1;
+        &:not(:first-child) {
+            border-top-right-radius: 0;
+            border-top-left-radius: 0;
+        }
+        &:not(:last-child) {
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        &:disabled,
+        &:hover {
+            color: var(--text-color);
+            background-color: var(--select-highlight) !important;
+            border-color: var(--border-color) !important;
+            opacity: 1;
+        }
+    }
 }

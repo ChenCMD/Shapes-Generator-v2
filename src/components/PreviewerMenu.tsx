@@ -1,12 +1,9 @@
-import React, { useCallback } from 'react';
-import Col from 'react-bootstrap/esm/Col';
-import Container from 'react-bootstrap/esm/Container';
-import Row from 'react-bootstrap/esm/Row';
-import ToggleButton from 'react-bootstrap/esm/ToggleButton';
-import ToggleButtonGroup from 'react-bootstrap/esm/ToggleButtonGroup';
+import React from 'react';
+import Button from 'react-bootstrap/esm/Button';
 import styles from '../styles/PreviewerMenu.module.scss';
 import { GridMode } from '../types/GridMode';
 import { StateDispatcher } from '../types/StateDispatcher';
+import BtnMenu from './BtnMenu';
 import OptimizeParticleSetting from './OptimizeParticleSetting';
 import { useLocale } from './ShapesGenerator';
 
@@ -19,31 +16,19 @@ interface PreviewerMenuProps {
 
 const PreviewerMenu = ({ gridMode, setGridMode, duplicatedPointRange, setDuplicatedPointRange }: PreviewerMenuProps): JSX.Element => {
     const locale = useLocale();
-    const onGridModeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setGridMode(parseInt(e.target.value)), [setGridMode]);
 
     return (
         <div className={styles['window']}>
-            <Container fluid>
-                <Row>
-                    <Col>
-                        <div className={styles['text']}>{locale('menu.grid')}</div>
-                        <ToggleButtonGroup type="radio" name="options" defaultValue={gridMode} value={gridMode}>
-                            <ToggleButton className={styles['button']} value={0} onChange={onGridModeChange}>
-                                {locale('menu.grid.off')}
-                            </ToggleButton>
-                            <ToggleButton className={styles['button']} value={1} onChange={onGridModeChange}>
-                                {locale('menu.grid.block')}
-                            </ToggleButton>
-                            <ToggleButton className={styles['button']} value={2} onChange={onGridModeChange}>
-                                {locale('menu.grid.double')}
-                            </ToggleButton>
-                        </ToggleButtonGroup>
-                    </Col>
-                    <Col>
-                        <OptimizeParticleSetting {...{ duplicatedPointRange, setDuplicatedPointRange }} />
-                    </Col>
-                </Row>
-            </Container>
+            <div className={styles['contents']}>
+                <BtnMenu label={locale('menu.grid')}>
+                    <div className={styles['button-group']}>
+                        <Button disabled={gridMode === GridMode.off} onClick={() => setGridMode(GridMode.off)}>{locale('menu.grid.off')}</Button>
+                        <Button disabled={gridMode === GridMode.block} onClick={() => setGridMode(GridMode.block)}>{locale('menu.grid.block')}</Button>
+                        <Button disabled={gridMode === GridMode.double} onClick={() => setGridMode(GridMode.double)}>{locale('menu.grid.double')}</Button>
+                    </div>
+                </BtnMenu>
+                <OptimizeParticleSetting {...{ duplicatedPointRange, setDuplicatedPointRange }} />
+            </div>
         </div>
     );
 };

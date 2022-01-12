@@ -1,8 +1,7 @@
-import React from 'react';
-import RangeSlider from './RangeSlider';
+import React, { useCallback } from 'react';
 import { useLocale } from './ShapesGenerator';
-import styles from '../styles/OptimizedParticleSetting.module.scss';
 import { StateDispatcher } from '../types/StateDispatcher';
+import BtnToggle from './BtnToggle';
 
 interface OptimizedParticleSettingProps {
     duplicatedPointRange: number,
@@ -11,17 +10,9 @@ interface OptimizedParticleSettingProps {
 
 const OptimizedParticleSetting = ({ duplicatedPointRange, setDuplicatedPointRange }: OptimizedParticleSettingProps): JSX.Element => {
     const locale = useLocale();
+    const onClick = useCallback(() => setDuplicatedPointRange(prev => prev === 0.1 ? 0 : 0.1), [setDuplicatedPointRange]);
     return (
-        <>
-            <div className={styles['title']}>{locale('delete-duplicate-points')}</div>
-            <RangeSlider
-                min={0} step={0.05} max={0.5}
-                value={duplicatedPointRange}
-                setValue={setDuplicatedPointRange}
-                unit="m"
-                specialZeroVal={locale('off')}
-            />
-        </>
+        <BtnToggle value={duplicatedPointRange === 0.1} onClick={onClick} label={locale('delete-duplicate-points')} />
     );
 };
 
