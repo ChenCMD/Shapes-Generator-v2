@@ -14,6 +14,7 @@ import { ShapesDispatch } from '../reducers/shapesReducer';
 import { StateDispatcher } from '../types/StateDispatcher';
 import SystemMenu from './SystemMenu';
 import PreviewerMenu from './PreviewerMenu';
+import styles from '../styles/Main.module.scss';
 
 interface MainProps {
     shapes: Shape[]
@@ -42,7 +43,7 @@ const Main = ({ shapes, latestSelect, shapesDispatch, language, setLanguage, set
     );
 
     return <>
-        <Container fluid>
+        <Container fluid className={styles['main']}>
             <Row noGutters>
                 <Col xl={6} lg={6} md={12} sm={12} xs={12}>
                     <Container fluid>

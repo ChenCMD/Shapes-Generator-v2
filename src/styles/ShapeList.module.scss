@@ -1,12 +1,13 @@
 .window {
+    $margin: 8px;
+    margin: $margin;
     background-color: var(--window-bg-color);
     border-style: solid;
     border-width: 1px;
     border-color: var(--border-color);
-    min-height: calc(50vh - 2px * 1 - 8px * 2);
-    max-height: calc(50vh - 2px * 1 - 8px * 2);
+    min-height: calc(50vh - #{$margin} * 2 - 4px * 1);
+    max-height: calc(50vh - #{$margin} * 2 - 4px * 1);
     border-radius: 0.25rem;
-    margin: 8px;
 }
 
 .list {
