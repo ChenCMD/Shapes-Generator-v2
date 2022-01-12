@@ -5,8 +5,8 @@
     background-color: var(--window-bg-color);
     border: var(--border-color) solid 1px;
     border-radius: 0.25rem;
-    min-height: calc(100vh - #{$window-margin} * 2 /* MenuHeight:*/- 70px * 2 - #{$base-margin} * 2);
-    max-height: calc(100vh - #{$window-margin} * 2 /* MenuHeight:*/- 70px * 2 - #{$base-margin} * 2);
+    min-height: calc(100vh - #{$window-margin} * 2 /* MenuHeight:*/- 72px * 2 - #{$base-margin} * 2);
+    max-height: calc(100vh - #{$window-margin} * 2 /* MenuHeight:*/- 72px * 2 - #{$base-margin} * 2);
     @media screen and (max-width: 991px) {
         // xs
         min-height: calc(100vw - 34px);
