@@ -1513,6 +1513,11 @@
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.9.2.tgz"
   integrity sha512-VZMYa7+fXHdwIq1TDhSXoVmSPEGM/aa+6Aiq3nVVJ9bXr24zScr+NlKFKC3iPljA7ho/GAZr+d2jOf5GIRC30Q==
 
+"@primer/octicons-react@^16.2.0":
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/@primer/octicons-react/-/octicons-react-16.2.0.tgz#702f59169dd763dc03e613b0e881aa715da37a5c"
+  integrity sha512-943t5kkVRt+/hxVnKS27xweUp4lXFxwJaTrsit1C1xBB4kqdjzmYGpU84zwKsNyyV2Ch7may3umKjbI/mFBPPQ==
+
 "@restart/context@^2.1.4":
   version "2.1.4"
   resolved "https://registry.npmjs.org/@restart/context/-/context-2.1.4.tgz"

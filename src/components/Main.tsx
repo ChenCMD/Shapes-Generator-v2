@@ -6,14 +6,14 @@ import ExportModal from './ExportModal';
 import ImportModal from './ImportModal';
 import Previewer from './Previewer';
 import UserInterface from './UserInterface';
-import styles from '../styles/Main.module.scss';
 import { GridMode } from '../types/GridMode';
 import { deleteDuplicatedPoints, IndexedPoint } from '../types/Point';
 import { Shape } from '../ShapeNodes';
 import { SpecificatedLanguage } from '../types/Language';
 import { ShapesDispatch } from '../reducers/shapesReducer';
 import { StateDispatcher } from '../types/StateDispatcher';
-import Menu from './Menu';
+import SystemMenu from './SystemMenu';
+import PreviewerMenu from './PreviewerMenu';
 
 interface MainProps {
     shapes: Shape[]
@@ -42,30 +42,26 @@ const Main = ({ shapes, latestSelect, shapesDispatch, language, setLanguage, set
     );
 
     return <>
-        <Container fluid className={styles['container']}>
+        <Container fluid>
             <Row noGutters>
                 <Col xl={6} lg={6} md={12} sm={12} xs={12}>
-                    <Container fluid className={styles['container']}>
-                        <Row noGutters>
-                            <Col xl={6} lg={6} md={12} sm={12} xs={12}>
-                                <Menu
-                                    openImportModal={setImportModalOpened}
-                                    openExportModal={setExportModalOpened}
-                                    {...{
-                                        gridMode, setGridMode, duplicatedPointRange,
-                                        setDuplicatedPointRange, language, setLanguage
-                                    }}
-                                />
-                            </Col>
-                        </ Row>
-                        <Row noGutters>
-                            <Col xl={6} lg={6} md={12} sm={12} xs={12}>
-                                <Previewer
-                                    shapes={processedPoints}
-                                    {...{ gridMode }}
-                                />
-                            </Col>
-                        </ Row>
+                    <Container fluid>
+                        <Row noGutters><Col>
+                            <SystemMenu
+                                openImportModal={setImportModalOpened}
+                                openExportModal={setExportModalOpened}
+                                {...{ language, setLanguage }}
+                            />
+                        </Col></ Row>
+                        <Row noGutters><Col>
+                            <Previewer
+                                shapes={processedPoints}
+                                {...{ gridMode }}
+                            />
+                        </Col></ Row>
+                        <Row noGutters><Col>
+                            <PreviewerMenu {...{ gridMode, setGridMode, duplicatedPointRange, setDuplicatedPointRange }} />
+                        </Col></ Row>
                     </Container>
                 </Col>
                 <Col xl={6} lg={6} md={12} sm={12} xs={12}>
