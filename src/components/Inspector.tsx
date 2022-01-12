@@ -22,7 +22,7 @@ const Inspector = ({ shapes, shapesDispatch }: InspectorProps): JSX.Element => {
         .filter(v => v.s.isSelected)
         .flatMap(({ s: shape, i: index }) =>
             shape.getParameterMap().map(([arg, param]) => {
-                const colWrap = (elem: JSX.Element) => (<Col key={`${shape.uuid}-${arg}`} className={styles['xxl']} xl={6} lg={12} md={4} sm={6} xs={12}>{elem}</Col>);
+                const colWrap = (elem: JSX.Element) => (<Col key={`${shape.uuid}-${arg}`} xs={12}>{elem}</Col>);
                 const props = { type: shape.type, arg, index, shapesDispatch };
                 switch (param.type) {
                     case 'pos':

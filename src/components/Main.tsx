@@ -13,6 +13,7 @@ import { Shape } from '../ShapeNodes';
 import { SpecificatedLanguage } from '../types/Language';
 import { ShapesDispatch } from '../reducers/shapesReducer';
 import { StateDispatcher } from '../types/StateDispatcher';
+import Menu from './Menu';
 
 interface MainProps {
     shapes: Shape[]
@@ -44,19 +45,32 @@ const Main = ({ shapes, latestSelect, shapesDispatch, language, setLanguage, set
         <Container fluid className={styles['container']}>
             <Row noGutters>
                 <Col xl={6} lg={6} md={12} sm={12} xs={12}>
-                    <Previewer
-                        shapes={processedPoints}
-                        {...{ gridMode }}
-                    />
+                    <Container fluid className={styles['container']}>
+                        <Row noGutters>
+                            <Col xl={6} lg={6} md={12} sm={12} xs={12}>
+                                <Menu
+                                    openImportModal={setImportModalOpened}
+                                    openExportModal={setExportModalOpened}
+                                    {...{
+                                        gridMode, setGridMode, duplicatedPointRange,
+                                        setDuplicatedPointRange, language, setLanguage
+                                    }}
+                                />
+                            </Col>
+                        </ Row>
+                        <Row noGutters>
+                            <Col xl={6} lg={6} md={12} sm={12} xs={12}>
+                                <Previewer
+                                    shapes={processedPoints}
+                                    {...{ gridMode }}
+                                />
+                            </Col>
+                        </ Row>
+                    </Container>
                 </Col>
                 <Col xl={6} lg={6} md={12} sm={12} xs={12}>
                     <UserInterface
-                        openImportModal={setImportModalOpened}
-                        openExportModal={setExportModalOpened}
-                        {...{
-                            shapes, latestSelect, shapesDispatch, gridMode, setGridMode, duplicatedPointRange,
-                            setDuplicatedPointRange, language, setLanguage, setContextTarget
-                        }}
+                        {...{ shapes, latestSelect, shapesDispatch, setContextTarget }}
                     />
                 </Col>
             </ Row>

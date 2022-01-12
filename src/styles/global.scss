@@ -40,6 +40,17 @@ body {
 }
 
 :global {
+    .col,
+    .row,
+    .container {
+        margin: 0;
+        padding: 0;
+    }
+
+    .container-fluid {
+        padding: 0;
+    }
+
     .btn {
         background-color: var(--window-bg-color);
         color: var(--text-color);
