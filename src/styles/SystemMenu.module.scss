@@ -5,20 +5,15 @@
     background-color: var(--window-bg-color);
     border: 1px solid var(--border-color);
     border-radius: 0.25rem;
-    height: 54px;
+    // height: 54px;
 }
 
 .contents {
-    display: flex;
-    align-items: center;
-    padding: 8px 0;
+    padding: 0px 2px !important;
 
-    & > * {
+    & > * > * {
         color: var(--text-color);
-        margin: 0 8px !important;
-        max-width: 100%;
-        width: 100%;
-        position: relative;
+        padding: 8px 8px !important;
     }
 }
 

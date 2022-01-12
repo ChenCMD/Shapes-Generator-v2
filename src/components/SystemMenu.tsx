@@ -1,5 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
 import Button from 'react-bootstrap/esm/Button';
+import Container from 'react-bootstrap/esm/Container';
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
 import { languageMap } from '../locales';
 import styles from '../styles/SystemMenu.module.scss';
 import { isValidateLanguage, SpecificatedLanguage } from '../types/Language';
@@ -35,11 +38,19 @@ const SystemMenu = ({ language, setLanguage, openImportModal, openExportModal }:
 
     return (
         <div className={styles['window']}>
-            <div className={styles['contents']}>
-                <BtnMenu icon="globe" iconSize={22} label={locale('menu.language')}>{languageButtons}</BtnMenu>
-                <Button onClick={onImport}><Icon i="upload" size={22} />{locale('menu.import')}</Button>
-                <Button onClick={onExport}><Icon i="download" size={22} />{locale('menu.export')}</Button>
-            </div>
+            <Container fluid className={styles['contents']}>
+                <Row noGutters>
+                    <Col xl={4} lg={4} md={12} sm={12} xs={12}>
+                        <BtnMenu icon="globe" iconSize={22} label={locale('menu.language')}>{languageButtons}</BtnMenu>
+                    </Col>
+                    <Col xl={4} lg={4} md={6} sm={6} xs={12}>
+                        <Button onClick={onImport}><Icon i="upload" size={22} />{locale('menu.import')}</Button>
+                    </Col>
+                    <Col xl={4} lg={4} md={6} sm={6} xs={12}>
+                        <Button onClick={onExport}><Icon i="download" size={22} />{locale('menu.export')}</Button>
+                    </Col>
+                </Row>
+            </Container>
         </div>
     );
 };
