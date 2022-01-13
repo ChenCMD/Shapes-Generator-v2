@@ -26,8 +26,10 @@
     }
 }
 
-.container {
+.param-container {
     margin: 5px auto 5px auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .xxl {
