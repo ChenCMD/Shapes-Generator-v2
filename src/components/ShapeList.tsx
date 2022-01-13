@@ -33,10 +33,10 @@ const ShapeList = ({ shapes, latestSelect, shapesDispatch, setContextTarget }: S
     }, [setContextTarget, shapesDispatch]);
 
     const items = shapes.map(({ uuid: key, name, isSelected }, index) => (
-        // eslint-disable-next-line react/jsx-key
         <ShapeListItem
+            key={key}
             {...{
-                index, key, name, isSelected, onSelect,
+                index, name, isSelected, onSelect,
                 onMoveSelect, onDuplicate, showContextMenu, shapesDispatch
             }}
         />
