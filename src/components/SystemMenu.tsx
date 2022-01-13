@@ -40,13 +40,13 @@ const SystemMenu = ({ language, setLanguage, openImportModal, openExportModal }:
         <div className={styles['window']}>
             <Container fluid className={styles['contents']}>
                 <Row noGutters>
-                    <Col xl={4} lg={4} md={12} sm={12} xs={12}>
+                    <Col xl={4} lg={12} md={4} sm={12} xs={12}>
                         <BtnMenu icon="globe" iconSize={22} label={locale('menu.language')}>{languageButtons}</BtnMenu>
                     </Col>
-                    <Col xl={4} lg={4} md={6} sm={6} xs={12}>
+                    <Col xl={4} lg={6} md={4} sm={6} xs={12}>
                         <Button onClick={onImport}><Icon i="upload" size={22} />{locale('menu.import')}</Button>
                     </Col>
-                    <Col xl={4} lg={4} md={6} sm={6} xs={12}>
+                    <Col xl={4} lg={6} md={4} sm={6} xs={12}>
                         <Button onClick={onExport}><Icon i="download" size={22} />{locale('menu.export')}</Button>
                     </Col>
                 </Row>
