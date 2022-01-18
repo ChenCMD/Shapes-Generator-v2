@@ -88,8 +88,8 @@ export function importShape(importKey: string): Shape[] {
         return parsedObjects.map(
             v => new shapeConstructors[v.type](v.name, v.params as ParamValue<{ [k: string]: Param }>, v.uuid)
         );
-    } catch (e) {
-        console.error(e.stack);
+    } catch (e: unknown) {
+        console.error((e as Error).stack);
         if (e instanceof SyntaxError) {
             showNotification('error', locale('error.invalid.import-key'));
         } else {
