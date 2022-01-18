@@ -1,8 +1,8 @@
 {
-  "name": "shapes-generator",
+  "name": "shapes-generator-v2",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ChenCMD.github.io/shapes-generator",
+  "homepage": "https://ChenCMD.github.io/shapes-generator-v2",
   "dependencies": {
     "@primer/octicons-react": "^16.2.0",
     "bootstrap": "^5.0.1",
