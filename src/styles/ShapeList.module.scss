@@ -6,8 +6,8 @@
     border-style: solid;
     border-width: 1px;
     border-color: var(--border-color);
-    min-height: calc(50vh - var(--window-margin) * 2 - #{$base-margin});
-    max-height: calc(50vh - var(--window-margin) * 2 - #{$base-margin});
+    min-height: calc(100vh - var(--window-margin) * 2 - #{$base-margin} * 2);
+    max-height: calc(100vh - var(--window-margin) * 2 - #{$base-margin} * 2);
     border-radius: 0.25rem;
     padding-bottom: 29px;
 
