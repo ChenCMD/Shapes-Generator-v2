@@ -37,6 +37,6 @@
      - DiffExp(o) が計算できる時、 o は**well-definedな差分定義を持つ**と言う
    - plainな図形オブジェクト o は、well-typedなmodifierリストを持つ(FIXME: これは未定義)とき、
      o はwell-typeであるという。
-   - well-formedな図形プログラムのうち、すべての図形オブジェクトがwell-definedな差分展開を持ち、
+   - well-formedな図形プログラム w のうち、すべての図形オブジェクトがwell-definedな差分展開を持ち、
      しかも差分展開がすべてwell-typedであれば、各図形オブジェクト o に対して SOPM である Compile(o) が計算できる。
-     この時得られる Compile(o) の列を**コンパイル結果**と呼ぶ。コンパイル結果はShapes Generatorの重要な中間生成物である。
+     この時得られる Compile(o) の列を**wのコンパイル結果**と呼ぶ。コンパイル結果はShapes Generatorの重要な中間生成物である。
