@@ -41,3 +41,57 @@
      しかも差分展開がすべてwell-typedであるとき、 w は well-typed であるという。
      - w が well-typed な時、 w 内の各図形オブジェクト o に対して、 o に対応する SOPM である SOPM(o) が計算できる。
      - この時得られる SOPM(o) の列をwの**SOPM計算結果**と呼ぶ。SOPM計算結果はShapes Generatorの重要な中間生成物である。
+
+## Shapes Generator Language
+
+この節では、[ハイレベルな用語の定義](#ハイレベルな用語の定義)で定義した概念を形式言語である Shapes Generator Language (以下SGLと呼ぶ)に落とす。
+SGLそれ自身は、汎用的な算術式を一切埋め込めないという意味で、ほとんど計算能力を持たない。
+
+Webアプリケーションとしての Shapes Generator は、
+
+ - UIから入力された情報に基づいてSGLプログラム p を生成し、
+ - p が well-typed であるかを検査し、
+   - そうであればSOPM計算結果を計算したうえで
+     - UI上にSOPM計算結果を可視化し、
+     - export機能でmcfunctionに結果をトランスパイルしたりできるようにする
+   - そうでなければユーザーにエラーの原因となった個所をハイライトして修正を促す
+
+ようなものであると考えてよい。
+
+以下、SGLプログラムの定義を記述する。
+
+```
+# shape definition
+ShapeKind ::= { Native }
+ShapeParameter ::= { Native }
+Shape
+  ::= Shape(ShapeKind, [ShapeParameter])
+
+# modifier definition
+ModifierKind ::= { Native }
+ModifierParameter ::= { Native }
+Modifier
+  ::= Modifier(ModifierKind, [ModifierParameter])
+ModifierDefinition
+  ::= ModifierDefinition(UID, Modifier)
+
+# Shape Object Diff definition
+ShapeDiff
+  ::= ShapeDiff([ShapeParameter])
+ModifierDefinitionReference
+  ::= ModifierDefinitionReference(UID)
+ModifierDiff
+  ::= ModifierDiff(ModifierDefinitionReference, [ModifierParameter])
+ShapeObjectDiff
+  ::= ShapeObjectDiff(ShapeDiff, [ModifierDiff])
+
+ShapeObject
+  ::= SynchronizedObject(UID, ShapeObjectDiff, [ModifierDefinition])
+    | ModifiedShape(Shape, [ModifierDefinition])
+
+ShapeObjectDefinition
+  ::= ShapeObjectDefinition(UID, ShapeObject)
+
+ShapesGeneratorLanguageProgram
+  ::= ShapesGeneratorLanguageProgram([ShapeObjectDefinition])
+```
