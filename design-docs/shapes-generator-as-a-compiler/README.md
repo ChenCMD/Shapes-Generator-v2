@@ -38,5 +38,6 @@
    - plainな図形オブジェクト o は、well-typedなmodifierリストを持つ(FIXME: これは未定義)とき、
      o はwell-typeであるという。
    - well-formedな図形プログラム w のうち、すべての図形オブジェクトがwell-definedな差分展開を持ち、
-     しかも差分展開がすべてwell-typedであれば、各図形オブジェクト o に対して SOPM である Compile(o) が計算できる。
-     この時得られる Compile(o) の列を**wのコンパイル結果**と呼ぶ。コンパイル結果はShapes Generatorの重要な中間生成物である。
+     しかも差分展開がすべてwell-typedであるとき、 w は well-typed であるという。
+     - w が well-typed な時、 w 内の各図形オブジェクト o に対して、 o に対応する SOPM である SOPM(o) が計算できる。
+     - この時得られる SOPM(o) の列をwの**SOPM計算結果**と呼ぶ。SOPM計算結果はShapes Generatorの重要な中間生成物である。
