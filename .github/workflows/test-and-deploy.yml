@@ -1,4 +1,4 @@
-name: App test and deploy GitHub Pages(main branch only)
+name: Test and deploy to GH Pages
 on: push
 
 jobs:
