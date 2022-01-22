@@ -27,6 +27,7 @@
   "scripts": {
     "build": "rm -r dist;webpack --mode production",
     "build-dev": "rm -r dist;webpack --mode development",
+    "test": "jest --passWithNoTests",
     "start": "webpack-dev-server --mode development",
     "start-profiling": "webpack-dev-server --mode production",
     "predeploy": "npm run build",
