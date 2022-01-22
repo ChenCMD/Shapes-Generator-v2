@@ -1,0 +1,42 @@
+name: App test and deploy GitHub Pages(main branch only)
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install modules
+        run: yarn
+
+      - name: Run tests
+        run: yarn test
+
+  deploy:
+    runs-on: ubuntu-18.04
+    needs: test
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install modules
+        run: yarn
+
+      - name: build
+        run: yarn build
+
+      - uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          branch: gh-pages
+          folder: dist
