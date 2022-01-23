@@ -1,20 +1,31 @@
 import { newUid, Uid } from './uid';
 
+export type RawParameterValue = number | string;
+export type OpaqueParameterSet = { [parameterName: string]: RawParameterValue };
+
 // #region shape definitions
-export type ShapeKind = never;
-export type ShapeParameter = never;
+export type ShapeKind = 'ellipse' | 'ellipseInscribedPolygon' | 'lineSegment';
+
 export interface Shape {
     readonly shapeKind: ShapeKind;
-    readonly parameters: ShapeParameter[];
+    readonly parameters: OpaqueParameterSet;
 }
 // #endregion
 
 // #region modifier definitions
-export type ModifierKind = never;
-export type ModifierParameter = never;
+export type ModifierKind =
+    | 'applyInitialVelocities'
+    | 'setVisibility'
+    | 'deletePoints'
+    | 'affineTransform'
+    | 'replicateOtherOriginAtParticlePoints'
+    | 'replicateOtherOriginAtAngledVertices'
+    | 'replicateInitialPointAtOtherParticlePoints'
+    ;
+
 export interface Modifier {
     readonly modifierKind: Modifier;
-    readonly parameters: ModifierParameter[];
+    readonly parameters: OpaqueParameterSet;
 }
 
 export type ModifierDefinitionId = Uid & { readonly __SOIDTag: unique symbol };
@@ -29,12 +40,12 @@ export interface ModifierDefinition {
 
 // #region ShapeObject diff definitions
 export interface ShapeDiff {
-    readonly paramDiffs: ShapeParameter[];
+    readonly paramDiffs: OpaqueParameterSet;
 }
 
 export interface ModifierDiff {
     readonly target: ModifierDefinitionId;
-    readonly paramDiffs: ModifierParameter[];
+    readonly paramDiffs: OpaqueParameterSet;
 }
 // #endregion
 
