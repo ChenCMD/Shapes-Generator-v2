@@ -69,7 +69,6 @@ export interface ModifiedShapeObject {
 }
 
 export type ShapeObject = SynchronizedShapeObject | ModifiedShapeObject;
-// #endregion
 
 export type ShapeObjectId = Uid & { readonly __SOIDTag: unique symbol };
 export const newShapeObjectId = (): ShapeObjectId => (newUid() as ShapeObjectId);
@@ -79,15 +78,11 @@ export interface ShapeObjectDefinition<O extends ShapeObject> {
     id: ShapeObjectId;
     shapeObject: O;
 }
+// #endregion
 
 /**
  * UIから入力される、Shapes Generator Language のプログラム。
+ * これらは図形オブジェクト定義の列である。
  */
 export type ShapesGeneratorLanguageProgram = ShapeObjectDefinition<ShapeObject>[];
 export type SGLProgram = ShapesGeneratorLanguageProgram;
-
-/**
- * SGLProgram のうち、 ModifiedShapeObject をもとにした図形定義しか含まないもの。
- * SGLの実行パイプライン上では、まず最初に SGLProgram が DiffPatchedSGLProgram に「展開」される。
- */
-export type DiffPatchedSGLProgram = ShapeObjectDefinition<ModifiedShapeObject>[];
