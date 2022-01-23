@@ -19,6 +19,7 @@ jobs:
         run: yarn test
 
   deploy:
+    concurrency: deploy-gh-pages--${{ github.ref }}
     runs-on: ubuntu-18.04
     needs: test
     if: ${{ github.ref == 'refs/heads/main' }}
