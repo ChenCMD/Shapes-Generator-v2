@@ -28,7 +28,7 @@ export type RawModifierParameterValue = number | string;
 export type ModifierParameterSet = OpaqueParameterSet<RawModifierParameterValue>;
 
 export interface Modifier {
-    readonly modifierKind: Modifier;
+    readonly modifierKind: ModifierKind;
     readonly parameters: ModifierParameterSet;
 }
 
