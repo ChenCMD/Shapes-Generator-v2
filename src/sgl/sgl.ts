@@ -62,7 +62,7 @@ export interface SynchronizedShapeObject extends ShapeObject {
     readonly modifierDiffs: ModifierDiff[];
 }
 
-export interface ModifiedShapeObject {
+export interface ModifiedShapeObject extends ShapeObject {
     readonly __kind: 'modifiedShape';
     readonly shape: Shape;
     readonly modifierDefinitions: ModifierDefinition[];
@@ -73,9 +73,9 @@ export type ShapeObjectId = Uid & { readonly __SOIDTag: unique symbol };
 export const newShapeObjectId = (): ShapeObjectId => (newUid() as ShapeObjectId);
 export const coerceToShapeObjectId = (uid: Uid): ShapeObjectId => (uid as ShapeObjectId);
 
-export interface ShapeObjectDefinition {
+export interface ShapeObjectDefinition<O extends ShapeObject> {
     id: ShapeObjectId;
-    shapeObject: ShapeObject;
+    shapeObject: O;
 }
 
-export type ShapesGeneratorLanguageProgram = ShapeObjectDefinition[];
+export type ShapesGeneratorLanguageProgram = ShapeObjectDefinition<ShapeObject>[];
