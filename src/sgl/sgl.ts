@@ -54,11 +54,7 @@ export interface ModifierDiff {
 // #endregion
 
 // #region ShapeObject definitions
-export interface ShapeObject {
-    readonly __kind: 'synchronized' | 'modifiedShape';
-}
-
-export interface SynchronizedShapeObject extends ShapeObject {
+export interface SynchronizedShapeObject {
     readonly __kind: 'synchronized';
     readonly uid: ShapeObjectId;
 
@@ -66,11 +62,13 @@ export interface SynchronizedShapeObject extends ShapeObject {
     readonly modifierDiffs: ModifierDiff[];
 }
 
-export interface ModifiedShapeObject extends ShapeObject {
+export interface ModifiedShapeObject {
     readonly __kind: 'modifiedShape';
     readonly shape: Shape;
     readonly modifierDefinitions: ModifierDefinition[];
 }
+
+export type ShapeObject = SynchronizedShapeObject | ModifiedShapeObject;
 // #endregion
 
 export type ShapeObjectId = Uid & { readonly __SOIDTag: unique symbol };
