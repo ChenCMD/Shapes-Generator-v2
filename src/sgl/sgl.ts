@@ -78,4 +78,14 @@ export interface ShapeObjectDefinition<O extends ShapeObject> {
     shapeObject: O;
 }
 
+/**
+ * UIから入力される、Shapes Generator Language のプログラム。
+ */
 export type ShapesGeneratorLanguageProgram = ShapeObjectDefinition<ShapeObject>[];
+export type SGLProgram = ShapesGeneratorLanguageProgram;
+
+/**
+ * SGLProgram のうち、 ModifiedShapeObject をもとにした図形定義しか含まないもの。
+ * SGLの実行パイプライン上では、まず最初に SGLProgram が DiffPatchedSGLProgram に「展開」される。
+ */
+export type DiffPatchedSGLProgram = ShapeObjectDefinition<ModifiedShapeObject>[];
