@@ -84,5 +84,4 @@ export interface ShapeObjectDefinition<O extends ShapeObject> {
  * UIから入力される、Shapes Generator Language のプログラム。
  * これらは図形オブジェクト定義の列である。
  */
-export type ShapesGeneratorLanguageProgram = ShapeObjectDefinition<ShapeObject>[];
-export type SGLProgram = ShapesGeneratorLanguageProgram;
+export type SGLProgram = ShapeObjectDefinition<ShapeObject>[];
