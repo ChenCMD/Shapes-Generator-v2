@@ -59,13 +59,13 @@ export interface SynchronizedShapeObject {
     readonly targetUid: ShapeObjectId;
 
     readonly shapeDiff: ShapeDiff;
-    readonly modifierDiffs: ModifierDiff[];
+    readonly modifierDiffs: ReadonlyArray<ModifierDiff>;
 }
 
 export interface ModifiedShapeObject {
     readonly __kind: 'modifiedShape';
     readonly shape: Shape;
-    readonly modifierDefinitions: ModifierDefinition[];
+    readonly modifierDefinitions: ReadonlyArray<ModifierDefinition>;
 }
 
 export type ShapeObject = SynchronizedShapeObject | ModifiedShapeObject;
@@ -84,4 +84,4 @@ export interface ShapeObjectDefinition<O extends ShapeObject> {
  * UIから入力される、Shapes Generator Language のプログラム。
  * これらは図形オブジェクト定義の列である。
  */
-export type SGLProgram = ShapeObjectDefinition<ShapeObject>[];
+export type SGLProgram = ReadonlyArray<ShapeObjectDefinition<ShapeObject>>;
