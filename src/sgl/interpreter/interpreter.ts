@@ -27,6 +27,8 @@ type DiffPatchedSGLProgram = ShapeObjectDefinition<ModifiedShapeObject>[];
 
 type ErrorOr<A> = E.Either<SGLInterpreterError, A>;
 
+// #region diff phase 
+
 function checkDiffPhaseInput(program: SGLProgram): E.Either<DiffPhaseError, void> {
     const idSoFar: Set<ShapeObjectId> = new Set();
     for (const soDef of program) {
@@ -57,6 +59,8 @@ function expandDiff(program: SGLProgram): E.Either<DiffPhaseError, DiffPatchedSG
         E.map(expandCheckedProgram)
     );
 }
+
+// #endregion
 
 function typeCheckModifiers(program: DiffPatchedSGLProgram): ErrorOr<void> {
     return E.left(notImplemented);
