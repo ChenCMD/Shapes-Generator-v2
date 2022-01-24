@@ -4,7 +4,7 @@ export type OpaqueParameterSet<P> = { [parameterName: string]: P };
 
 // #region shape definitions
 export type ShapeKind = 'ellipse' | 'ellipseInscribedPolygon' | 'lineSegment';
-export type RawShapeParameterValue = number | string;
+export type RawShapeParameterValue = number | string | boolean;
 export type ShapeParameterSet = OpaqueParameterSet<RawShapeParameterValue>;
 
 export interface Shape {
@@ -24,7 +24,7 @@ export type ModifierKind =
     | 'replicateInitialPointAtOtherParticlePoints'
     ;
 
-export type RawModifierParameterValue = number | string;
+export type RawModifierParameterValue = number | string | boolean;
 export type ModifierParameterSet = OpaqueParameterSet<RawModifierParameterValue>;
 
 export interface Modifier {
