@@ -56,7 +56,7 @@ export interface ModifierDiff {
 // #region ShapeObject definitions
 export interface SynchronizedShapeObject {
     readonly __kind: 'synchronized';
-    readonly uid: ShapeObjectId;
+    readonly targetUid: ShapeObjectId;
 
     readonly shapeDiff: ShapeDiff;
     readonly modifierDiffs: ModifierDiff[];
