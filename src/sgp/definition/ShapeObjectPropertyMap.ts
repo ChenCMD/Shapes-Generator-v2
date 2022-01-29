@@ -29,9 +29,9 @@ export interface DirectedEndpoints {
  * ShapesGeneratorProgram内の一つのShapeObjectDefinitionから得られる、その定義の実行結果。
  */
 export interface ShapeObjectPropertyMap {
-  readonly particlePoints: ParticlePoint[];
+  readonly particlePoints: ReadonlyArray<ParticlePoint>;
   readonly visibility: Visibility;
-  readonly angledVertices: AngledVertex[] | null;
+  readonly angledVertices: ReadonlyArray<AngledVertex> | null;
   readonly directedEndpoints: DirectedEndpoints | null;
 }
 
@@ -44,6 +44,6 @@ export type SOPMWith<
   AngledVerticesPresence extends boolean,
   DirectedEndpointsPresence extends boolean
 > = SOPM & {
-  readonly angledVertices: LiftBoolToNullability<AngledVerticesPresence, AngledVertex[]>
+  readonly angledVertices: LiftBoolToNullability<AngledVerticesPresence, ReadonlyArray<AngledVertex>>
   readonly directedEndpoints: LiftBoolToNullability<DirectedEndpointsPresence, DirectedEndpoints>
 };
