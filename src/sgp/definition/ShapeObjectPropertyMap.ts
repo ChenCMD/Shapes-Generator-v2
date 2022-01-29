@@ -1,5 +1,4 @@
 import { Vector2D } from '../../types/Vector2D';
-import * as O from 'fp-ts/Option';
 
 export interface ParticlePoint {
   __type: 'ParticlePoint'
