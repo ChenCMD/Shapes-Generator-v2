@@ -33,8 +33,8 @@ type SOPMSchemeWith<
  * {@link SOPMScheme} の値を簡単に生成するための関数。
  * 引数はそれぞれどのフィールドの存在を予期するかを表す。
  * 
- * この関数は、引数にリテラルを渡すことでより具体的な
- * {@link SOPMScheme} が得られるように型宣言されている。
+ * この関数は、引数にリテラルを渡すことで返り値の型({@link SOPMScheme}の部分型)
+ * がより具体的になるように型宣言されている。
  */
 export const sopmSchemeWith = <
   AngledVerticesPresence extends boolean,
