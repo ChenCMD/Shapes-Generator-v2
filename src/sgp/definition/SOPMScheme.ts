@@ -2,7 +2,8 @@ import { ProjectNullabilityToBool } from '../../utils/bool-to-nullability';
 import { SOPM } from './ShapeObjectPropertyMap';
 
 /**
- * {@link SOPM} の各フィールドの型に {@link ProjectNullability} を適用したもの。
+ * {@link SOPM} の各フィールドの型に
+ * {@link ProjectNullabilityToBool} を適用したもの。
  * 
  * FIXME: ShapeObject / Modifierパイプラインの「型付け」にこれが利用されていることをここに書け。
  */
@@ -11,7 +12,8 @@ export type SOPMScheme = {
 };
 
 /**
- * {@link SOPMScheme} のうち、より具体的な {@link SOPM} に対して {@link ProjectNullability} が適用されたもの。
+ * {@link SOPMScheme} のうち、より具体的な {@link SOPM} に対して
+ * {@link ProjectNullabilityToBool} が適用されたもの。
  * 
  * この型の値は、主に{@link ShapeObject}の実装の内部的な整合性を取るのに用いられる。
  */
