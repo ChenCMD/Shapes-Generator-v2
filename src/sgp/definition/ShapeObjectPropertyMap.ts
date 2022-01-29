@@ -40,6 +40,9 @@ export interface ShapeObjectPropertyMap {
  */
 export type SOPM = ShapeObjectPropertyMap;
 
+/**
+ * {@link SOPM}のより具体的な部分型を簡単に記述するための型関数
+ */
 export type SOPMWith<
   AngledVerticesPresence extends boolean,
   DirectedEndpointsPresence extends boolean
