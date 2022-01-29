@@ -2,20 +2,44 @@ import { ProjectNullabilityToBool } from '../../../utils/bool-to-nullability';
 import { SOPM } from './ShapeObjectPropertyMap';
 
 /**
- * {@link SOPM} の各フィールドの型に
- * {@link ProjectNullabilityToBool} を適用したもの。
+ * {@link SOPM} の各フィールドの型に {@link ProjectNullabilityToBool} を適用したもの。
  * 
- * FIXME: ShapeObject / Modifierパイプラインの「型付け」にこれが利用されていることをここに書け。
+ * この型の値は、「ShapeObjectから実際にSOPMを生成して、Modifierの列に流し込む」という
+ * Shapes Generator の実行フェーズ (このフェーズのことを
+ * Modifierパイプラインフェーズと呼ぶこととする) に**先駆けて**、
+ * 「Modifierの列が意味を成す順序で与えられているかを確認」するために利用される
+ * (この確認フェーズのことをModifier型チェックフェーズと呼ぶこととする)。
+ * 
+ * Modifier型チェックフェーズが必要とされる背景としては、
+ *  - Modifierパイプラインフェーズでは比較的重い処理を行う場合がある
+ *    - 例えば楕円の曲線長を計算したり、GLSLシェーダーで書かれたベクトル場に
+ *      SOPMが持つ点集合を流し込んだりするような処理まで想定している
+ *  - どのModifierの後にどのModifierが適用できるかというのが非自明
+ * 
+ * といった点がある。このような事情から、Modifierの列が「実行可能」であるかどうかの
+ * 軽量なチェックがあれば、
+ *  1. UI上のエラー表示
+ *  2. 正しい順序でModifierを組み上げることを強制するUI
+ *  3. 様々な図形定義をユーザーがごちゃごちゃ動かしても、
+ *     エラーにならなさそうな場合にのみSOPMを再計算する仕組み
+ * 
+ * 等の実装において便利だと考えられる。上のリストのうち(1)と(2)は一見
+ * 矛盾する要求のように思えるが、一度正しい順序でModifierパイプラインを組み上げたとしても、
+ * 間に「図形複製」等の機能が挟まっていた場合、中間の図形定義にModifierを追加/削除することで、
+ * それを複製する図形のModifierパイプラインが破損する可能性があるといった点に注意されたい。
  */
 export type SOPMScheme = {
   readonly [P in keyof SOPM]: ProjectNullabilityToBool<SOPM[P]>;
 };
 
 /**
- * {@link SOPMScheme} のうち、より具体的な {@link SOPM} に対して
- * {@link ProjectNullabilityToBool} が適用されたもの。
+ * {@link SOPM} の部分型 {@link M} の各フィールドの型に {@link ProjectNullabilityToBool} を適用したもの。
  * 
- * この型の値は、主に{@link ShapeObject}の実装の内部的な整合性を取るのに用いられる。
+ * この型は {@link SOPMScheme} の部分型であり、0個以上の `boolean` のフィールドが
+ * リテラル型に置き換わっているものと考えてよい。どのフィールドが置き換わっているかは、
+ * {@link M} がフィールドのnullabilityをどれだけ精密に指定しているかに依存する。
+ * 
+ * この型は、主に{@link ShapeObject}の実装の整合性を取るのに用いられる。
  */
 export type DetailedSOPMScheme<M extends SOPM> = SOPMScheme & {
   readonly [P in keyof M]: ProjectNullabilityToBool<M[P]>;
