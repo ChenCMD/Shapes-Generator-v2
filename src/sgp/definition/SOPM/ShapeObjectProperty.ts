@@ -1,4 +1,4 @@
-import { Vector2D } from '../../types/Vector2D';
+import { Vector2D } from '../../../types/Vector2D';
 
 export interface ParticlePoint {
   __type: 'ParticlePoint'

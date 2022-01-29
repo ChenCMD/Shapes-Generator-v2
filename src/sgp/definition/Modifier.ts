@@ -1,7 +1,7 @@
-import { SOPM } from './ShapeObjectPropertyMap';
-import { SOPMScheme } from './SOPMScheme';
 import * as E from 'fp-ts/Either';
 import * as O from 'fp-ts/Option';
+import { SOPM } from './SOPM/ShapeObjectPropertyMap';
+import { SOPMScheme } from './SOPM/SOPMScheme';
 
 /**
  * {@link SOPM}のキーのうちnullableなものすべて

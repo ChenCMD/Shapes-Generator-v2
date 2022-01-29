@@ -1,5 +1,5 @@
-import { SOPM } from './ShapeObjectPropertyMap';
-import { DetailedSOPMScheme } from './SOPMScheme';
+import { SOPM } from './SOPM/ShapeObjectPropertyMap';
+import { DetailedSOPMScheme } from './SOPM/SOPMScheme';
 
 export interface ShapeObject<Output extends SOPM> {
   /**

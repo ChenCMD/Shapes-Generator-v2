@@ -1,4 +1,4 @@
-import { LiftBoolToNullability } from '../../utils/bool-to-nullability';
+import { LiftBoolToNullability } from '../../../utils/bool-to-nullability';
 import { AngledVertex, DirectedEndpoints, ParticlePoint, Visibility } from './ShapeObjectProperty';
 
 /**

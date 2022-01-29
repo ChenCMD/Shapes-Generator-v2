@@ -1,6 +1,6 @@
 import { ShapeObject } from '../ShapeObject';
-import { SOPMWith } from '../ShapeObjectPropertyMap';
-import { DetailedSOPMScheme, sopmSchemeWith } from '../SOPMScheme';
+import { SOPMWith } from '../SOPM/ShapeObjectPropertyMap';
+import { DetailedSOPMScheme, sopmSchemeWith } from '../SOPM/SOPMScheme';
 
 type CircleSOPM = SOPMWith<true, false>;
 export class Circle implements ShapeObject<CircleSOPM> {
