@@ -21,7 +21,7 @@ export type DetailedSOPMScheme<M extends SOPM> = SOPMScheme & {
   readonly [P in keyof M]: ProjectNullabilityToBool<M[P]>;
 };
 
-export type SOPMSchemeWith<
+type SOPMSchemeWith<
   AngledVerticesPresence extends boolean,
   DirectedEndpointsPresence extends boolean
 > = SOPMScheme & {
@@ -29,6 +29,13 @@ export type SOPMSchemeWith<
   readonly directedEndpoints: DirectedEndpointsPresence
 };
 
+/**
+ * {@link SOPMScheme} の値を簡単に生成するための関数。
+ * 引数はそれぞれどのフィールドの存在を予期するかを表す。
+ * 
+ * この関数は、引数にリテラルを渡すことでより具体的な
+ * {@link SOPMScheme} が得られるように型宣言されている。
+ */
 export const sopmSchemeWith = <
   AngledVerticesPresence extends boolean,
   DirectedEndpointsPresence extends boolean
