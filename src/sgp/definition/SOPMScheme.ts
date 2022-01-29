@@ -1,17 +1,5 @@
+import { ProjectNullabilityToBool } from '../../utils/bool-to-nullability';
 import { SOPM } from './ShapeObjectPropertyMap';
-
-/**
- * {@link T} を、Tが
- *  - `null` なら `false`
- *  - nullable なら `boolean`
- *  - そうでなければ `true`
- * 
- * へ送る型関数。
- */
-type ProjectNullability<T> =
-  null extends T
-    ? (T extends null ? false : boolean)
-    : true;
 
 /**
  * {@link SOPM} の各フィールドの型に {@link ProjectNullability} を適用したもの。
@@ -19,7 +7,7 @@ type ProjectNullability<T> =
  * FIXME: ShapeObject / Modifierパイプラインの「型付け」にこれが利用されていることをここに書け。
  */
 export type SOPMScheme = {
-  readonly [P in keyof SOPM]: ProjectNullability<SOPM[P]>;
+  readonly [P in keyof SOPM]: ProjectNullabilityToBool<SOPM[P]>;
 };
 
 /**
@@ -28,5 +16,24 @@ export type SOPMScheme = {
  * この型の値は、主に{@link ShapeObject}の実装の内部的な整合性を取るのに用いられる。
  */
 export type DetailedSOPMScheme<M extends SOPM> = SOPMScheme & {
-  readonly [P in keyof M]: ProjectNullability<M[P]>;
+  readonly [P in keyof M]: ProjectNullabilityToBool<M[P]>;
 };
+
+export type SOPMSchemeWith<
+  AngledVerticesPresence extends boolean,
+  DirectedEndpointsPresence extends boolean
+> = SOPMScheme & {
+  readonly angledVertices: AngledVerticesPresence
+  readonly directedEndpoints: DirectedEndpointsPresence
+};
+
+export const sopmSchemeWith = <
+  AngledVerticesPresence extends boolean,
+  DirectedEndpointsPresence extends boolean
+>(angledVerticesPresence: AngledVerticesPresence,
+  directedEndpointsPresence: DirectedEndpointsPresence): SOPMSchemeWith<AngledVerticesPresence, DirectedEndpointsPresence> => ({
+    particlePoints: true,
+    visibility: true,
+    angledVertices: angledVerticesPresence,
+    directedEndpoints: directedEndpointsPresence,
+  });

@@ -1,4 +1,5 @@
 import { Vector2D } from '../../types/Vector2D';
+import { LiftBoolToNullability } from '../../utils/bool-to-nullability';
 
 export interface ParticlePoint {
   __type: 'ParticlePoint'
@@ -38,3 +39,11 @@ export interface ShapeObjectPropertyMap {
  * {@link ShapeObjectPropertyMap}の略称
  */
 export type SOPM = ShapeObjectPropertyMap;
+
+export type SOPMWith<
+  AngledVerticesPresence extends boolean,
+  DirectedEndpointsPresence extends boolean
+> = SOPM & {
+  readonly angledVertices: LiftBoolToNullability<AngledVerticesPresence, AngledVertex[]>
+  readonly directedEndpoints: LiftBoolToNullability<DirectedEndpointsPresence, DirectedEndpoints>
+};
