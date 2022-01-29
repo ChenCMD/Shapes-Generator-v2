@@ -7,10 +7,14 @@ export type ModifierTypeError = never; // TODO specify this
 
 export interface Modifier {
   /**
-   * {@link onInput}で指定される形の{@link SOPM}が{@link run}に入力された時に
-   * {@link run}が出力するであろう{@link SOPM}の形である{@link SOPMScheme}。
+   * {@link onInput}が型指定する{@link SOPM}が{@link run}に入力された時に
+   * {@link run}が出力するであろう{@link SOPM}を型指定する{@link SOPMScheme}。
    * 
-   * FIXME: 「SOPMSchemeで指定される形のSOPM」が未定義
+   * {@link onInput}で型指定される形の{@link SOPM}が{@link run}に入力された時に
+   * {@link run}が{@link SOPM}を出力できないような場合、
+   * {@link E.Left}に{@link ModifierTypeError}を返す。
+   * 
+   * FIXME: 「SOPMSchemeがSOPMを型指定する」という関係が未定義
    */
   outputSpec(onInput: SOPMScheme): E.Either<ModifierTypeError, SOPMScheme>
 

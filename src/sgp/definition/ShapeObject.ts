@@ -3,9 +3,9 @@ import { DetailedSOPMScheme } from './SOPMScheme';
 
 export interface ShapeObject<Output extends SOPM> {
   /**
-   * {@link run}が出力するであろう{@link SOPM}の形を指定するSOPMScheme。
+   * {@link run}が出力する{@link SOPM}を型指定する{@link DetailedSOPMScheme}。
    * 
-   * FIXME: 「SOPMSchemeで指定される形のSOPM」が未定義
+   * FIXME: 「SOPMSchemeがSOPMを型指定する」という関係が未定義
    */
   readonly outputSpec: DetailedSOPMScheme<Output>
 
