@@ -3,7 +3,8 @@ import { SOPMScheme } from './SOPMScheme';
 import * as E from 'fp-ts/Either';
 import * as O from 'fp-ts/Option';
 
-export type ModifierTypeError = never; // TODO specify this
+// TODO 「フィールドが足りない」の形をしたエラーを用意しておきたい
+export type ModifierTypeError = never;
 
 export interface Modifier {
   /**
