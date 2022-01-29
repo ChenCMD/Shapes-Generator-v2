@@ -5,9 +5,7 @@ export interface ShapeObject<Output extends SOPM> {
   /**
    * {@link run}が出力するであろう{@link SOPM}の形を指定するSOPMScheme。
    * 
-   * FIXME: 「SOPMSchemeで指定される形のSOPM」が未定義。
-   * FIXME: 「Modifierの型付けphase」においてこの情報が使われるため、
-   * できるだけ正確な`SOPMScheme`を報告すべきというのをちゃんと書く
+   * FIXME: 「SOPMSchemeで指定される形のSOPM」が未定義
    */
   readonly outputSpec: DetailedSOPMScheme<Output>
 
@@ -18,7 +16,7 @@ export interface ShapeObject<Output extends SOPM> {
    * このinterfaceの実装は次の条件を保証しなければならない：
    * 
    * {@link SOPM}のすべてのプロパティ`K`について、
-   *  - `outputSpec[K] === true` ならば `run()[K] !== null` が成り立つ
+   *  - `outputSpec[K] === true` と `run()[K] !== null` が同値
    */
   run(): Output
 }

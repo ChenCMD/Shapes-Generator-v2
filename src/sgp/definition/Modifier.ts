@@ -10,9 +10,7 @@ export interface Modifier {
    * {@link onInput}で指定される形の{@link SOPM}が{@link run}に入力された時に
    * {@link run}が出力するであろう{@link SOPM}の形である{@link SOPMScheme}。
    * 
-   * FIXME: 「SOPMSchemeで指定される形のSOPM」が未定義。
-   * FIXME: 「Modifierの型付けphase」においてこの情報が使われるため、
-   * できるだけ正確な`SOPMScheme`を報告すべきというのをちゃんと書く
+   * FIXME: 「SOPMSchemeで指定される形のSOPM」が未定義
    */
   outputSpec(onInput: SOPMScheme): E.Either<ModifierTypeError, SOPMScheme>
 
@@ -27,7 +25,7 @@ export interface Modifier {
    *  - `outputSpec(inputScheme)` が {@link E.right} で `s: SOPMScheme` を含むならば、
    *    
    *    {@link SOPM} のすべてのプロパティ `K` について、
-   *    `outputSpec(inputScheme)[K] === true` ならば `run(input)[K] !== null` が成り立つ
+   *    `outputSpec(inputScheme)[K] === true` と `run(input)[K] !== null` が同値
    */
   run(input: SOPM): O.Option<SOPM>
 }
