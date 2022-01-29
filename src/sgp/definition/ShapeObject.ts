@@ -16,7 +16,10 @@ export interface ShapeObject<Output extends SOPM> {
    * このinterfaceの実装は次の条件を保証しなければならない：
    * 
    * {@link SOPM}のすべてのプロパティ`K`について、
-   *  - `outputSpec[K] === true` と `run()[K] !== null` が同値
+   *  - `outputSpec[K] === true`
+   *  - `run()[K] !== null`
+   * 
+   * が同値
    */
   run(): Output
 }

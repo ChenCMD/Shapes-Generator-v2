@@ -29,7 +29,10 @@ export interface Modifier {
    *  - `outputSpec(inputScheme)` が {@link E.right} で `s: SOPMScheme` を含むならば、
    *    
    *    {@link SOPM} のすべてのプロパティ `K` について、
-   *    `outputSpec(inputScheme)[K] === true` と `run(input)[K] !== null` が同値
+   *     - `outputSpec(inputScheme)[K] === true`
+   *     - `run(input)[K] !== null`
+   * 
+   *    が同値
    */
   run(input: SOPM): O.Option<SOPM>
 }
