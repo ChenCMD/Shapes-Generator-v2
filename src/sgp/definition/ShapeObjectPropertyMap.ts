@@ -1,4 +1,5 @@
 import { Vector2D } from '../../types/Vector2D';
+import * as O from 'fp-ts/Option';
 
 export interface ParticlePoint {
   __type: 'ParticlePoint'
@@ -28,10 +29,10 @@ export interface DirectedEndpoints {
  * ShapesGeneratorProgram内の一つのShapeObjectDefinitionから得られる、その定義の実行結果。
  */
 export interface ShapeObjectPropertyMap {
-  readonly particlePoints: ParticlePoint[]
-  readonly visibility: Visibility
-  readonly angledVertices?: AngledVertex[]
-  readonly DirectedEndpoints?: DirectedEndpoints
+  readonly particlePoints: ParticlePoint[];
+  readonly visibility: Visibility;
+  readonly angledVertices: AngledVertex[] | null;
+  readonly directedEndpoints: DirectedEndpoints | null;
 }
 
 /**
