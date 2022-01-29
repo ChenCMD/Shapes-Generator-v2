@@ -25,7 +25,7 @@ export interface DirectedEndpoints {
 }
 
 /**
- * 一つのShapeObjectDefinitionに対応する、ShapesGeneratorProgramの「実行結果」。
+ * ShapesGeneratorProgram内の一つのShapeObjectDefinitionから得られる、その定義の実行結果。
  */
 export interface ShapeObjectPropertyMap {
   readonly particlePoints: ParticlePoint[]
@@ -33,3 +33,8 @@ export interface ShapeObjectPropertyMap {
   readonly angledVertices?: AngledVertex[]
   readonly DirectedEndpoints?: DirectedEndpoints
 }
+
+/**
+ * {@link ShapeObjectPropertyMap}の略称
+ */
+export type SOPM = ShapeObjectPropertyMap;
