@@ -3,8 +3,22 @@ import { SOPMScheme } from './SOPMScheme';
 import * as E from 'fp-ts/Either';
 import * as O from 'fp-ts/Option';
 
-// TODO 「フィールドが足りない」の形をしたエラーを用意しておきたい
-export type ModifierTypeError = never;
+/**
+ * {@link SOPM}のキーのうちnullableなものすべて
+ */
+type NullableSOPMField = keyof {
+  [F in (keyof SOPM) as (null extends SOPM[F] ? never : F)]: unknown
+};
+
+export interface InsufficientSOPMFields {
+  __kind: 'InsufficientSOPMFields';
+  readonly lackingFields: ReadonlySet<NullableSOPMField>;
+}
+
+/**
+ * 入力SOPMを指定するスキーマがModifierが予期したものでないときに返されるエラーの型
+ */
+export type ModifierTypeCheckError = InsufficientSOPMFields;
 
 export interface Modifier {
   /**
@@ -13,11 +27,11 @@ export interface Modifier {
    * 
    * {@link onInput}で型指定される形の{@link SOPM}が{@link run}に入力された時に
    * {@link run}が{@link SOPM}を出力できないような場合、
-   * {@link E.Left}に{@link ModifierTypeError}を返す。
+   * {@link E.Left}に{@link ModifierTypeCheckError}を返す。
    * 
    * FIXME: 「SOPMSchemeがSOPMを型指定する」という関係が未定義
    */
-  outputSpec(onInput: SOPMScheme): E.Either<ModifierTypeError, SOPMScheme>
+  outputSpec(onInput: SOPMScheme): E.Either<ModifierTypeCheckError, SOPMScheme>
 
   /**
    * この{@link Modifier}に{@link SOPM}を与えて実行する。
