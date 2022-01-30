@@ -10,6 +10,42 @@ import { SOPM } from './ShapeObjectPropertyMap';
  * 「Modifierの列が意味を成す順序で与えられているかを確認」するために利用される
  * (この確認フェーズのことをModifier型チェックフェーズと呼ぶこととする)。
  * 
+ * ## 型指定関係について
+ * 
+ * {@link SOPMScheme}の値 `scheme` と{@link SOPM}の値 `sopm` について、
+ * **`scheme` は `sopm` を型指定する** とは以下のように定義される:
+ *  - {@link SOPM}のすべてのプロパティ`K`について、
+ *    - `scheme[K] === true` と `sopm[K] !== null` が同値
+ * 
+ * 例えば、
+ * 
+ * ```TS
+ * ({
+ *   particlePoints: true,
+ *   visibility: true,
+ *   angledVertices: false,
+ *   directedEndpoints: true,
+ * })
+ * ```
+ * 
+ * は、
+ * 
+ * ```TS
+ * ({
+ *   particlePoints: [],
+ *   visibility: true,
+ *   angledVertices: null,
+ *   directedEndpoints: [],
+ * })
+ * ```
+ * 
+ * を型指定する。
+ * 
+ * 型指定の概念は、ModifierやShapeObjectインターフェースの契約に現れるため、
+ * そちらも参照されたい。
+ * 
+ * ## Modifier型チェックフェーズの必要性について
+ * 
  * Modifier型チェックフェーズが必要とされる背景としては、
  *  - Modifierパイプラインフェーズでは比較的重い処理を行う場合がある
  *    - 例えば楕円の曲線長を計算したり、GLSLシェーダーで書かれたベクトル場に
@@ -26,7 +62,7 @@ import { SOPM } from './ShapeObjectPropertyMap';
  * 等の実装において便利だと考えられる。上のリストのうち(1)と(2)は一見
  * 矛盾する要求のように思えるが、一度正しい順序でModifierパイプラインを組み上げたとしても、
  * 間に「図形複製」等の機能が挟まっていた場合、中間の図形定義にModifierを追加/削除することで、
- * それを複製する図形のModifierパイプラインが破損する可能性があるといった点に注意されたい。
+ * それを複製する図形のModifierパイプラインが破損する可能性があるといった点に注意。
  */
 export type SOPMScheme = {
   readonly [P in keyof SOPM]: ProjectNullabilityToBool<SOPM[P]>;
@@ -34,6 +70,8 @@ export type SOPMScheme = {
 
 /**
  * {@link SOPM} の部分型 {@link M} の各フィールドの型に {@link ProjectNullabilityToBool} を適用したもの。
+ * 
+ * @remarks
  * 
  * この型は {@link SOPMScheme} の部分型であり、0個以上の `boolean` のフィールドが
  * リテラル型に置き換わっているものと考えてよい。どのフィールドが置き換わっているかは、

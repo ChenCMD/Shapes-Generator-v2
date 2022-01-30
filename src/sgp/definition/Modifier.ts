@@ -29,7 +29,7 @@ export interface Modifier {
    * {@link run}が{@link SOPM}を出力できないような場合、
    * {@link E.Left}に{@link ModifierTypeCheckError}を返す。
    * 
-   * FIXME: 「SOPMSchemeがSOPMを型指定する」という関係が未定義
+   * 型指定については、{@link SOPMScheme}を参照せよ。
    */
   outputSpec(onInput: SOPMScheme): E.Either<ModifierTypeCheckError, SOPMScheme>
 
@@ -39,15 +39,13 @@ export interface Modifier {
    * {@link run} は、{@link outputSpec} と {@link SOPMScheme} 上の整合性がある。
    * すなわち、このinterfaceの実装は次の条件を保証しなければならない：
    * 
-   * `input` を指定する{@link SOPMScheme}を`inputScheme`とすると、
+   * `input` を型指定する{@link SOPMScheme}を`inputScheme`とすると、
    *  - `outputSpec(inputScheme)` が {@link E.Left} であるならば {@link run} は {@link O.None} を出力する
-   *  - `outputSpec(inputScheme)` が {@link E.right} で `s: SOPMScheme` を含むならば、
-   *    
-   *    {@link SOPM} のすべてのプロパティ `K` について、
-   *     - `outputSpec(inputScheme)[K] === true`
-   *     - `run(input)[K] !== null`
+   *  - `outputSpec(inputScheme)` が {@link E.right} で `outScheme: SOPMScheme` を含むならば、
+   *    `run(input)` は `out: SOPM` を含む {@link O.Some} を返し、
+   *    `outScheme` は `out` を型指定する
    * 
-   *    が同値
+   * 型指定については、{@link SOPMScheme}を参照せよ。
    */
   run(input: SOPM): O.Option<SOPM>
 }

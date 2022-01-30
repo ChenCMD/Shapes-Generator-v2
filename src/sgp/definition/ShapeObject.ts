@@ -1,25 +1,22 @@
 import { SOPM } from './SOPM/ShapeObjectPropertyMap';
-import { DetailedSOPMScheme } from './SOPM/SOPMScheme';
+import * as S from './SOPM/SOPMScheme';
 
 export interface ShapeObject<Output extends SOPM> {
   /**
-   * {@link run}が出力する{@link SOPM}を型指定する{@link DetailedSOPMScheme}。
+   * {@link run}が出力する{@link SOPM}を型指定する{@link S.DetailedSOPMScheme}。
    * 
-   * FIXME: 「SOPMSchemeがSOPMを型指定する」という関係が未定義
+   * 型指定については、{@link S.SOPMScheme}を参照せよ。
    */
-  readonly outputSpec: DetailedSOPMScheme<Output>
+  readonly outputSpec: S.DetailedSOPMScheme<Output>
 
   /**
    * この{@link ShapeObject}の出力である{@link SOPM}。
    * 
    * {@link run}は、{@link outputSpec}と{@link SOPMScheme}上の整合性がある。すなわち、
-   * このinterfaceの実装は次の条件を保証しなければならない：
+   * このinterfaceの実装は {@link outputSpec} が {@link run} の結果を
+   * 型指定することを保証しなければならない。
    * 
-   * {@link SOPM}のすべてのプロパティ`K`について、
-   *  - `outputSpec[K] === true`
-   *  - `run()[K] !== null`
-   * 
-   * が同値
+   * 型指定については、{@link S.SOPMScheme}を参照せよ。
    */
   run(): Output
 }
