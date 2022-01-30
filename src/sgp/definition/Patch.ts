@@ -12,6 +12,8 @@ abstract class Patch<Bound, TargetType extends Bound> {
   }
 }
 
-export type ShapeObjectPatch<Target extends ShapeObject<SOPM>> = Patch<ShapeObject<SOPM>, Target>;
+export abstract class ShapeObjectPatch<Target extends ShapeObject<SOPM>>
+  extends Patch<ShapeObject<SOPM>, Target> {}
 
-export type ModifierPatch<Target extends Modifier> = Patch<Modifier, Target>;
+export abstract class ModifierPatch<Target extends Modifier>
+  extends Patch<Modifier, Target> {}
