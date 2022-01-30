@@ -5,14 +5,14 @@ import { ShapeObjectPropertyMap, SOPMWith } from '../SOPM/ShapeObjectPropertyMap
 import { DetailedSOPMScheme, sopmSchemeWith } from '../SOPM/SOPMScheme';
 
 type EllipseSOPM = SOPMWith<true, false>;
-type EllipseParameters = {
-  pointCount: number;
-  center: Vector2D;
-  semiMajorAxis: number;
-  startAngle: number;
-  eccentricity: number;
-  rotation: number;
-  spreadPointsEvenly: boolean;
+export type EllipseParameters = {
+  readonly pointCount: number;
+  readonly center: Vector2D;
+  readonly semiMajorAxis: number;
+  readonly startAngle: number;
+  readonly eccentricity: number;
+  readonly rotation: number;
+  readonly spreadPointsEvenly: boolean;
 };
 
 export class Ellipse implements ShapeObject<EllipseSOPM> {
