@@ -29,7 +29,7 @@ export interface Modifier {
    * {@link run}が{@link SOPM}を出力できないような場合、
    * {@link E.Left}に{@link ModifierTypeCheckError}を返す。
    * 
-   * 型指定については、{@link SOPMScheme}を参照せよ。
+   * 「型指定」概念については、{@link SOPMScheme}を参照せよ。
    */
   outputSpec(onInput: SOPMScheme): E.Either<ModifierTypeCheckError, SOPMScheme>
 
@@ -45,7 +45,7 @@ export interface Modifier {
    *    `run(input)` は `out: SOPM` を含む {@link O.Some} を返し、
    *    `outScheme` は `out` を型指定する
    * 
-   * 型指定については、{@link SOPMScheme}を参照せよ。
+   * 「型指定」概念については、{@link SOPMScheme}を参照せよ。
    */
   run(input: SOPM): O.Option<SOPM>
 }

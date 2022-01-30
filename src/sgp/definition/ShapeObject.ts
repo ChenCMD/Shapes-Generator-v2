@@ -5,7 +5,7 @@ export interface ShapeObject<Output extends SOPM> {
   /**
    * {@link run}が出力する{@link SOPM}を型指定する{@link S.DetailedSOPMScheme}。
    * 
-   * 型指定については、{@link S.SOPMScheme}を参照せよ。
+   * 「型指定」概念については、{@link S.SOPMScheme}を参照せよ。
    */
   readonly outputSpec: S.DetailedSOPMScheme<Output>
 
@@ -16,7 +16,7 @@ export interface ShapeObject<Output extends SOPM> {
    * このinterfaceの実装は {@link outputSpec} が {@link run} の結果を
    * 型指定することを保証しなければならない。
    * 
-   * 型指定については、{@link S.SOPMScheme}を参照せよ。
+   * 「型指定」概念については、{@link S.SOPMScheme}を参照せよ。
    */
   run(): Output
 }
