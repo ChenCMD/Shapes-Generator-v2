@@ -34,6 +34,8 @@ export class EllipsePatch extends ShapeObjectPatch<Ellipse> {
     this.patchParams = patchParams;
   }
 
-  canBeAppliedTo = (x: ShapeObject<ShapeObjectPropertyMap>): x is Ellipse => x instanceof Ellipse;
-  patch = (x: Ellipse): Ellipse => new Ellipse(Object.assign({}, x.params, this.patchParams));
+  readonly canBeAppliedTo = (x: ShapeObject<ShapeObjectPropertyMap>): x is Ellipse =>
+    x instanceof Ellipse;
+  readonly patch = (x: Ellipse): Ellipse =>
+    new Ellipse(Object.assign({}, x.params, this.patchParams));
 }
