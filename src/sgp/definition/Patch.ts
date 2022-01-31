@@ -1,5 +1,5 @@
 import { Modifier } from './Modifier';
-import { ShapeObject } from './ShapeObject';
+import { Shape } from './Shape';
 import { SOPM } from './SOPM/ShapeObjectPropertyMap';
 import * as O from 'fp-ts/Option';
 
@@ -12,8 +12,8 @@ abstract class Patch<Bound, TargetType extends Bound> {
   }
 }
 
-export abstract class ShapeObjectPatch<Target extends ShapeObject<SOPM>>
-  extends Patch<ShapeObject<SOPM>, Target> {}
+export abstract class ShapePatch<Target extends Shape<SOPM>>
+  extends Patch<Shape<SOPM>, Target> {}
 
 export abstract class ModifierPatch<Target extends Modifier>
   extends Patch<Modifier, Target> {}
