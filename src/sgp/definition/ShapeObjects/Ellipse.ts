@@ -1,6 +1,6 @@
 import { Vector2D } from '../../../types/Vector2D';
-import { ShapeObjectPatch } from '../Patch';
-import { ShapeObject } from '../ShapeObject';
+import { ShapePatch } from '../Patch';
+import { Shape } from '../Shape';
 import { ShapeObjectPropertyMap, SOPMWith } from '../SOPM/ShapeObjectPropertyMap';
 import { DetailedSOPMScheme, sopmSchemeWith } from '../SOPM/SOPMScheme';
 
@@ -15,7 +15,7 @@ export type EllipseParameters = {
   readonly spreadPointsEvenly: boolean;
 };
 
-export class Ellipse implements ShapeObject<EllipseSOPM> {
+export class Ellipse implements Shape<EllipseSOPM> {
   readonly outputSpec: DetailedSOPMScheme<EllipseSOPM> = sopmSchemeWith(true, false);
   readonly params: EllipseParameters;
   constructor(params: EllipseParameters) {
@@ -27,14 +27,14 @@ export class Ellipse implements ShapeObject<EllipseSOPM> {
   }
 }
 
-export class EllipsePatch extends ShapeObjectPatch<Ellipse> {
+export class EllipsePatch extends ShapePatch<Ellipse> {
   readonly patchParams: Partial<EllipseParameters>;
   constructor(patchParams: Partial<EllipseParameters>) {
     super();
     this.patchParams = patchParams;
   }
 
-  readonly canBeAppliedTo = (x: ShapeObject<ShapeObjectPropertyMap>): x is Ellipse =>
+  readonly canBeAppliedTo = (x: Shape<ShapeObjectPropertyMap>): x is Ellipse =>
     x instanceof Ellipse;
   readonly patch = (x: Ellipse): Ellipse =>
     new Ellipse(Object.assign({}, x.params, this.patchParams));
