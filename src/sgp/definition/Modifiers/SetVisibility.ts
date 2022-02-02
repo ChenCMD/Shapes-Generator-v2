@@ -30,6 +30,7 @@ export class SetVisibilityPatch extends ModifierPatch<SetVisibilityModifier> {
 
   readonly canBeAppliedTo = (x: Modifier): x is SetVisibilityModifier =>
     x instanceof SetVisibilityModifier;
-  readonly patch = (x: SetVisibilityModifier): SetVisibilityModifier =>
+
+  readonly convert = (x: SetVisibilityModifier): SetVisibilityModifier =>
     new SetVisibilityModifier(Object.assign({}, x.params, this.patchParams));
 }

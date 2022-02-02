@@ -36,6 +36,7 @@ export class EllipsePatch extends ShapePatch<Ellipse> {
 
   readonly canBeAppliedTo = (x: Shape<ShapeObjectPropertyMap>): x is Ellipse =>
     x instanceof Ellipse;
-  readonly patch = (x: Ellipse): Ellipse =>
+
+  readonly convert = (x: Ellipse): Ellipse =>
     new Ellipse(Object.assign({}, x.params, this.patchParams));
 }
