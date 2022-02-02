@@ -2,10 +2,10 @@ import { Modifier } from './Modifier';
 import { SomeModifierPatch, SomeShapePatch } from './Patch';
 import { Shape } from './Shape';
 import { SOPM } from './SOPM/ShapeObjectPropertyMap';
-import { Uid } from './Uid';
+import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from './Uid';
 
 export interface ModifierDefinition {
-  uid: Uid;
+  uid: ModifierDefinitionUid;
   modifier: Modifier;
 }
 
@@ -16,13 +16,13 @@ export interface ModifiedShape {
 }
 
 export interface TargetedModifierPatch {
-  targetModifierUid: Uid;
+  targetModifierUid: ModifierDefinitionUid;
   patch: SomeModifierPatch;
 }
 
 export interface SynchronizedShape {
   __kind: 'SynchronizedShape';
-  targetDefinitionUid: Uid
+  targetDefinitionUid: ShapeObjectDefinitionUid;
   shapePatch: SomeShapePatch;
   modifierPatches: ReadonlyArray<TargetedModifierPatch>
 }
@@ -30,7 +30,7 @@ export interface SynchronizedShape {
 export type ShapeObject = ModifiedShape | SynchronizedShape;
 
 export interface ShapeObjectDefinition {
-  definitionUid: Uid;
+  definitionUid: ShapeObjectDefinitionUid;
   shapeObject: ShapeObject;
 }
 
