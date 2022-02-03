@@ -1,25 +1,25 @@
 import { Vector2D } from '../../../types/Vector2D';
 
 export interface ParticlePoint {
-  __type: 'ParticlePoint'
-  point: Vector2D
-  velocity: Vector2D
+  readonly __type: 'ParticlePoint'
+  readonly point: Vector2D
+  readonly velocity: Vector2D
 }
 
 export interface Visibility {
-  __type: 'Visibility'
-  visibility: boolean
+  readonly __type: 'Visibility'
+  readonly visibility: boolean
 }
 
 export interface AngledVertex {
-  __type: 'AngledVertices'
-  point: Vector2D
+  readonly __type: 'AngledVertices'
+  readonly point: Vector2D
   /** 単位ベクトル */
-  direction: Vector2D
+  readonly direction: Vector2D
 }
 
 export interface DirectedEndpoints {
-  __type: 'Endpoints'
-  startPoint: Vector2D
-  endPoint: Vector2D
+  readonly __type: 'Endpoints'
+  readonly startPoint: Vector2D
+  readonly endPoint: Vector2D
 }

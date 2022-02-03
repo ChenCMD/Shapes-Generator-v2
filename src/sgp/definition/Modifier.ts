@@ -11,7 +11,7 @@ type NullableSOPMField = keyof {
 };
 
 export interface InsufficientSOPMFields {
-  __kind: 'InsufficientSOPMFields';
+  readonly __kind: 'InsufficientSOPMFields';
   readonly lackingFields: ReadonlySet<NullableSOPMField>;
 }
 

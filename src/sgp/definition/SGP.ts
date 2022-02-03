@@ -5,33 +5,33 @@ import { SOPM } from './SOPM/ShapeObjectPropertyMap';
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from './Uid';
 
 export interface ModifierDefinition {
-  uid: ModifierDefinitionUid;
-  modifier: Modifier;
+  readonly uid: ModifierDefinitionUid;
+  readonly modifier: Modifier;
 }
 
 export interface ModifiedShape {
-  __kind: 'ModifiedShape';
-  shape: Shape<SOPM>;
-  modifiers: ReadonlyArray<ModifierDefinition>;
+  readonly __kind: 'ModifiedShape';
+  readonly shape: Shape<SOPM>;
+  readonly modifiers: ReadonlyArray<ModifierDefinition>;
 }
 
 export interface TargetedModifierPatch {
-  targetModifierUid: ModifierDefinitionUid;
-  patch: SomeModifierPatch;
+  readonly targetModifierUid: ModifierDefinitionUid;
+  readonly patch: SomeModifierPatch;
 }
 
 export interface SynchronizedShape {
-  __kind: 'SynchronizedShape';
-  targetDefinitionUid: ShapeObjectDefinitionUid;
-  shapePatch: SomeShapePatch;
-  modifierPatches: ReadonlyArray<TargetedModifierPatch>
+  readonly __kind: 'SynchronizedShape';
+  readonly targetDefinitionUid: ShapeObjectDefinitionUid;
+  readonly shapePatch: SomeShapePatch;
+  readonly modifierPatches: ReadonlyArray<TargetedModifierPatch>
 }
 
 export type ShapeObject = ModifiedShape | SynchronizedShape;
 
 export interface ShapeObjectDefinition {
-  definitionUid: ShapeObjectDefinitionUid;
-  shapeObject: ShapeObject;
+  readonly definitionUid: ShapeObjectDefinitionUid;
+  readonly shapeObject: ShapeObject;
 }
 
 export type ShapesGeneratorProgram = ReadonlyArray<ShapeObjectDefinition>;
