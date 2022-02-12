@@ -1,7 +1,7 @@
 import { Vector2D } from '../../../types/Vector2D';
-import { ShapePatch } from '../Patch';
+import { patchForUnaryClass } from '../../../utils/ClassPatch';
 import { Shape } from '../Shape';
-import { ShapeObjectPropertyMap, SOPMWith } from '../SOPM/ShapeObjectPropertyMap';
+import { SOPMWith } from '../SOPM/ShapeObjectPropertyMap';
 import { DetailedSOPMScheme, sopmSchemeWith } from '../SOPM/SOPMScheme';
 
 type EllipseSOPM = SOPMWith<true, false>;
@@ -27,16 +27,4 @@ export class Ellipse implements Shape<EllipseSOPM> {
   }
 }
 
-export class EllipsePatch extends ShapePatch<Ellipse> {
-  readonly patchParams: Partial<EllipseParameters>;
-  constructor(patchParams: Partial<EllipseParameters>) {
-    super();
-    this.patchParams = patchParams;
-  }
-
-  readonly canBeAppliedTo = (x: Shape<ShapeObjectPropertyMap>): x is Ellipse =>
-    x instanceof Ellipse;
-
-  readonly convert = (x: Ellipse): Ellipse =>
-    new Ellipse(Object.assign({}, x.params, this.patchParams));
-}
+export const EllipsePatch = patchForUnaryClass(Ellipse, t => t.params);

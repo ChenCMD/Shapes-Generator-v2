@@ -1,7 +1,7 @@
 import * as E from 'fp-ts/lib/Either';
 import * as O from 'fp-ts/lib/Option';
 import { InsufficientSOPMFields, Modifier } from '../Modifier';
-import { ModifierPatch } from '../Patch';
+import { patchForUnaryClass } from '../../../utils/ClassPatch';
 import { ShapeObjectPropertyMap } from '../SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme } from '../SOPM/SOPMScheme';
 
@@ -21,16 +21,4 @@ export class SetVisibilityModifier implements Modifier {
     O.some(Object.assign({}, input, { visibility: this.params.visibility }));
 }
 
-export class SetVisibilityPatch extends ModifierPatch<SetVisibilityModifier> {
-  readonly patchParams: Partial<SetVisibilityParameters>;
-  constructor(patchParams: Partial<SetVisibilityParameters>) {
-    super();
-    this.patchParams = patchParams;
-  }
-
-  readonly canBeAppliedTo = (x: Modifier): x is SetVisibilityModifier =>
-    x instanceof SetVisibilityModifier;
-
-  readonly convert = (x: SetVisibilityModifier): SetVisibilityModifier =>
-    new SetVisibilityModifier(Object.assign({}, x.params, this.patchParams));
-}
+export const SetVisibilityPatch = patchForUnaryClass(SetVisibilityModifier, t => t.params);

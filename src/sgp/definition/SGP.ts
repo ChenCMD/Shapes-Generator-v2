@@ -1,5 +1,5 @@
 import { Modifier } from './Modifier';
-import { SomeModifierPatch, SomeShapePatch } from './Patch';
+import { SomeModifierPatch, SomeShapePatch } from './Patches';
 import { Shape } from './Shape';
 import { SOPM } from './SOPM/ShapeObjectPropertyMap';
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from './Uid';
