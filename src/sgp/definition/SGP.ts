@@ -29,11 +29,11 @@ export interface SynchronizedShape {
 
 export type ShapeObject = ModifiedShape | SynchronizedShape;
 
-export interface ShapeObjectDefinition {
+export interface ShapeObjectDefinition<SOBound extends ShapeObject> {
   readonly definitionUid: ShapeObjectDefinitionUid;
-  readonly shapeObject: ShapeObject;
+  readonly shapeObject: SOBound;
 }
 
-export type ShapesGeneratorProgram = ReadonlyArray<ShapeObjectDefinition>;
+export type ShapesGeneratorProgram = ReadonlyArray<ShapeObjectDefinition<ShapeObject>>;
 
 export type SGP = ShapesGeneratorProgram;
