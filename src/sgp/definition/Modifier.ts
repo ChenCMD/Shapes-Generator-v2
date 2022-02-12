@@ -20,6 +20,9 @@ export interface InsufficientSOPMFields {
  */
 export type ModifierTypeCheckError = InsufficientSOPMFields;
 
+// TODO Modifierはプログラムの一部の実行結果を利用して動作するため、SOPM上の関数だと表現しきれない。
+//      「どのShapeObject達のSOPMを利用するか」という情報を宣言させこれを実行前型チェックに利用し、
+//      そのShapeObject達の実行結果のSOPMと共に実行できるようにすべき。
 export interface Modifier {
   /**
    * {@link onInput}が型指定する{@link SOPM}が{@link run}に入力された時に
