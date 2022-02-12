@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://ChenCMD.github.io/shapes-generator-v2",
-  "type": "module",
   "dependencies": {
     "@primer/octicons-react": "^16.2.0",
     "bootstrap": "^5.0.1",
