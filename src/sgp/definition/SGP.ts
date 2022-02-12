@@ -4,6 +4,11 @@ import { Shape } from './Shape';
 import { SOPM } from './SOPM/ShapeObjectPropertyMap';
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from './Uid';
 
+export type SGPEvaluationResult = ReadonlyArray<{
+  resultOf: ShapeObjectDefinitionUid;
+  result: SOPM;
+}>;
+
 export interface ModifierDefinition {
   readonly uid: ModifierDefinitionUid;
   readonly modifier: Modifier;

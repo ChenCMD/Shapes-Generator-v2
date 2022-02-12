@@ -2,10 +2,9 @@ import * as E from 'fp-ts/Either';
 import * as EE from '../../utils/either';
 
 import { pipe } from 'fp-ts/function';
-import { ModifiedShape, SGP, ShapeObjectDefinition } from '../definition/SGP';
+import { ModifiedShape, SGP, ShapeObjectDefinition, SGPEvaluationResult } from '../definition/SGP';
 import { DiffExpansionPhaseError, duplicateShapeObjectUid, notImplemented, SGPInterpreterError, syncReferenceIllFormed } from './errors';
 import { ShapeObjectDefinitionUid } from '../definition/Uid';
-import { SOPM } from '../definition/SOPM/ShapeObjectPropertyMap';
 
 /**
  * SGP のうち、 ModifiedShape をもとにした図形定義しか含まないもの。
@@ -72,11 +71,6 @@ function typeCheckModifiers(program: DiffPatchedSGP): ErrorOr<void> {
 function validateShapeObjectDefinitionReferences(program: DiffPatchedSGP): ErrorOr<void> {
   return E.left(notImplemented);
 }
-
-type SGPEvaluationResult = ReadonlyArray<{
-  resultOf: ShapeObjectDefinitionUid;
-  result: SOPM;
-}>;
 
 function evaluate(program: DiffPatchedSGP): ErrorOr<SGPEvaluationResult> {
   return E.left(notImplemented);
