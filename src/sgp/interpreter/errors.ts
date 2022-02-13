@@ -18,12 +18,12 @@ export type IllFormedReferenceReason = 'forwardReference' | 'notFound';
 * 同期図形の同期対象への参照が正しく行われていない時のエラー。
 */
 export interface SyncReferenceIllFormed {
-  __kind: 'SyncReferenceIllFormed';
+  readonly __kind: 'SyncReferenceIllFormed';
   /**
   * 参照を正しく行っていない同期図形オブジェクトの Uid
   */
-  sourceId: ShapeObjectDefinitionUid;
-  reason: IllFormedReferenceReason;
+  readonly sourceId: ShapeObjectDefinitionUid;
+  readonly reason: IllFormedReferenceReason;
 }
 export const syncReferenceIllFormed =
   (sourceId: ShapeObjectDefinitionUid, reason: IllFormedReferenceReason): SyncReferenceIllFormed =>
@@ -33,17 +33,17 @@ export const syncReferenceIllFormed =
 * 同じShapeObjectIdが複数の図形オブジェクト定義に使われてしまっている時のエラー。
 */
 export interface DuplicateShapeObjectUid {
-  __kind: 'DuplicateShapeObjectUid';
-  duplicatedId: ShapeObjectDefinitionUid;
+  readonly __kind: 'DuplicateShapeObjectUid';
+  readonly duplicatedId: ShapeObjectDefinitionUid;
 }
 export const duplicateShapeObjectUid =
   (duplicatedId: ShapeObjectDefinitionUid): DuplicateShapeObjectUid =>
     ({ __kind: 'DuplicateShapeObjectUid', duplicatedId });
 
 export interface DuplicateModifierUid {
-  __kind: 'DuplicateModifierUid';
-  duplicatedModifierUid: ModifierDefinitionUid;
-  modifierOwnerUid: ShapeObjectDefinitionUid;
+  readonly __kind: 'DuplicateModifierUid';
+  readonly duplicatedModifierUid: ModifierDefinitionUid;
+  readonly modifierOwnerUid: ShapeObjectDefinitionUid;
 
   /**
    * どの段階でModifierのUidが重複していたか。
@@ -51,7 +51,7 @@ export interface DuplicateModifierUid {
    *  - `'afterExpansion'` の場合、展開後の `shapeObject` の内一つが、
    * 二つの異なるModifierで同じUidを持つものを含んでいたことを示す。
    */
-  when: 'onInput' | 'afterExpansion'
+   readonly when: 'onInput' | 'afterExpansion'
 }
 
 export type DiffExpansionPhaseError =
