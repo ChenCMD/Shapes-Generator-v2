@@ -29,7 +29,8 @@ export interface SynchronizedShape {
   readonly __kind: 'SynchronizedShape';
   readonly targetDefinitionUid: ShapeObjectDefinitionUid;
   readonly shapePatch: SomeShapePatch;
-  readonly modifierPatches: ReadonlyArray<TargetedModifierPatch>
+  readonly modifierPatches: ReadonlyArray<TargetedModifierPatch>;
+  readonly additionalModifiers: ReadonlyArray<ModifierDefinition>;
 }
 
 export type ShapeObject = ModifiedShape | SynchronizedShape;
