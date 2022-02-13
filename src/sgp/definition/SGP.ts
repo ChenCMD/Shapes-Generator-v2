@@ -10,7 +10,7 @@ export type SGPEvaluationResult = ReadonlyArray<{
 }>;
 
 export interface ModifierDefinition {
-  readonly uid: ModifierDefinitionUid;
+  readonly definitionUid: ModifierDefinitionUid;
   readonly modifier: Modifier;
 }
 
