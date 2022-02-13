@@ -12,10 +12,6 @@ function typeCheckModifiers(program: DiffPatchedSGP): InterpreterErrorOr<void> {
   return E.left(notImplemented);
 }
 
-function validateShapeObjectDefinitionReferences(program: DiffPatchedSGP): InterpreterErrorOr<void> {
-  return E.left(notImplemented);
-}
-
 function evaluate(program: DiffPatchedSGP): InterpreterErrorOr<SGPEvaluationResult> {
   return E.left(notImplemented);
 }
@@ -25,7 +21,6 @@ export function evaluateSGP(program: SGP): InterpreterErrorOr<SGPEvaluationResul
     E.right(program),
     E.chain(expandDiff),
     EE.chainTap(typeCheckModifiers),
-    EE.chainTap(validateShapeObjectDefinitionReferences),
     E.chain(evaluate)
   );
 }
