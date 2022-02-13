@@ -9,21 +9,22 @@ class A {
 }
 
 describe('Partial functions constructed by definePartialFnOnClass', () => {
-  type EndoFunction<X> = (x: X) => X;
-
-  const testFunctions: ReadonlyArray<EndoFunction<A>> = [
+  // テスト用の関数列
+  const testFunctions: ReadonlyArray<(x: A) => A> = [
     x => x,
     x => new A(x.param * x.param),
     x => new A(2 * x.param),
     x => new A(-x.param),
   ];
+
+  // A の値の列
   const acceptableInputs: A[] = [1, 10, -1, -100].map(n => new A(n));
-  const unacceptableInputs: unknown[] = [1, 0.1, '', null, undefined, ({})];
+
+  // A 以外の値の列
+  const unacceptableInputs: unknown[] = [1, 0.1, '', null, undefined, ({})].concat(testFunctions);
 
   describe('when given an instance of the class', () => {
-    type TestCase = [EndoFunction<A>, A];
-    const testCases: ReadonlyArray<TestCase> =
-      testFunctions.flatMap(f => acceptableInputs.map(a => [f, a] as TestCase));
+    const testCases = testFunctions.flatMap(f => acceptableInputs.map(a => [f, a] as const));
 
     it.each(testCases)('must accept the input', (f, a) => {
       expect(definePartialFnOnClass(A, f).canBeAppliedTo(a)).toEqual(true);
@@ -39,9 +40,8 @@ describe('Partial functions constructed by definePartialFnOnClass', () => {
   });
 
   describe('when given non-instance of the class', () => {
-    type TestCase = [EndoFunction<A>, unknown];
-    const testCases: ReadonlyArray<TestCase> =
-      testFunctions.flatMap(f => unacceptableInputs.map(a => [f, a] as TestCase));
+    const testCases =
+      testFunctions.flatMap(f => unacceptableInputs.map(a => [f, a] as const));
 
     it.each(testCases)('must not accept the input', (f, x) => {
       expect(definePartialFnOnClass(A, f).canBeAppliedTo(x)).toEqual(false);
