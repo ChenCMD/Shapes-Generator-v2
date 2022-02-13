@@ -14,13 +14,13 @@ import { ShapeObjectDefinitionUid } from '../definition/Uid';
  * この展開処理を行う部分を diff-expansion phase と呼ぶことにする。
  * 
  * diff-expansion phase では、SGP の中の各 ShapeObject が
- *  - 一意なIdを利用しているか
+ *  - 一意なUidを利用しているか
  *  - SynchronizedShape であれば、同期対象として、
  *    それよりも前に定義された ShapeObject を参照していること
+ *  - ModiferのPatchが存在するModifierを参照していること
+ *  - 展開の前後を通して、Modifierに(同ShapeObject内で)一意なUidを割り振っているか
  * 
- * を検査する。
- * 検査に通らなければエラーを出し、通れば SynchronizedShape が保持していた差分を適用する。
- * 差分が適用できなかった場合はやはりエラーになる。
+ * などを検査する。
  */
 type DiffPatchedSGP = ReadonlyArray<ShapeObjectDefinition<ModifiedShape>>;
 
@@ -45,7 +45,7 @@ function checkSyncObjectReferences(program: SGP): E.Either<DiffExpansionPhaseErr
     }
 
     idSoFar.add(definitionUid);
-  }    
+  }
 
   return E.right(undefined);
 }
@@ -54,6 +54,15 @@ function expandCheckedProgram(program: SGP): DiffPatchedSGP {
   throw Error('Not implemented!');
 }
 
+/**
+ * SGPを展開する。
+ * 
+ * このメソッドにより展開されたプログラムは、以下を満たす：
+ *  - 各{@link ShapeObjectDefinition}が
+ *   - {@link ModifiedShape}であり、
+ *   - それぞれ一意なUidを持っており、
+ *   - 各{@link ModifierDefinition}が、{@link ShapeObjectDefinition}内で一意なUidを持つ
+ */
 function expandDiff(program: SGP): ErrorOr<DiffPatchedSGP> {
   return pipe(
     E.right(program),
