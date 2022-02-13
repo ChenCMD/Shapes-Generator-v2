@@ -2,138 +2,25 @@ import * as E from 'fp-ts/Either';
 import * as EE from '../../utils/either';
 
 import { pipe } from 'fp-ts/function';
-import { ModifiedShape, SGP, ShapeObjectDefinition, SGPEvaluationResult } from '../definition/SGP';
-import { DiffExpansionPhaseError, duplicateModifierUid, duplicateShapeObjectUid, notImplemented, SGPInterpreterError, syncReferenceIllFormed, WhenWasModifierUidDuplicated } from './errors';
-import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from '../definition/Uid';
+import { SGP, SGPEvaluationResult } from '../definition/SGP';
+import { notImplemented, SGPInterpreterError } from './errors';
+import { expandDiff, DiffPatchedSGP } from './diff-phase';
 
-/**
- * SGP のうち、 ModifiedShape をもとにした図形定義しか含まないもの。
- * 
- * SGP の評価パイプライン上では、まず最初に SGP が DiffPatchedSGP に
- * expandDiff 関数によって「展開」される。
- * この展開処理を行う部分を diff-expansion phase と呼ぶことにする。
- * 
- * diff-expansion phase では、SGP の中の各 ShapeObject が
- *  - 一意なUidを利用しているか
- *  - SynchronizedShape であれば、同期対象として、
- *    それよりも前に定義された ShapeObject を参照していること
- *  - ModiferのPatchが存在するModifierを参照していること
- *  - 展開の前後を通して、Modifierに(同ShapeObject内で)一意なUidを割り振っているか
- * 
- * などを検査する。
- */
-type DiffPatchedSGP = ReadonlyArray<ShapeObjectDefinition<ModifiedShape>>;
+type InterpreterErrorOr<A> = E.Either<SGPInterpreterError, A>;
 
-type ErrorOr<A> = E.Either<SGPInterpreterError, A>;
-
-// #region diff phase 
-
-/**
- * 各{@link ShapeObjectDefinition}が一意な{@link ShapeObjectDefinitionUid}を持っていることを確認する
- */
-function checkShapeObjectUidUniqueness(program: SGP): E.Either<DiffExpansionPhaseError, void> {
-  const idSoFar: Set<ShapeObjectDefinitionUid> = new Set();
-  for (const { definitionUid } of program) {
-    if (idSoFar.has(definitionUid)) {
-      return E.left(duplicateShapeObjectUid(definitionUid));
-    } else {
-      idSoFar.add(definitionUid);
-    }
-  }
-  
-  return E.right(undefined);
-}
-
-/**
- * 各{@link ModifierDefinition}が({@link ShapeObjectDefinition}内で)
- * 一意な{@link ModifierDefinitionUid}を持っていることを確認する
- */
-const checkModifierUidUniqueness =
-  (when: WhenWasModifierUidDuplicated) => <P extends SGP>(program: P): E.Either<DiffExpansionPhaseError, void> => {
-    for (const { definitionUid: soUid, shapeObject } of program) {
-      const declaredModifiers =
-        shapeObject.__kind === 'ModifiedShape' ?
-          shapeObject.modifiers
-        : shapeObject.additionalModifiers;
-
-      const modifierIdSoFar: Set<ModifierDefinitionUid> = new Set();
-
-      for (const { definitionUid } of declaredModifiers) {
-        if (modifierIdSoFar.has(definitionUid)) {
-          return E.left(duplicateModifierUid(definitionUid, soUid, when));
-        } else {
-          modifierIdSoFar.add(definitionUid);
-        }
-      }
-    }
-
-    return E.right(undefined);
-  };
-
-/**
- * 各{@link SynchronizedShape}が有効な図形を参照していることを確認する
- */
-function checkSyncObjectReferences(program: SGP): E.Either<DiffExpansionPhaseError, void> {
-  const idSoFar: Set<ShapeObjectDefinitionUid> = new Set();
-
-  for (const { definitionUid, shapeObject } of program) {
-    if (shapeObject.__kind === 'SynchronizedShape' && !idSoFar.has(shapeObject.targetDefinitionUid)) {
-      const isForwardReference = program
-        .map(def => def.definitionUid)
-        .includes(shapeObject.targetDefinitionUid);
-      const reason = isForwardReference ? 'forwardReference' : 'notFound';
-      return E.left(syncReferenceIllFormed(definitionUid, reason));
-    }
-
-    idSoFar.add(definitionUid);
-  }
-
-  return E.right(undefined);
-}
-
-function expandCheckedProgram(program: SGP): E.Either<DiffExpansionPhaseError, DiffPatchedSGP> {
-  throw Error('Not implemented!');
-}
-
-/**
- * SGPを展開する。
- * 
- * このメソッドにより展開されたプログラムは、以下を満たす：
- *  - 各{@link ShapeObjectDefinition}が
- *   - {@link ModifiedShape}であり、
- *   - それぞれ一意なUidを持っており、
- *   - 各{@link ModifierDefinition}が、{@link ShapeObjectDefinition}内で一意なUidを持つ
- */
-function expandDiff(program: SGP): ErrorOr<DiffPatchedSGP> {
-  return pipe(
-    E.right(program),
-    EE.chainTap(checkShapeObjectUidUniqueness),
-    EE.chainTap(checkModifierUidUniqueness('onInput')),
-    EE.chainTap(checkSyncObjectReferences),
-    // この時点で、programの各ShapeObjectDefinitionが一意なUidを持っており、
-    // Modifierの列が一意なUidを持っており、
-    // さらに各SynchronizedShapeが有効な参照をしていることが保証されている
-    E.chain(expandCheckedProgram),
-    // 展開後にModifierの各列がUidの一意性を持っている保証はないので、確認する
-    EE.chainTap(checkModifierUidUniqueness('afterExpansion')),
-  );
-}
-
-// #endregion
-
-function typeCheckModifiers(program: DiffPatchedSGP): ErrorOr<void> {
+function typeCheckModifiers(program: DiffPatchedSGP): InterpreterErrorOr<void> {
   return E.left(notImplemented);
 }
 
-function validateShapeObjectDefinitionReferences(program: DiffPatchedSGP): ErrorOr<void> {
+function validateShapeObjectDefinitionReferences(program: DiffPatchedSGP): InterpreterErrorOr<void> {
   return E.left(notImplemented);
 }
 
-function evaluate(program: DiffPatchedSGP): ErrorOr<SGPEvaluationResult> {
+function evaluate(program: DiffPatchedSGP): InterpreterErrorOr<SGPEvaluationResult> {
   return E.left(notImplemented);
 }
 
-export function evaluateSGP(program: SGP): ErrorOr<SGPEvaluationResult> {
+export function evaluateSGP(program: SGP): InterpreterErrorOr<SGPEvaluationResult> {
   return pipe(
     E.right(program),
     E.chain(expandDiff),
