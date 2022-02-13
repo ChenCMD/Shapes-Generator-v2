@@ -9,38 +9,47 @@ class A {
 }
 
 describe('Partial functions constructed by definePartialFnOnClass', () => {
-  const testFunctions: ((x: A) => A)[] = [
+  type EndoFunction<X> = (x: X) => X;
+
+  const testFunctions: ReadonlyArray<EndoFunction<A>> = [
     x => x,
     x => new A(x.param * x.param),
     x => new A(2 * x.param),
     x => new A(-x.param),
   ];
+  const acceptableInputs: A[] = [1, 10, -1, -100].map(n => new A(n));
+  const unacceptableInputs: unknown[] = [1, 0.1, '', null, undefined, ({})];
 
-  it('must behave as the provided function when given an instance of the class', () => {
-    const inputs: A[] = [1, 10, -1, -100].map(n => new A(n));
+  describe('when given an instance of the class', () => {
+    type TestCase = [EndoFunction<A>, A];
+    const testCases: ReadonlyArray<TestCase> =
+      testFunctions.flatMap(f => acceptableInputs.map(a => [f, a] as TestCase));
 
-    for (const f of testFunctions) {
-      for (const param of inputs) {
-        const partialFunction = definePartialFnOnClass(A, f);
+    it.each(testCases)('must accept the input', (f, a) => {
+      expect(definePartialFnOnClass(A, f).canBeAppliedTo(a)).toEqual(true);
+    });
 
-        expect(partialFunction.canBeAppliedTo(param)).toEqual(true);
-        expect(partialFunction.convert(param)).toEqual(f(param));
-        expect(partialFunction.convertIfApplicable(param)).toEqual(O.some(f(param)));
-      }
-    }
+    it.each(testCases)('must convert according to the underlying function', (f, a) => {
+      expect(definePartialFnOnClass(A, f).convert(a)).toEqual(f(a));
+    });
+
+    it.each(testCases)('must convertIfApplicable according to the underlying function', (f, a) => {
+      expect(definePartialFnOnClass(A, f).convertIfApplicable(a)).toEqual(O.some(f(a)));
+    });
   });
 
-  it('must return Option.None when given non-instance of the class', () => {
-    const nonAValues: unknown[] = [1, 0.1, '', null, undefined, ({})];
+  describe('when given non-instance of the class', () => {
+    type TestCase = [EndoFunction<A>, unknown];
+    const testCases: ReadonlyArray<TestCase> =
+      testFunctions.flatMap(f => unacceptableInputs.map(a => [f, a] as TestCase));
 
-    for (const f of testFunctions) {
-      for (const nonAValue of nonAValues) {
-        const partialFunction = definePartialFnOnClass(A, f);
+    it.each(testCases)('must not accept the input', (f, x) => {
+      expect(definePartialFnOnClass(A, f).canBeAppliedTo(x)).toEqual(false);
+    });
 
-        expect(partialFunction.canBeAppliedTo(nonAValue)).toEqual(false);
-        expect(partialFunction.convertIfApplicable(nonAValue)).toEqual(O.none);
-      }
-    }
+    it.each(testCases)('must emit Option.none on convertIfApplicable', (f, x) => {
+      expect(definePartialFnOnClass(A, f).convertIfApplicable(x)).toEqual(O.none);
+    });
   });
 });
 
