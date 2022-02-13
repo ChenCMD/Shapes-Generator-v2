@@ -40,19 +40,23 @@ export const duplicateShapeObjectUid =
   (duplicatedId: ShapeObjectDefinitionUid): DuplicateShapeObjectUid =>
     ({ __kind: 'DuplicateShapeObjectUid', duplicatedId });
 
+/**
+ * どの段階でModifierのUidが重複していたか。
+ *  - `'onInput'` の場合、入力されたプログラムの `shapeObject` の内一つが、
+ *  - `'afterExpansion'` の場合、展開後の `shapeObject` の内一つが、
+ * 二つの異なるModifierで同じUidを持つものを含んでいたことを示す。
+ */
+export type WhenWasModifierUidDuplicated = 'onInput' | 'afterExpansion';
+
 export interface DuplicateModifierUid {
   readonly __kind: 'DuplicateModifierUid';
   readonly duplicatedModifierUid: ModifierDefinitionUid;
   readonly modifierOwnerUid: ShapeObjectDefinitionUid;
-
-  /**
-   * どの段階でModifierのUidが重複していたか。
-   *  - `'onInput'` の場合、入力されたプログラムの `shapeObject` の内一つが、
-   *  - `'afterExpansion'` の場合、展開後の `shapeObject` の内一つが、
-   * 二つの異なるModifierで同じUidを持つものを含んでいたことを示す。
-   */
-   readonly when: 'onInput' | 'afterExpansion'
+  readonly when: WhenWasModifierUidDuplicated;
 }
+export const duplicateModifierUid =
+  (duplicatedModifierUid: ModifierDefinitionUid, modifierOwnerUid: ShapeObjectDefinitionUid, when: WhenWasModifierUidDuplicated): DuplicateModifierUid =>
+    ({ __kind: 'DuplicateModifierUid', duplicatedModifierUid, modifierOwnerUid, when });
 
 export type DiffExpansionPhaseError =
   | SyncReferenceIllFormed
