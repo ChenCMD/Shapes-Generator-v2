@@ -1,4 +1,4 @@
-import { ShapeObjectDefinitionUid } from '../definition/Uid';
+import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from '../definition/Uid';
 
 /**
  * 図形オブジェクトへの参照がなぜ正しくないかの理由。
@@ -27,7 +27,7 @@ export interface SyncReferenceIllFormed {
 }
 export const syncReferenceIllFormed =
   (sourceId: ShapeObjectDefinitionUid, reason: IllFormedReferenceReason): SyncReferenceIllFormed =>
-      ({ __kind: 'SyncReferenceIllFormed', sourceId, reason });
+    ({ __kind: 'SyncReferenceIllFormed', sourceId, reason });
 
 /**
 * 同じShapeObjectIdが複数の図形オブジェクト定義に使われてしまっている時のエラー。
@@ -38,18 +38,13 @@ export interface DuplicateShapeObjectUid {
 }
 export const duplicateShapeObjectUid =
   (duplicatedId: ShapeObjectDefinitionUid): DuplicateShapeObjectUid =>
-      ({ __kind: 'DuplicateShapeObjectUid', duplicatedId });
-
-/**
- * 同じShapeObjectIdが複数の図形オブジェクト定義に使われてしまっている時のエラー。
- */
-export interface DuplicateShapeObjectUid {
-  __kind: 'DuplicateShapeObjectUid';
-  duplicatedId: ShapeObjectDefinitionUid;
-}
+    ({ __kind: 'DuplicateShapeObjectUid', duplicatedId });
 
 export interface DuplicateModifierUid {
   __kind: 'DuplicateModifierUid';
+  duplicatedModifierUid: ModifierDefinitionUid;
+  modifierOwnerUid: ShapeObjectDefinitionUid;
+
   /**
    * どの段階でModifierのUidが重複していたか。
    *  - `'onInput'` の場合、入力されたプログラムの `shapeObject` の内一つが、
