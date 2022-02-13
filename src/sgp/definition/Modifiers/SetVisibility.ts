@@ -4,6 +4,8 @@ import { InsufficientSOPMFields, Modifier } from '../Modifier';
 import { patchForUnaryClass } from '../../../utils/ClassPatch';
 import { ShapeObjectPropertyMap } from '../SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme } from '../SOPM/SOPMScheme';
+import { SGPEvaluationResult } from '../SGP';
+import { ShapeObjectDefinitionUid } from '../Uid';
 
 export type SetVisibilityParameters = {
   readonly visibility: boolean
@@ -15,9 +17,13 @@ export class SetVisibilityModifier implements Modifier {
     this.params = params;
   }
 
+  readonly partialEvaluationResultRequirements = (): ReadonlySet<ShapeObjectDefinitionUid> =>
+    new Set();
+
   readonly outputSpec = (onInput: SOPMScheme): E.Either<InsufficientSOPMFields, SOPMScheme> =>
     E.right(onInput);
-  readonly run = (input: ShapeObjectPropertyMap): O.Option<ShapeObjectPropertyMap> => 
+
+  readonly run = (_partialResult: SGPEvaluationResult, input: ShapeObjectPropertyMap): O.Option<ShapeObjectPropertyMap> => 
     O.some(Object.assign({}, input, { visibility: this.params.visibility }));
 }
 
