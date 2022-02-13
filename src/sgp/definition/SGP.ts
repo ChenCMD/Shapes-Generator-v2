@@ -40,6 +40,8 @@ export interface ShapeObjectDefinition<SOBound extends ShapeObject> {
   readonly shapeObject: SOBound;
 }
 
-export type ShapesGeneratorProgram = ReadonlyArray<ShapeObjectDefinition<ShapeObject>>;
+export type AnyShapeObjectDefinition = ShapeObjectDefinition<ShapeObject>;
+
+export type ShapesGeneratorProgram = ReadonlyArray<AnyShapeObjectDefinition>;
 
 export type SGP = ShapesGeneratorProgram;
