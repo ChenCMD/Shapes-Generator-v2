@@ -10,55 +10,78 @@ import { ShapeObjectDefinitionUid } from '../definition/Uid';
  * 
  * のどちらかである。
  */
- export type IllFormedReferenceReason = 'forwardReference' | 'notFound';
+export type IllFormedReferenceReason = 'forwardReference' | 'notFound';
 
- // #region diff phase のエラー
- 
- /**
-  * 同期図形の同期対象への参照が正しく行われていない時のエラー。
+// #region diff phase のエラー
+
+/**
+* 同期図形の同期対象への参照が正しく行われていない時のエラー。
+*/
+export interface SyncReferenceIllFormed {
+  __kind: 'SyncReferenceIllFormed';
+  /**
+  * 参照を正しく行っていない同期図形オブジェクトの Uid
   */
- export interface SyncReferenceIllFormed {
-     __kind: 'SyncReferenceIllFormed';
-     /**
-      * 参照を正しく行っていない同期図形オブジェクトの Uid
-      */
-     sourceId: ShapeObjectDefinitionUid;
-     reason: IllFormedReferenceReason;
- }
- export const syncReferenceIllFormed =
-     (sourceId: ShapeObjectDefinitionUid, reason: IllFormedReferenceReason): SyncReferenceIllFormed =>
-         ({ __kind: 'SyncReferenceIllFormed', sourceId, reason });
- 
- /**
-  * 同じShapeObjectIdが複数の図形オブジェクト定義に使われてしまっている時のエラー。
-  */
- export interface DuplicateShapeObjectUid {
-     __kind: 'DuplicateShapeObjectUid';
-     duplicatedId: ShapeObjectDefinitionUid;
- }
- export const duplicateShapeObjectUid =
-     (duplicatedId: ShapeObjectDefinitionUid): DuplicateShapeObjectUid =>
-         ({ __kind: 'DuplicateShapeObjectUid', duplicatedId });
- 
- export type DiffExpansionPhaseError = SyncReferenceIllFormed | DuplicateShapeObjectUid;
- 
- // #endregion
- 
- export type ModifierTypeCheckPhaseError = never;
- 
- export type EvaluationError = never;
- 
- export interface NotImplemented {
-     __kind: 'NotImplemented';
- }
- 
- // TODO eliminate this
- export const notImplemented: NotImplemented = ({ __kind: 'NotImplemented' });
- export type GenericError = NotImplemented;
- 
- export type SGPInterpreterError =
-     | DiffExpansionPhaseError
-     | ModifierTypeCheckPhaseError
-     | EvaluationError
-     | GenericError
-     ;
+  sourceId: ShapeObjectDefinitionUid;
+  reason: IllFormedReferenceReason;
+}
+export const syncReferenceIllFormed =
+  (sourceId: ShapeObjectDefinitionUid, reason: IllFormedReferenceReason): SyncReferenceIllFormed =>
+      ({ __kind: 'SyncReferenceIllFormed', sourceId, reason });
+
+/**
+* 同じShapeObjectIdが複数の図形オブジェクト定義に使われてしまっている時のエラー。
+*/
+export interface DuplicateShapeObjectUid {
+  __kind: 'DuplicateShapeObjectUid';
+  duplicatedId: ShapeObjectDefinitionUid;
+}
+export const duplicateShapeObjectUid =
+  (duplicatedId: ShapeObjectDefinitionUid): DuplicateShapeObjectUid =>
+      ({ __kind: 'DuplicateShapeObjectUid', duplicatedId });
+
+/**
+ * 同じShapeObjectIdが複数の図形オブジェクト定義に使われてしまっている時のエラー。
+ */
+export interface DuplicateShapeObjectUid {
+  __kind: 'DuplicateShapeObjectUid';
+  duplicatedId: ShapeObjectDefinitionUid;
+}
+
+export interface DuplicateModifierUid {
+  __kind: 'DuplicateModifierUid';
+  /**
+   * どの段階でModifierのUidが重複していたか。
+   *  - `'onInput'` の場合、入力されたプログラムの `shapeObject` の内一つが、
+   *  - `'afterExpansion'` の場合、展開後の `shapeObject` の内一つが、
+   * 二つの異なるModifierで同じUidを持つものを含んでいたことを示す。
+   */
+  when: 'onInput' | 'afterExpansion'
+}
+
+export type DiffExpansionPhaseError =
+  | SyncReferenceIllFormed
+  | DuplicateShapeObjectUid
+  | DuplicateModifierUid
+  ;
+
+// #endregion
+
+export type ModifierTypeCheckPhaseError = never;
+
+export type EvaluationError = never;
+
+export interface NotImplemented {
+    __kind: 'NotImplemented';
+}
+
+// TODO eliminate this
+export const notImplemented: NotImplemented = ({ __kind: 'NotImplemented' });
+export type GenericError = NotImplemented;
+
+export type SGPInterpreterError =
+  | DiffExpansionPhaseError
+  | ModifierTypeCheckPhaseError
+  | EvaluationError
+  | GenericError
+  ;
