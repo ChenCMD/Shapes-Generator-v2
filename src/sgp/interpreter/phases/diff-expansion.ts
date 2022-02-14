@@ -3,7 +3,7 @@ import * as EE from '../../../utils/either';
 
 import { pipe } from 'fp-ts/function';
 import { ModifiedShape, SGP, ShapeObjectDefinition } from '../../definition/SGP';
-import { DiffExpansionPhaseError, duplicateModifierUid, duplicateShapeObjectUid, syncReferenceIllFormed, WhenWasModifierUidDuplicated } from '../errors';
+import { DiffExpansionPhaseError, duplicateModifierUid, duplicateShapeObjectUid, InterpreterErrorOr, syncReferenceIllFormed, WhenWasModifierUidDuplicated } from '../errors';
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from '../../definition/Uid';
 
 type ModifiedShapeDefinition = ShapeObjectDefinition<ModifiedShape>;
@@ -116,7 +116,7 @@ function expandCheckedProgram(program: SGP): E.Either<DiffExpansionPhaseError, D
  * よりユーザーが対処しにくい壊れ方をする可能性があるから、
  * このようなプログラムは無効であるというデザインをしている。
  */
-export function expandDiff(program: SGP): E.Either<DiffExpansionPhaseError, DiffPatchedSGP> {
+export function expandDiff(program: SGP): InterpreterErrorOr<DiffPatchedSGP> {
   return pipe(
     E.right(program),
     EE.chainTap(checkShapeObjectUidUniqueness),
