@@ -18,10 +18,12 @@ export interface ModifierDefinition {
   readonly modifier: Modifier;
 }
 
+export type ModifierPipeline = ReadonlyArray<ModifierDefinition>;
+
 export interface ModifiedShape {
   readonly __kind: 'ModifiedShape';
   readonly shape: Shape<SOPM>;
-  readonly modifiers: ReadonlyArray<ModifierDefinition>;
+  readonly modifiers: ModifierPipeline;
 }
 
 export interface TargetedModifierPatch {
@@ -34,7 +36,7 @@ export interface SynchronizedShape {
   readonly targetDefinitionUid: ShapeObjectDefinitionUid;
   readonly shapePatch: SomeShapePatch;
   readonly modifierPatches: ReadonlyArray<TargetedModifierPatch>;
-  readonly additionalModifiers: ReadonlyArray<ModifierDefinition>;
+  readonly additionalModifiers: ModifierPipeline;
 }
 
 export type ShapeObject = ModifiedShape | SynchronizedShape;
