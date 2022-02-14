@@ -144,10 +144,9 @@ export type EvaluationError =
 
 // #endregion
 
-export type SGPInterpreterError =
-  | DiffExpansionPhaseError
+export type SGPEvaluationPhaseError =
   | ModifierTypeCheckPhaseError
   | EvaluationError
   ;
 
-export type InterpreterErrorOr<A> = E.Either<SGPInterpreterError, A>;
+export type SGPEvaluationPhaseErrorOr<A> = E.Either<SGPEvaluationPhaseError, A>;

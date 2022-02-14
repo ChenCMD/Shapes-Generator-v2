@@ -3,18 +3,24 @@ import * as EE from '../../utils/either';
 
 import { pipe } from 'fp-ts/function';
 import { SGP, SGPEvaluationResult } from '../definition/SGP';
-import { InterpreterErrorOr } from './errors';
-import { expandDiff } from './phases/diff-expansion';
+import { SGPEvaluationPhaseErrorOr } from './errors';
+import { DiffExpansionPhaseErrorOr, DiffPatchedSGP, expandDiff as expandDiffPhase } from './phases/diff-expansion';
 import { evaluate } from './phases/evaluate';
 import { typeCheckModifiers } from './phases/typecheck';
 
 /**
- * Shapes Generator Program を実行して、実行結果またはエラーを得る。
+ * SGPを展開する。
  */
-export function evaluateSGP(program: SGP): InterpreterErrorOr<SGPEvaluationResult> {
+ export function expandDiff(program: SGP): DiffExpansionPhaseErrorOr<DiffPatchedSGP> {
+  return expandDiffPhase(program);
+}
+
+/**
+ * 展開済みのSGPを型チェックに掛けたうえで実行する。
+ */
+export function evaluatePatchedSGP(program: DiffPatchedSGP): SGPEvaluationPhaseErrorOr<SGPEvaluationResult> {
   return pipe(
     E.right(program),
-    E.chainW(expandDiff),
     EE.chainTapW(typeCheckModifiers),
     E.chainW(evaluate)
   );
