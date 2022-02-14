@@ -2,18 +2,16 @@ import * as E from 'fp-ts/Either';
 import * as EE from '../../utils/either';
 
 import { pipe } from 'fp-ts/function';
-import { SGP, SGPEvaluationResult } from '../definition/SGP';
+import { SGPEvaluationResult } from '../definition/SGP';
 import { SGPEvaluationPhaseErrorOr } from './errors';
-import { DiffExpansionPhaseErrorOr, DiffPatchedSGP, expandDiff as expandDiffPhase } from './phases/diff-expansion';
+import { DiffPatchedSGP } from './phases/diff-expansion';
 import { evaluate } from './phases/evaluate';
 import { typeCheckModifiers } from './phases/typecheck';
 
 /**
  * SGPを展開する。
  */
- export function expandDiff(program: SGP): DiffExpansionPhaseErrorOr<DiffPatchedSGP> {
-  return expandDiffPhase(program);
-}
+ export { expandDiff } from './phases/diff-expansion';
 
 /**
  * 展開済みのSGPを型チェックに掛けたうえで実行する。
