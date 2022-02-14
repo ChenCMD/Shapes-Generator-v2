@@ -5,8 +5,11 @@ import { SOPM } from './SOPM/ShapeObjectPropertyMap';
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from './Uid';
 
 export type ShapeObjectEvaluationResult = {
-  readonly resultOf: ShapeObjectDefinitionUid;
-  readonly result: SOPM;
+  /**
+   * どのShapeObjectDefinitionによってこの結果が生成されたかの参照
+   */
+  readonly originUid: ShapeObjectDefinitionUid;
+  readonly output: SOPM;
 };
 export type SGPEvaluationResult = ReadonlyArray<ShapeObjectEvaluationResult>;
 
