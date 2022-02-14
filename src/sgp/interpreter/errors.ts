@@ -101,7 +101,28 @@ export type DiffExpansionPhaseError =
 
 // #region typecheck phase のエラー
 
-export type ModifierTypeCheckPhaseError = never;
+export interface ModifierTypeError {
+  readonly __kind: 'ModifierTypeError';
+  readonly shapeObjectDefinitionUid: ShapeObjectDefinitionUid;
+  readonly modifierDefinitionUid: ModifierDefinitionUid;
+}
+export const modifierTypeError =
+  (shapeObjectDefinitionUid: ShapeObjectDefinitionUid, modifierDefinitionUid: ModifierDefinitionUid): ModifierTypeError =>
+    ({ __kind: 'ModifierTypeError', shapeObjectDefinitionUid, modifierDefinitionUid });
+
+export interface ModifierRequirementFailed {
+  readonly __kind: 'ModifierRequirementFailed';
+  readonly shapeObjectDefinitionUid: ShapeObjectDefinitionUid;
+  readonly modifierDefinitionUid: ModifierDefinitionUid;
+}
+export const modifierRequirementFailed =
+  (shapeObjectDefinitionUid: ShapeObjectDefinitionUid, modifierDefinitionUid: ModifierDefinitionUid): ModifierRequirementFailed =>
+    ({ __kind: 'ModifierRequirementFailed', shapeObjectDefinitionUid, modifierDefinitionUid });
+
+export type ModifierTypeCheckPhaseError =
+  | ModifierTypeError
+  | ModifierRequirementFailed
+  ;
 
 // #endregion
 
