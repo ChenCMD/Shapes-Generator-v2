@@ -115,6 +115,9 @@ function patchModifierPipeline(pipeline: ModifierPipeline, modifierPatch: Target
   );
 }
 
+/**
+ * パッチ定義 {@link patchDef} を {@link ModifiedShapeDefinition} に適用する。
+ */
 function patchShapeObject(targetDef: ModifiedShapeDefinition, patchDef: SynchronizedShapeDefinition): E.Either<DiffExpansionPhaseError, ModifiedShape> {
   const { shape: targetShape, modifiers: targetModifiers } = targetDef.shapeObject;
   const { modifierPatches, shapePatch, additionalModifiers } = patchDef.shapeObject;
@@ -147,6 +150,11 @@ function patchShapeObject(targetDef: ModifiedShapeDefinition, patchDef: Synchron
   });
 }
 
+/**
+ * SGPを展開する。
+ * 
+ * この関数は、事前条件として、同期図形のUid参照が後方参照になっていないことを求める。
+ */
 function expandCheckedProgram(program: SGP): E.Either<DiffExpansionPhaseError, DiffPatchedSGP> {
   const expandedDefinitions: ModifiedShapeDefinition[] = [];
 
