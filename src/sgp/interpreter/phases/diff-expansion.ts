@@ -53,8 +53,8 @@ const checkModifierUidUniqueness =
   (when: WhenWasModifierUidDuplicated) => <P extends SGP>(program: P): E.Either<DiffExpansionPhaseError, void> => {
     for (const { definitionUid: soUid, shapeObject } of program) {
       const declaredModifiers =
-        shapeObject.__kind === 'ModifiedShape' ?
-          shapeObject.modifiers
+        shapeObject.__kind === 'ModifiedShape'
+        ? shapeObject.modifiers
         : shapeObject.additionalModifiers;
 
       const modifierIdSoFar: Set<ModifierDefinitionUid> = new Set();
