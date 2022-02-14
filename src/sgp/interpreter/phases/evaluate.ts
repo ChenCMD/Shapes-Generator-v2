@@ -1,8 +1,10 @@
 import * as E from 'fp-ts/Either';
 
 import { SGPEvaluationResult, ShapeObjectEvaluationResult } from '../../definition/SGP';
-import { InterpreterErrorOr, modifierReturnedNoneWhenEvaluated } from '../errors';
+import { EvaluationError, modifierReturnedNoneWhenEvaluated } from '../errors';
 import { DiffPatchedSGP } from './diff-expansion';
+
+export type EvaluationErrorOr<A> = E.Either<EvaluationError, A>;
 
 /**
  * 型チェックに通った {@link DiffPatchedSGP} を実行する。
@@ -10,7 +12,7 @@ import { DiffPatchedSGP } from './diff-expansion';
  * このフェーズでエラーが返ってくる場合は、Modifierの実装が誤っているか、
  * 型チェッカの実装が誤っているような場合のいずれかなので、ユーザーにバグ報告を促すこと。
  */
-export function evaluate(program: DiffPatchedSGP): InterpreterErrorOr<SGPEvaluationResult> {
+export function evaluate(program: DiffPatchedSGP): EvaluationErrorOr<SGPEvaluationResult> {
   const resultSoFar: ShapeObjectEvaluationResult[] = [];
 
   for (const { definitionUid: shapeObjectUid, shapeObject } of program) {

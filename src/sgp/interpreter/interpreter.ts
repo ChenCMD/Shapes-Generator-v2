@@ -14,8 +14,8 @@ import { typeCheckModifiers } from './phases/typecheck';
 export function evaluateSGP(program: SGP): InterpreterErrorOr<SGPEvaluationResult> {
   return pipe(
     E.right(program),
-    E.chain(expandDiff),
-    EE.chainTap(typeCheckModifiers),
-    E.chain(evaluate)
+    E.chainW(expandDiff),
+    EE.chainTapW(typeCheckModifiers),
+    E.chainW(evaluate)
   );
 }

@@ -4,7 +4,7 @@ import * as EE from '../../../utils/either';
 
 import { pipe } from 'fp-ts/function';
 import { ModifiedShape, ModifiedShapeDefinition, ModifierPipeline, SGP, SynchronizedShape, SynchronizedShapeDefinition, TargetedModifierPatch } from '../../definition/SGP';
-import { DiffExpansionPhaseError, duplicateModifierUid, duplicateShapeObjectUid, InterpreterErrorOr, modifierPatchTargetNotFound, modifierPatchUnapplicable, shapePatchUnapplicable, syncReferenceIllFormed, WhenWasModifierUidDuplicated } from '../errors';
+import { DiffExpansionPhaseError, duplicateModifierUid, duplicateShapeObjectUid, modifierPatchTargetNotFound, modifierPatchUnapplicable, shapePatchUnapplicable, syncReferenceIllFormed, WhenWasModifierUidDuplicated } from '../errors';
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from '../../definition/Uid';
 import { assert } from 'console';
 
@@ -26,10 +26,12 @@ import { assert } from 'console';
  */
 export type DiffPatchedSGP = ReadonlyArray<ModifiedShapeDefinition>;
 
+export type DiffExpansionPhaseErrorOr<A> = E.Either<DiffExpansionPhaseError, A>;
+
 /**
  * 各{@link ShapeObjectDefinition}が一意な{@link ShapeObjectDefinitionUid}を持っていることを確認する
  */
-function checkShapeObjectUidUniqueness(program: SGP): E.Either<DiffExpansionPhaseError, void> {
+function checkShapeObjectUidUniqueness(program: SGP): DiffExpansionPhaseErrorOr<void> {
   const idSoFar: Set<ShapeObjectDefinitionUid> = new Set();
   for (const { definitionUid } of program) {
     if (idSoFar.has(definitionUid)) {
@@ -47,7 +49,7 @@ function checkShapeObjectUidUniqueness(program: SGP): E.Either<DiffExpansionPhas
  * 一意な{@link ModifierDefinitionUid}を持っていることを確認する
  */
 const checkModifierUidUniqueness =
-  (when: WhenWasModifierUidDuplicated) => <P extends SGP>(program: P): E.Either<DiffExpansionPhaseError, void> => {
+  (when: WhenWasModifierUidDuplicated) => <P extends SGP>(program: P): DiffExpansionPhaseErrorOr<void> => {
     for (const { definitionUid: soUid, shapeObject } of program) {
       const declaredModifiers =
         shapeObject.__kind === 'ModifiedShape'
@@ -71,7 +73,7 @@ const checkModifierUidUniqueness =
 /**
  * 各{@link SynchronizedShape}が有効な図形を参照していることを確認する
  */
-function checkSyncObjectReferences(program: SGP): E.Either<DiffExpansionPhaseError, void> {
+function checkSyncObjectReferences(program: SGP): DiffExpansionPhaseErrorOr<void> {
   const idSoFar: Set<ShapeObjectDefinitionUid> = new Set();
 
   for (const { definitionUid, shapeObject } of program) {
@@ -115,7 +117,7 @@ function patchModifierPipeline(pipeline: ModifierPipeline, modifierPatch: Target
 /**
  * パッチ定義 {@link patchDef} を {@link ModifiedShapeDefinition} に適用する。
  */
-function patchShapeObject(targetDef: ModifiedShapeDefinition, patchDef: SynchronizedShapeDefinition): E.Either<DiffExpansionPhaseError, ModifiedShape> {
+function patchShapeObject(targetDef: ModifiedShapeDefinition, patchDef: SynchronizedShapeDefinition): DiffExpansionPhaseErrorOr<ModifiedShape> {
   const { shape: targetShape, modifiers: targetModifiers } = targetDef.shapeObject;
   const { modifierPatches, shapePatch, additionalModifiers } = patchDef.shapeObject;
 
@@ -152,7 +154,7 @@ function patchShapeObject(targetDef: ModifiedShapeDefinition, patchDef: Synchron
  * 
  * この関数は、事前条件として、同期図形のUid参照が後方参照になっていないことを求める。
  */
-function expandCheckedProgram(program: SGP): E.Either<DiffExpansionPhaseError, DiffPatchedSGP> {
+function expandCheckedProgram(program: SGP): DiffExpansionPhaseErrorOr<DiffPatchedSGP> {
   const expandedDefinitions: ModifiedShapeDefinition[] = [];
 
   for (const { definitionUid, shapeObject } of program) {
@@ -199,7 +201,7 @@ function expandCheckedProgram(program: SGP): E.Either<DiffExpansionPhaseError, D
  * よりユーザーが対処しにくい壊れ方をする可能性があるから、
  * このようなプログラムは無効であるというデザインをしている。
  */
-export function expandDiff(program: SGP): InterpreterErrorOr<DiffPatchedSGP> {
+export function expandDiff(program: SGP): DiffExpansionPhaseErrorOr<DiffPatchedSGP> {
   return pipe(
     E.right(program),
     EE.chainTap(checkShapeObjectUidUniqueness),

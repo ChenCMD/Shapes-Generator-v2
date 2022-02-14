@@ -144,19 +144,10 @@ export type EvaluationError =
 
 // #endregion
 
-export interface NotImplemented {
-    __kind: 'NotImplemented';
-}
-
-// TODO eliminate this
-export const notImplemented: NotImplemented = ({ __kind: 'NotImplemented' });
-export type GenericError = NotImplemented;
-
 export type SGPInterpreterError =
   | DiffExpansionPhaseError
   | ModifierTypeCheckPhaseError
   | EvaluationError
-  | GenericError
   ;
 
 export type InterpreterErrorOr<A> = E.Either<SGPInterpreterError, A>;

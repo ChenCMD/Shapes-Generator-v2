@@ -4,7 +4,7 @@ import * as RA from 'fp-ts/ReadonlyArray';
 import { subsetOf } from '../../../utils/ReadonlySet';
 
 import { DiffPatchedSGP } from './diff-expansion';
-import { InterpreterErrorOr, modifierRequirementFailed, ModifierTypeCheckPhaseError, modifierTypeError } from '../errors';
+import { modifierRequirementFailed, ModifierTypeCheckPhaseError, modifierTypeError } from '../errors';
 import { pipe } from 'fp-ts/function';
 import { ModifiedShapeDefinition } from '../../definition/SGP';
 import { ShapeObjectDefinitionUid } from '../../definition/Uid';
@@ -65,7 +65,7 @@ function typeCheckModifierRequirementsOfProgram(program: DiffPatchedSGP): TypeCh
   return E.right(undefined);
 }
 
-export function typeCheckModifiers(program: DiffPatchedSGP): InterpreterErrorOr<void> {
+export function typeCheckModifiers(program: DiffPatchedSGP): TypeCheckErrorOrVoid {
   return pipe(
     E.right(program),
     EE.chainTap(typeCheckModifierRequirementsOfProgram),
