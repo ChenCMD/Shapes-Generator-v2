@@ -1,10 +1,10 @@
 import * as E from 'fp-ts/Either';
-import * as EE from '../../utils/either';
+import * as EE from '../../../utils/either';
 
 import { pipe } from 'fp-ts/function';
-import { ModifiedShape, SGP, ShapeObjectDefinition } from '../definition/SGP';
-import { DiffExpansionPhaseError, duplicateModifierUid, duplicateShapeObjectUid, syncReferenceIllFormed, WhenWasModifierUidDuplicated } from './errors';
-import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from '../definition/Uid';
+import { ModifiedShape, SGP, ShapeObjectDefinition } from '../../definition/SGP';
+import { DiffExpansionPhaseError, duplicateModifierUid, duplicateShapeObjectUid, syncReferenceIllFormed, WhenWasModifierUidDuplicated } from '../errors';
+import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from '../../definition/Uid';
 
 type ModifiedShapeDefinition = ShapeObjectDefinition<ModifiedShape>;
 
