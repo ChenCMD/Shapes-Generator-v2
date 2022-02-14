@@ -3,6 +3,7 @@ import { patchForUnaryClass } from '../../../utils/ClassPatch';
 import { Shape } from '../Shape';
 import { SOPMWith } from '../SOPM/ShapeObjectPropertyMap';
 import { DetailedSOPMScheme, sopmSchemeWith } from '../SOPM/SOPMScheme';
+import { shapePatch } from '../Patches';
 
 type EllipseSOPM = SOPMWith<true, false>;
 export type EllipseParameters = {
@@ -27,4 +28,4 @@ export class Ellipse implements Shape<EllipseSOPM> {
   }
 }
 
-export const EllipsePatch = patchForUnaryClass(Ellipse, t => t.params);
+export const EllipsePatch = shapePatch(patchForUnaryClass(Ellipse, t => t.params));

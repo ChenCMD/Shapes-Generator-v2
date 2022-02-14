@@ -104,7 +104,7 @@ function patchModifierPipeline(pipeline: ModifierPipeline, modifierPatch: Target
       patchTarget.definitionUid === targetModifierUid
       ? pipe(
           patchTarget.modifier,
-          patch.asPartialFunctionOnBound,
+          patch,
           O.map(m => ({ definitionUid: patchTarget.definitionUid, modifier: m }))
         )
       : O.some(patchTarget)
@@ -119,7 +119,7 @@ function patchShapeObject(targetDef: ModifiedShapeDefinition, patchDef: Synchron
   const { shape: targetShape, modifiers: targetModifiers } = targetDef.shapeObject;
   const { modifierPatches, shapePatch, additionalModifiers } = patchDef.shapeObject;
 
-  const patchedShape = shapePatch.asPartialFunctionOnBound(targetShape);
+  const patchedShape = shapePatch(targetShape);
   if (patchedShape._tag === 'None') {
     return E.left(shapePatchUnapplicable(targetDef.definitionUid, patchDef.definitionUid));
   }

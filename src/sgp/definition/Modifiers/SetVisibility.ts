@@ -6,6 +6,7 @@ import { ShapeObjectPropertyMap } from '../SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme } from '../SOPM/SOPMScheme';
 import { SGPEvaluationResult } from '../SGP';
 import { ShapeObjectDefinitionUid } from '../Uid';
+import { modifierPatch } from '../Patches';
 
 export type SetVisibilityParameters = {
   readonly visibility: boolean
@@ -27,4 +28,4 @@ export class SetVisibilityModifier implements Modifier {
     O.some(Object.assign({}, input, { visibility: this.params.visibility }));
 }
 
-export const SetVisibilityPatch = patchForUnaryClass(SetVisibilityModifier, t => t.params);
+export const SetVisibilityPatch = modifierPatch(patchForUnaryClass(SetVisibilityModifier, t => t.params));

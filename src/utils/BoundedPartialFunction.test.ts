@@ -34,8 +34,8 @@ describe('Partial functions constructed by definePartialFnOnClass', () => {
       expect(definePartialFnOnClass(A, f).convert(a)).toEqual(f(a));
     });
 
-    it.each(testCases)('must convertIfApplicable according to the underlying function', (f, a) => {
-      expect(definePartialFnOnClass(A, f).convertIfApplicable(a)).toEqual(O.some(f(a)));
+    it.each(testCases)('must convert (with asPartialFunctionOn) according to the underlying function', (f, a) => {
+      expect(definePartialFnOnClass(A, f).asPartialFunctionOn()(a)).toEqual(O.some(f(a)));
     });
   });
 
@@ -47,8 +47,8 @@ describe('Partial functions constructed by definePartialFnOnClass', () => {
       expect(definePartialFnOnClass(A, f).canBeAppliedTo(x)).toEqual(false);
     });
 
-    it.each(testCases)('must emit Option.none on convertIfApplicable', (f, x) => {
-      expect(definePartialFnOnClass(A, f).convertIfApplicable(x)).toEqual(O.none);
+    it.each(testCases)('must emit Option.none when a value is applied to asPartialFunctionOn', (f, x) => {
+      expect(definePartialFnOnClass(A, f).asPartialFunctionOn<unknown>()(x)).toEqual(O.none);
     });
   });
 });
