@@ -3,7 +3,7 @@ import * as E from 'fp-ts/Either';
 import * as EE from '../../../utils/either';
 
 import { pipe } from 'fp-ts/function';
-import { ModifiedShape, SGP, ShapeObjectDefinition, SynchronizedShape } from '../../definition/SGP';
+import { ModifiedShape, ModifierPipeline, SGP, ShapeObjectDefinition, SynchronizedShape, TargetedModifierPatch } from '../../definition/SGP';
 import { DiffExpansionPhaseError, duplicateModifierUid, duplicateShapeObjectUid, InterpreterErrorOr, modifierPatchTargetNotFound, modifierPatchUnapplicable, shapePatchUnapplicable, syncReferenceIllFormed, WhenWasModifierUidDuplicated } from '../errors';
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from '../../definition/Uid';
 import { assert } from 'console';
@@ -92,6 +92,29 @@ function checkSyncObjectReferences(program: SGP): E.Either<DiffExpansionPhaseErr
   return E.right(undefined);
 }
 
+/**
+ * Modifierへのパッチ {@link modifierPatch} を、Modifierパイプライン {@link pipeline} に適用する。
+ * 
+ * パッチの適用対象が見つからなかった場合は、パイプラインが変更されずにそのまま返る。
+ * 適用対象が見つかったが、適用が不可能だった場合には {@link O.none} が返る。
+ */
+function patchModifierPipeline(pipeline: ModifierPipeline, modifierPatch: TargetedModifierPatch): O.Option<ModifierPipeline> {
+  const { targetModifierUid, patch } = modifierPatch;
+
+  return pipe(
+    pipeline,
+    O.traverseArray(patchTarget =>
+      patchTarget.definitionUid === targetModifierUid
+      ? pipe(
+          patchTarget.modifier,
+          patch.asPartialFunctionOnBound,
+          O.map(m => ({ definitionUid: patchTarget.definitionUid, modifier: m }))
+        )
+      : O.some(patchTarget)
+    )
+  );
+}
+
 function patchShapeObject(targetDef: ModifiedShapeDefinition, patchDef: SynchronizedShapeDefinition): E.Either<DiffExpansionPhaseError, ModifiedShape> {
   const { shape: targetShape, modifiers: targetModifiers } = targetDef.shapeObject;
   const { modifierPatches, shapePatch, additionalModifiers } = patchDef.shapeObject;
@@ -104,26 +127,12 @@ function patchShapeObject(targetDef: ModifiedShapeDefinition, patchDef: Synchron
   let patchedModifiers = targetModifiers;
   for (const modifierPatch of modifierPatches) {
     if (patchedModifiers.find(m => m.definitionUid === modifierPatch.targetModifierUid) === undefined) {
-      E.left(modifierPatchTargetNotFound(modifierPatch.targetModifierUid, targetDef.definitionUid));
+      return E.left(modifierPatchTargetNotFound(modifierPatch.targetModifierUid, targetDef.definitionUid));
     }
     
-    const patchResult = pipe(
-      patchedModifiers,
-      O.traverseArray(modifierDefinition => {
-        if (modifierDefinition.definitionUid === modifierPatch.targetModifierUid) {
-          return pipe(
-            modifierDefinition.modifier,
-            modifierPatch.patch.asPartialFunctionOnBound,
-            O.map(m => ({ definitionUid: modifierDefinition.definitionUid, modifier: m }))
-          );
-        } else {
-          return O.some(modifierDefinition);
-        }
-      })
-    );
-
+    const patchResult = patchModifierPipeline(patchedModifiers, modifierPatch);
     if (patchResult._tag === 'None') {
-      E.left(modifierPatchUnapplicable(
+      return E.left(modifierPatchUnapplicable(
         targetDef.definitionUid, modifierPatch.targetModifierUid, patchDef.definitionUid
       ));
     } else {
@@ -153,10 +162,10 @@ function expandCheckedProgram(program: SGP): E.Either<DiffExpansionPhaseError, D
 
       const patchedShapeObject = patchShapeObject(target, { definitionUid, shapeObject });
 
-      if (patchedShapeObject._tag === 'Left') {
-        return patchedShapeObject;
-      } else {
+      if (patchedShapeObject._tag === 'Right') {
         expandedDefinitions.push({ definitionUid, shapeObject: patchedShapeObject.right });
+      } else {
+        return patchedShapeObject as E.Left<DiffExpansionPhaseError>;
       }
     } else {
       expandedDefinitions.push({ definitionUid, shapeObject });
