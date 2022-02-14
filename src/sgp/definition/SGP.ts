@@ -47,6 +47,8 @@ export interface ShapeObjectDefinition<SOBound extends ShapeObject> {
 }
 
 export type AnyShapeObjectDefinition = ShapeObjectDefinition<ShapeObject>;
+export type SynchronizedShapeDefinition = ShapeObjectDefinition<SynchronizedShape>;
+export type ModifiedShapeDefinition = ShapeObjectDefinition<ModifiedShape>;
 
 export type ShapesGeneratorProgram = ReadonlyArray<AnyShapeObjectDefinition>;
 
