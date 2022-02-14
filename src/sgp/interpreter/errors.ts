@@ -2,6 +2,8 @@ import * as E from 'fp-ts/Either';
 
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from '../definition/Uid';
 
+// #region diff phase のエラー
+
 /**
  * 図形オブジェクトへの参照がなぜ正しくないかの理由。
  * 
@@ -14,11 +16,9 @@ import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from '../definition/U
  */
 export type IllFormedReferenceReason = 'forwardReference' | 'notFound';
 
-// #region diff phase のエラー
-
 /**
-* 同期図形の同期対象への参照が正しく行われていない時のエラー。
-*/
+ * 同期図形の同期対象への参照が正しく行われていない時のエラー。
+ */
 export interface SyncReferenceIllFormed {
   readonly __kind: 'SyncReferenceIllFormed';
   /**
@@ -68,9 +68,29 @@ export type DiffExpansionPhaseError =
 
 // #endregion
 
+// #region typecheck phase のエラー
+
 export type ModifierTypeCheckPhaseError = never;
 
-export type EvaluationError = never;
+// #endregion
+
+// #region evaluate phase のエラー
+
+export interface ModifierReturnedNoneWhenEvaluated {
+  readonly __kind: 'ModifierReturnedNoneWhenEvaluated';
+  readonly ownerShapeObjectUid: ShapeObjectDefinitionUid;
+  readonly modifierUid: ModifierDefinitionUid;
+}
+
+export const modifierReturnedNoneWhenEvaluated =
+  (ownerShapeObjectUid: ShapeObjectDefinitionUid, modifierUid: ModifierDefinitionUid): ModifierReturnedNoneWhenEvaluated =>
+    ({ __kind: 'ModifierReturnedNoneWhenEvaluated', ownerShapeObjectUid, modifierUid });
+
+export type EvaluationError =
+  | ModifierReturnedNoneWhenEvaluated
+  ;
+
+// #endregion
 
 export interface NotImplemented {
     __kind: 'NotImplemented';
