@@ -1,11 +1,14 @@
+import * as O from 'fp-ts/Option';
 import * as E from 'fp-ts/Either';
 import * as EE from '../../../utils/either';
 
 import { pipe } from 'fp-ts/function';
-import { ModifiedShape, SGP, ShapeObjectDefinition } from '../../definition/SGP';
-import { DiffExpansionPhaseError, duplicateModifierUid, duplicateShapeObjectUid, InterpreterErrorOr, syncReferenceIllFormed, WhenWasModifierUidDuplicated } from '../errors';
+import { ModifiedShape, SGP, ShapeObjectDefinition, SynchronizedShape } from '../../definition/SGP';
+import { DiffExpansionPhaseError, duplicateModifierUid, duplicateShapeObjectUid, InterpreterErrorOr, modifierPatchTargetNotFound, modifierPatchUnapplicable, shapePatchUnapplicable, syncReferenceIllFormed, WhenWasModifierUidDuplicated } from '../errors';
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from '../../definition/Uid';
+import { assert } from 'console';
 
+type SynchronizedShapeDefinition = ShapeObjectDefinition<SynchronizedShape>;
 type ModifiedShapeDefinition = ShapeObjectDefinition<ModifiedShape>;
 
 /**
@@ -89,10 +92,76 @@ function checkSyncObjectReferences(program: SGP): E.Either<DiffExpansionPhaseErr
   return E.right(undefined);
 }
 
+function patchShapeObject(targetDef: ModifiedShapeDefinition, patchDef: SynchronizedShapeDefinition): E.Either<DiffExpansionPhaseError, ModifiedShape> {
+  const { shape: targetShape, modifiers: targetModifiers } = targetDef.shapeObject;
+  const { modifierPatches, shapePatch, additionalModifiers } = patchDef.shapeObject;
+
+  const patchedShape = shapePatch.asPartialFunctionOnBound(targetShape);
+  if (patchedShape._tag === 'None') {
+    return E.left(shapePatchUnapplicable(targetDef.definitionUid, patchDef.definitionUid));
+  }
+
+  let patchedModifiers = targetModifiers;
+  for (const modifierPatch of modifierPatches) {
+    if (patchedModifiers.find(m => m.definitionUid === modifierPatch.targetModifierUid) === undefined) {
+      E.left(modifierPatchTargetNotFound(modifierPatch.targetModifierUid, targetDef.definitionUid));
+    }
+    
+    const patchResult = pipe(
+      patchedModifiers,
+      O.traverseArray(modifierDefinition => {
+        if (modifierDefinition.definitionUid === modifierPatch.targetModifierUid) {
+          return pipe(
+            modifierDefinition.modifier,
+            modifierPatch.patch.asPartialFunctionOnBound,
+            O.map(m => ({ definitionUid: modifierDefinition.definitionUid, modifier: m }))
+          );
+        } else {
+          return O.some(modifierDefinition);
+        }
+      })
+    );
+
+    if (patchResult._tag === 'None') {
+      E.left(modifierPatchUnapplicable(
+        targetDef.definitionUid, modifierPatch.targetModifierUid, patchDef.definitionUid
+      ));
+    } else {
+      patchedModifiers = patchResult.value;
+    }
+  }
+
+  return E.right({
+    __kind: 'ModifiedShape',
+    shape: patchedShape.value,
+    modifiers: patchedModifiers.concat(additionalModifiers)
+  });
+}
+
 function expandCheckedProgram(program: SGP): E.Either<DiffExpansionPhaseError, DiffPatchedSGP> {
   const expandedDefinitions: ModifiedShapeDefinition[] = [];
 
-  // TODO expand definitions in program
+  for (const { definitionUid, shapeObject } of program) {
+    if (shapeObject.__kind === 'SynchronizedShape') {
+      const syncDef: SynchronizedShape = shapeObject;
+
+      const targetCandidates = expandedDefinitions
+        .filter(d => d.definitionUid === syncDef.targetDefinitionUid)!;
+      // 事前条件により一意に定まるはず
+      assert(targetCandidates.length === 1);
+      const target = targetCandidates[0]!;
+
+      const patchedShapeObject = patchShapeObject(target, { definitionUid, shapeObject });
+
+      if (patchedShapeObject._tag === 'Left') {
+        return patchedShapeObject;
+      } else {
+        expandedDefinitions.push({ definitionUid, shapeObject: patchedShapeObject.right });
+      }
+    } else {
+      expandedDefinitions.push({ definitionUid, shapeObject });
+    }
+  }
 
   return E.right(expandedDefinitions);
 }

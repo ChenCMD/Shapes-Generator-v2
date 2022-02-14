@@ -60,10 +60,41 @@ export const duplicateModifierUid =
   (duplicatedModifierUid: ModifierDefinitionUid, modifierOwnerUid: ShapeObjectDefinitionUid, when: WhenWasModifierUidDuplicated): DuplicateModifierUid =>
     ({ __kind: 'DuplicateModifierUid', duplicatedModifierUid, modifierOwnerUid, when });
 
+export interface ShapePatchUnapplicable {
+  readonly __kind: 'ShapePatchUnapplicable';
+  readonly patchedShapeObjectUid: ShapeObjectDefinitionUid;
+  readonly patchShapeObjectUid: ShapeObjectDefinitionUid;
+}
+export const shapePatchUnapplicable =
+  (patchedShapeObjectUid: ShapeObjectDefinitionUid, patchShapeObjectUid: ShapeObjectDefinitionUid): ShapePatchUnapplicable =>
+    ({ __kind: 'ShapePatchUnapplicable', patchedShapeObjectUid, patchShapeObjectUid });
+
+export interface ModifierPatchUnapplicable {
+  readonly __kind: 'ModifierPatchUnapplicable';
+  readonly patchedShapeObjectUid: ShapeObjectDefinitionUid;
+  readonly patchedModifierUid: ModifierDefinitionUid;
+  readonly patchShapeObjectUid: ShapeObjectDefinitionUid;
+}
+export const modifierPatchUnapplicable =
+  (patchedShapeObjectUid: ShapeObjectDefinitionUid, patchedModifierUid: ModifierDefinitionUid, patchShapeObjectUid: ShapeObjectDefinitionUid): ModifierPatchUnapplicable =>
+    ({ __kind: 'ModifierPatchUnapplicable', patchedShapeObjectUid, patchedModifierUid, patchShapeObjectUid });
+
+export interface ModifierPatchTargetNotFound {
+  readonly __kind: 'ModifierPatchTargetNotFound';
+  readonly patchTarget: ModifierDefinitionUid;
+  readonly patchSource: ShapeObjectDefinitionUid;
+}
+export const modifierPatchTargetNotFound =
+  (patchTarget: ModifierDefinitionUid, patchSource: ShapeObjectDefinitionUid): ModifierPatchTargetNotFound =>
+    ({ __kind: 'ModifierPatchTargetNotFound', patchTarget, patchSource });
+
 export type DiffExpansionPhaseError =
   | SyncReferenceIllFormed
   | DuplicateShapeObjectUid
   | DuplicateModifierUid
+  | ShapePatchUnapplicable
+  | ModifierPatchUnapplicable
+  | ModifierPatchTargetNotFound
   ;
 
 // #endregion
