@@ -5,8 +5,8 @@ import { SOPM } from './SOPM/ShapeObjectPropertyMap';
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from './Uid';
 
 export type ShapeObjectEvaluationResult = {
-  resultOf: ShapeObjectDefinitionUid;
-  result: SOPM;
+  readonly resultOf: ShapeObjectDefinitionUid;
+  readonly result: SOPM;
 };
 export type SGPEvaluationResult = ReadonlyArray<ShapeObjectEvaluationResult>;
 
