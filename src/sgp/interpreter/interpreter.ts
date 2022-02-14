@@ -3,18 +3,10 @@ import * as EE from '../../utils/either';
 
 import { pipe } from 'fp-ts/function';
 import { SGP, SGPEvaluationResult } from '../definition/SGP';
-import { notImplemented, SGPInterpreterError } from './errors';
-import { expandDiff, DiffPatchedSGP } from './diff-phase';
-
-type InterpreterErrorOr<A> = E.Either<SGPInterpreterError, A>;
-
-function typeCheckModifiers(program: DiffPatchedSGP): InterpreterErrorOr<void> {
-  return E.left(notImplemented);
-}
-
-function evaluate(program: DiffPatchedSGP): InterpreterErrorOr<SGPEvaluationResult> {
-  return E.left(notImplemented);
-}
+import { InterpreterErrorOr } from './errors';
+import { expandDiff } from './diff-phase';
+import { evaluate } from './eval-phase';
+import { typeCheckModifiers } from './typecheck-phase';
 
 export function evaluateSGP(program: SGP): InterpreterErrorOr<SGPEvaluationResult> {
   return pipe(

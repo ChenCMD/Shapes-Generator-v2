@@ -1,3 +1,5 @@
+import * as E from 'fp-ts/Either';
+
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from '../definition/Uid';
 
 /**
@@ -84,3 +86,5 @@ export type SGPInterpreterError =
   | EvaluationError
   | GenericError
   ;
+
+export type InterpreterErrorOr<A> = E.Either<SGPInterpreterError, A>;
