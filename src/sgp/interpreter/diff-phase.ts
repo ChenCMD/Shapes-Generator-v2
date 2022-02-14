@@ -105,6 +105,16 @@ function expandCheckedProgram(program: SGP): E.Either<DiffExpansionPhaseError, D
  *   - {@link ModifiedShape}であり、
  *   - それぞれ一意なUidを持っており、
  *   - 各{@link ModifierDefinition}が、{@link ShapeObjectDefinition}内で一意なUidを持つ
+ * 
+ * {@link ModifierDefinition}の{@link ShapeObjectDefinition}内でのUidの一意性は
+ * SGPの実行には必要のない制約ではある。例えば `[def1, def2]` というプログラムがあり、
+ * `def2` が `def1` に同期しているような場合、展開した結果は `[def1, patch(def1, def2)]` 
+ * のようなものになる。ここで `patch(def1, def2)` がUidが重複する{@link ModifierDefinition}を持っていようと
+ * このプログラムの実行自体にはさほど影響を及ぼさない。しかし、
+ * このような状況は明らかにUI上で異常な操作が行われない限り発生しないと考えるのが妥当で、
+ * プログラムに対して追加の操作(export/importや編集など)をしたときに、
+ * よりユーザーが対処しにくい壊れ方をする可能性があるから、
+ * このようなプログラムは無効であるというデザインをしている。
  */
 export function expandDiff(program: SGP): E.Either<DiffExpansionPhaseError, DiffPatchedSGP> {
   return pipe(
