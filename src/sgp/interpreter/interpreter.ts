@@ -8,6 +8,9 @@ import { expandDiff } from './phases/diff-expansion';
 import { evaluate } from './phases/evaluate';
 import { typeCheckModifiers } from './phases/typecheck';
 
+/**
+ * Shapes Generator Program を実行して、実行結果またはエラーを得る。
+ */
 export function evaluateSGP(program: SGP): InterpreterErrorOr<SGPEvaluationResult> {
   return pipe(
     E.right(program),

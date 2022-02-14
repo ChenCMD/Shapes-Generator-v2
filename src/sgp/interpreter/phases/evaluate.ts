@@ -4,6 +4,12 @@ import { SGPEvaluationResult, ShapeObjectEvaluationResult } from '../../definiti
 import { InterpreterErrorOr, modifierReturnedNoneWhenEvaluated } from '../errors';
 import { DiffPatchedSGP } from './diff-expansion';
 
+/**
+ * 型チェックに通った {@link DiffPatchedSGP} を実行する。
+ * 
+ * このフェーズでエラーが返ってくる場合は、Modifierの実装が誤っているか、
+ * 型チェッカの実装が誤っているような場合のいずれかなので、ユーザーにバグ報告を促すこと。
+ */
 export function evaluate(program: DiffPatchedSGP): InterpreterErrorOr<SGPEvaluationResult> {
   const resultSoFar: ShapeObjectEvaluationResult[] = [];
 
