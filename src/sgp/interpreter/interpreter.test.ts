@@ -50,8 +50,8 @@ describe('evaluatePatchedSGP', () => {
   const angledVerticesModifier = new class implements Modifier {
     readonly outputSpec = (inputScheme: SOPMScheme) =>
       inputScheme.angledVertices
-      ? E.left(insufficientSOPMFields(new Set(['angledVertices'])))
-      : E.right(inputScheme);
+      ? E.right(inputScheme)
+      : E.left(insufficientSOPMFields(new Set(['angledVertices'])));
     readonly partialEvaluationResultRequirements = () => new Set([]);
     readonly run = (partialResult: SGPEvaluationResult, input: ShapeObjectPropertyMap) =>
       input.angledVertices !== null
@@ -195,6 +195,7 @@ describe('evaluatePatchedSGP', () => {
                 definitionUid: coerceToModifierUid('mod 41'),
                 modifier: removeAngledVerticesModifier
               },
+
               {
                 definitionUid: coerceToModifierUid('mod 42'),
                 modifier: angledVerticesModifier
