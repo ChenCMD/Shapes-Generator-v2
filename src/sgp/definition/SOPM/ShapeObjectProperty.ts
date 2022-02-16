@@ -10,6 +10,8 @@ export interface Visibility {
   readonly __type: 'Visibility'
   readonly visibility: boolean
 }
+export const declareVisibility = (b: boolean): Visibility =>
+  ({ __type: 'Visibility', visibility: b });
 
 export interface AngledVertex {
   readonly __type: 'AngledVertices'
