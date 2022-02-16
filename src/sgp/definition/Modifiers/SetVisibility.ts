@@ -7,9 +7,10 @@ import { SOPMScheme } from '../SOPM/SOPMScheme';
 import { SGPEvaluationResult } from '../SGP';
 import { ShapeObjectDefinitionUid } from '../Uid';
 import { modifierPatch } from '../Patches';
+import { Visibility } from '../SOPM/ShapeObjectProperty';
 
 export type SetVisibilityParameters = {
-  readonly visibility: boolean
+  readonly visibility: Visibility
 };
 
 export class SetVisibilityModifier implements Modifier {
