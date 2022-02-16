@@ -9,13 +9,15 @@ import { ShapeObjectDefinitionUid } from './Uid';
  * {@link SOPM}のキーのうちnullableなものすべて
  */
 type NullableSOPMField = keyof {
-  [F in (keyof SOPM) as (null extends SOPM[F] ? never : F)]: unknown
+  [F in (keyof SOPM) as (null extends SOPM[F] ? F : never)]: unknown
 };
 
 export interface InsufficientSOPMFields {
   readonly __kind: 'InsufficientSOPMFields';
   readonly lackingFields: ReadonlySet<NullableSOPMField>;
 }
+export const insufficientSOPMFields = (lackingFields: ReadonlySet<NullableSOPMField>): InsufficientSOPMFields =>
+  ({ __kind: 'InsufficientSOPMFields', lackingFields });
 
 /**
  * 入力SOPMを指定するスキーマがModifierが予期したものでないときに返されるエラーの型
