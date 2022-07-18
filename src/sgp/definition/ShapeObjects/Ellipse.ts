@@ -7,6 +7,7 @@ import { shapePatch } from '../Patches';
 
 type EllipseSOPM = SOPMWith<true, false>;
 export type EllipseParameters = {
+  readonly __parameterKind: 'Ellipse';
   readonly pointCount: number;
   readonly center: Vector2D;
   readonly semiMajorAxis: number;

@@ -10,7 +10,8 @@ import { modifierPatch } from '../Patches';
 import { Visibility } from '../SOPM/ShapeObjectProperty';
 
 export type SetVisibilityParameters = {
-  readonly visibility: Visibility
+  readonly __parameterKind: 'SetVisibility';
+  readonly visibility: Visibility;
 };
 
 export class SetVisibilityModifier implements Modifier {
