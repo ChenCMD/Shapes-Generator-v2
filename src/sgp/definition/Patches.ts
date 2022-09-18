@@ -13,7 +13,7 @@ export const shapePatchForKind = <Kind extends ShapeParameters['__parameterKind'
     unknownModifier => unknownModifier.patternMatch(modifier => {
       const oldParameter = modifier.parameter;
       if (oldParameter.__parameterKind === kind) {
-        const newParameter = Object.assign({}, oldParameter, patch);
+        const newParameter = { ...oldParameter, ...patch };
         const patchedShape = { ...modifier, parameter: newParameter };
         return O.some(upcastShape(patchedShape));
       } else {
@@ -29,7 +29,7 @@ export const modifierPatchForKind = <Kind extends ModifierParameterSet['__parame
     unknownModifier => unknownModifier.patternMatch(modifier => {
       const oldParameter = modifier.parameters;
       if (oldParameter.__parameterKind === kind) {
-        const newParameter = Object.assign({}, oldParameter, patch);
+        const newParameter = { ...oldParameter, ...patch };
         const patchedShape = { ...modifier, parameter: newParameter };
         return O.some(upcastModifier(patchedShape));
       } else {

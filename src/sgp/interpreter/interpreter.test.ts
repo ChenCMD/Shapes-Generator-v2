@@ -63,10 +63,10 @@ describe('evaluatePatchedSGP', () => {
   const removeAngledVerticesModifier = upcastModifier(new class implements Modifier<SetVisibilityParameters> {
     readonly parameters = fakeSetVisibilityParameters;
     readonly outputSpec = (inputScheme: SOPMScheme) =>
-      E.right(Object.assign({}, inputScheme, { angledVertices: false }));
+      E.right({ ...inputScheme, angledVertices: false });
     readonly partialEvaluationResultRequirements = () => new Set([]);
     readonly run = (p: SetVisibilityParameters, partialResult: SGPEvaluationResult, input: ShapeObjectPropertyMap) =>
-      O.some(Object.assign({}, input, { angledVertices: null }));
+      O.some({ ...input, angledVertices: null });
   }());
 
   const angledVerticesModifier = upcastModifier(new class implements Modifier<SetVisibilityParameters> {

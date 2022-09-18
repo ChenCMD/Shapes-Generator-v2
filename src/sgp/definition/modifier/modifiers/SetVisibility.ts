@@ -19,7 +19,7 @@ export const SetVisibilityModifier = (parameters: SetVisibilityParameters): Modi
   outputSpec: (onInput: SOPMScheme): E.Either<InsufficientSOPMFields, SOPMScheme> =>
     E.right(onInput),
   run: (p: SetVisibilityParameters, _partialResult: SGPEvaluationResult, input: ShapeObjectPropertyMap): O.Option<ShapeObjectPropertyMap> => 
-    O.some(Object.assign({}, input, { visibility: p.visibility })),
+    O.some({ ...input, visibility: p.visibility }),
 });
 
 export const SetVisibilityPatch = modifierPatchForKind('SetVisibility');
