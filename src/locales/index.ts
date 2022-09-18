@@ -1,4 +1,3 @@
-import { showNotification } from '../components/ShapesGenerator';
 import { isValidateLanguage, SpecificatedLanguage } from '../types/Language';
 import { camelCaseToSnakeCase } from '../utils/common';
 import enLocale from './en.json';
@@ -23,7 +22,8 @@ async function loadLocale(lang: SpecificatedLanguage): Promise<void> {
     locales[lang] = data;
 }
 
-export async function setupLanguage(langs: string[], ignoreError = false): Promise<string> {
+// TODO ここに限った話ではないがどうにかする
+export async function setupLanguage(langs: string[], ignoreError = false, showNotification: (type: string, text: string) => void = ((t, s) => {})): Promise<string> {
     for (const [i, targetLanguage] of langs.entries()) {
         if (targetLanguage === language) {
             break;
