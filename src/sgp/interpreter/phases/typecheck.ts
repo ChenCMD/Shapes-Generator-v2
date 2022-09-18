@@ -9,6 +9,7 @@ import { pipe } from 'fp-ts/function';
 import { ModifiedShapeDefinition } from '../../definition/SGP';
 import { ShapeObjectDefinitionUid } from '../../definition/Uid';
 import { outputSpecOfUnknownParameterShape } from '../../definition/Shape';
+import { outputSpecOfUnknownParameterModifier, partialEvaluationResultRequirementsOfUnknownParameterModifier } from '../../definition/Modifier';
 
 type TypeCheckErrorOrVoid = E.Either<ModifierTypeCheckPhaseError, void>;
 
@@ -17,7 +18,7 @@ function typeCheckPipeline(def: ModifiedShapeDefinition): TypeCheckErrorOrVoid {
 
   let overallOutput = outputSpecOfUnknownParameterShape(shapeObject.shape);
   for (const { definitionUid: modifierDefinitionUid, modifier } of shapeObject.modifiers) {
-    const output = modifier.outputSpec(overallOutput);
+    const output = outputSpecOfUnknownParameterModifier(modifier, overallOutput);
     if (output._tag === 'Left') {
       return E.left(modifierTypeError(shapeDefinitionUid, modifierDefinitionUid));
     } else {
@@ -41,7 +42,7 @@ function typeCheckModifierRequirements(definitionsSoFar: ReadonlySet<ShapeObject
     shape.shapeObject.modifiers,
     RA.traverse(E.Applicative)(({ definitionUid: modifierDefinitionUid, modifier }) =>
       pipe(
-        modifier.partialEvaluationResultRequirements(),
+        partialEvaluationResultRequirementsOfUnknownParameterModifier(modifier),
         subsetOf(definitionsSoFar),
         (isSubset: boolean) => isSubset
           ? E.right(undefined)

@@ -1,4 +1,4 @@
-import { Modifier } from './Modifier';
+import { ModifierWithUnknownParameter } from './Modifier';
 import { ModifierPatch, ShapePatch } from './Patches';
 import { ShapeWithUnknownParameter } from './Shape';
 import { SOPM } from './SOPM/ShapeObjectPropertyMap';
@@ -15,7 +15,7 @@ export type SGPEvaluationResult = ReadonlyArray<ShapeObjectEvaluationResult>;
 
 export interface ModifierDefinition {
   readonly definitionUid: ModifierDefinitionUid;
-  readonly modifier: Modifier;
+  readonly modifier: ModifierWithUnknownParameter;
 }
 
 export type ModifierPipeline = ReadonlyArray<ModifierDefinition>;

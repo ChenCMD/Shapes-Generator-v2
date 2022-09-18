@@ -6,12 +6,13 @@ import { Shape, upcastToUnkownParameterShape } from '../definition/Shape';
 import { ShapeObjectPropertyMap, SOPM } from '../definition/SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme, sopmSchemeWith } from '../definition/SOPM/SOPMScheme';
 import { declareVisibility } from '../definition/SOPM/ShapeObjectProperty';
-import { insufficientSOPMFields, Modifier } from '../definition/Modifier';
+import { insufficientSOPMFields, Modifier, ModifierWithUnknownParameter, upcastToUnkownParameterModifier } from '../definition/Modifier';
 import * as O from 'fp-ts/lib/Option';
 import { subsetOf } from '../../utils/ReadonlySet';
 import { evaluatePatchedSGP } from './interpreter';
 import { SGPEvaluationPhaseError } from './errors';
 import { EllipseParameters } from '../definition/ShapeObjects/Ellipse';
+import { SetVisibilityParameters } from '../definition/Modifiers/SetVisibility';
 
 describe('evaluatePatchedSGP', () => {
   interface TestCase {
@@ -53,35 +54,42 @@ describe('evaluatePatchedSGP', () => {
   // #endregion
 
   // #region modifier definitions
-  const removeAngledVerticesModifier = new class implements Modifier {
+  const fakeSetVisibilityParameters: SetVisibilityParameters = {
+    __parameterKind: 'SetVisibility',
+    visibility: { __type: 'Visibility', visibility: true }
+  }; 
+  const removeAngledVerticesModifier = upcastToUnkownParameterModifier(new class implements Modifier<SetVisibilityParameters> {
+    readonly parameters = fakeSetVisibilityParameters;
     readonly outputSpec = (inputScheme: SOPMScheme) =>
       E.right(Object.assign({}, inputScheme, { angledVertices: false }));
     readonly partialEvaluationResultRequirements = () => new Set([]);
-    readonly run = (partialResult: SGPEvaluationResult, input: ShapeObjectPropertyMap) =>
+    readonly run = (p: SetVisibilityParameters, partialResult: SGPEvaluationResult, input: ShapeObjectPropertyMap) =>
       O.some(Object.assign({}, input, { angledVertices: null }));
-  }();
+  }());
 
-  const angledVerticesModifier = new class implements Modifier {
+  const angledVerticesModifier = upcastToUnkownParameterModifier(new class implements Modifier<SetVisibilityParameters> {
+    readonly parameters = fakeSetVisibilityParameters;
     readonly outputSpec = (inputScheme: SOPMScheme) =>
       inputScheme.angledVertices
       ? E.right(inputScheme)
       : E.left(insufficientSOPMFields(new Set(['angledVertices'])));
     readonly partialEvaluationResultRequirements = () => new Set([]);
-    readonly run = (partialResult: SGPEvaluationResult, input: ShapeObjectPropertyMap) =>
+    readonly run = (p: SetVisibilityParameters, partialResult: SGPEvaluationResult, input: ShapeObjectPropertyMap) =>
       input.angledVertices !== null
       ? O.some(input)
       : O.none;
-  }();
+  }());
 
-  const identityModifierRequiring = (requirements: ReadonlySet<ShapeObjectDefinitionUid>): Modifier =>
-    new class implements Modifier {
+  const identityModifierRequiring = (requirements: ReadonlySet<ShapeObjectDefinitionUid>): ModifierWithUnknownParameter =>
+    upcastToUnkownParameterModifier(new class implements Modifier<SetVisibilityParameters> {
+      readonly parameters = fakeSetVisibilityParameters;
       readonly outputSpec = (inputScheme: SOPMScheme) => E.right(inputScheme);
       readonly partialEvaluationResultRequirements = () => requirements;
-      readonly run = (partialResult: SGPEvaluationResult, input: ShapeObjectPropertyMap) =>
+      readonly run = (p: SetVisibilityParameters, partialResult: SGPEvaluationResult, input: ShapeObjectPropertyMap) =>
         subsetOf(new Set(partialResult.map(r => r.originUid)))(requirements)
         ? O.some(input)
         : O.none;
-    }();
+    }());
   // #endregion
 
   describe('for a valid patched program', () => {

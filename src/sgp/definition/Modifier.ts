@@ -1,5 +1,6 @@
 import * as E from 'fp-ts/Either';
 import * as O from 'fp-ts/Option';
+import { SetVisibilityParameters } from './Modifiers/SetVisibility';
 import { SGPEvaluationResult } from './SGP';
 import { SOPM } from './SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme } from './SOPM/SOPMScheme';
@@ -24,7 +25,14 @@ export const insufficientSOPMFields = (lackingFields: ReadonlySet<NullableSOPMFi
  */
 export type ModifierTypeCheckError = InsufficientSOPMFields;
 
-export interface Modifier {
+export type ModifierParameterSet = SetVisibilityParameters | { readonly __parameterKind: never };
+
+export type Modifier<ParameterSet extends ModifierParameterSet> = {
+  /**
+   * この{@link Modifier}の動作を制御するパラメータ集合。
+   */
+  parameters: ParameterSet
+
   /**
    * {@link inputScheme}が型指定する{@link SOPM}が{@link run}に入力された時に
    * {@link run}が出力するであろう{@link SOPM}を型指定する{@link SOPMScheme}。
@@ -49,7 +57,7 @@ export interface Modifier {
    * このようなプログラムを実行前に検知するため、SGPのインタプリタはこのメソッドから返される情報を元に
    * {@link run} が値を返せるかどうかを判断すべきである。
    */
-  partialEvaluationResultRequirements(): ReadonlySet<ShapeObjectDefinitionUid>
+  partialEvaluationResultRequirements(parameters: ParameterSet): ReadonlySet<ShapeObjectDefinitionUid>
 
   /**
    * この{@link Modifier}に、部分的な(後述){@link SGPEvaluationResult}と{@link SOPM}を与えて実行する。
@@ -76,5 +84,30 @@ export interface Modifier {
    * もしこれを保証したにもかかわらず {@link O.None} が返された場合、
    * それは当Modifierの実装が誤っていると考えるべきで、UIに適切な報告をするよう促すべきである。
    */
-  run(partialResult: SGPEvaluationResult, input: SOPM): O.Option<SOPM>
+  run(parameters: ParameterSet, partialResult: SGPEvaluationResult, input: SOPM): O.Option<SOPM>
+};
+
+export type ModifierWithUnknownParameter = {
+  readonly patternMatch: <PatternMatchResult>(
+    onType: <Parameter extends ModifierParameterSet>(modifier: Modifier<Parameter>) => PatternMatchResult
+  ) => PatternMatchResult;
+};
+
+export function upcastToUnkownParameterModifier<ParameterSet extends ModifierParameterSet>(modifier: Modifier<ParameterSet>): ModifierWithUnknownParameter {
+  return {
+    patternMatch: <PatternMatchResult>(onType: <P extends ModifierParameterSet>(_modifier: Modifier<P>) => PatternMatchResult) =>
+      onType<ParameterSet>(modifier)
+  };
+}
+
+export function runUnknownParameterModifier(unknownModifier: ModifierWithUnknownParameter, partialResult: SGPEvaluationResult, input: SOPM): O.Option<SOPM> {
+  return unknownModifier.patternMatch(modifier => modifier.run(modifier.parameters, partialResult, input));
+}
+
+export function partialEvaluationResultRequirementsOfUnknownParameterModifier(unknownModifier: ModifierWithUnknownParameter): ReadonlySet<ShapeObjectDefinitionUid> {
+  return unknownModifier.patternMatch(modifier => modifier.partialEvaluationResultRequirements(modifier.parameters));
+}
+
+export function outputSpecOfUnknownParameterModifier(unknownModifier: ModifierWithUnknownParameter, inputScheme: SOPMScheme): E.Either<ModifierTypeCheckError, SOPMScheme> {
+  return unknownModifier.patternMatch(modifier => modifier.outputSpec(inputScheme));
 }

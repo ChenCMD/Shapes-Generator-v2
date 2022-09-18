@@ -1,18 +1,18 @@
-import { PartialEndoFunction } from '../../utils/BoundedPartialFunction';
-import { ParameterizedClassPatch } from '../../utils/ClassPatch';
-import { Modifier } from './Modifier';
+import { ModifierParameterSet, ModifierWithUnknownParameter, upcastToUnkownParameterModifier } from './Modifier';
 import { ShapeParameters, ShapeWithUnknownParameter, upcastToUnkownParameterShape } from './Shape';
 import * as O from 'fp-ts/Option';
 
-export type ShapePatch = PartialEndoFunction<ShapeWithUnknownParameter>;
+type Patch<Target> = (target: Target) => O.Option<Target>;
+
+export type ShapePatch = Patch<ShapeWithUnknownParameter>;
 
 export const shapePatchForKind = <Kind extends ShapeParameters['__parameterKind']>(kind: Kind) =>
   (patch: Partial<ShapeParameters> & { __parameterKind: Kind }): ShapePatch =>
-    unknownShape => unknownShape.patternMatch(shape => {
-      const oldParameter = shape.parameter;
+    unknownModifier => unknownModifier.patternMatch(modifier => {
+      const oldParameter = modifier.parameter;
       if (oldParameter.__parameterKind === kind) {
         const newParameter = Object.assign({}, oldParameter, patch);
-        const patchedShape = { ...shape, parameter: newParameter };
+        const patchedShape = { ...modifier, parameter: newParameter };
         return O.some(upcastToUnkownParameterShape(patchedShape));
       } else {
         // patch is not applicable
@@ -20,8 +20,18 @@ export const shapePatchForKind = <Kind extends ShapeParameters['__parameterKind'
       }
     });
 
-export type ModifierPatch = PartialEndoFunction<Modifier>;
+export type ModifierPatch = Patch<ModifierWithUnknownParameter>;
 
-export function modifierPatch<C extends Modifier, P>(parameterizedPatch: ParameterizedClassPatch<C, P>): (patchParams: Partial<P>) => ModifierPatch {
-  return p => parameterizedPatch(p).asPartialFunctionOn<Modifier>();
-}
+export const modifierPatchForKind = <Kind extends ModifierParameterSet['__parameterKind']>(kind: Kind) =>
+  (patch: Partial<ModifierParameterSet> & { __parameterKind: Kind }): ModifierPatch =>
+    unknownModifier => unknownModifier.patternMatch(modifier => {
+      const oldParameter = modifier.parameters;
+      if (oldParameter.__parameterKind === kind) {
+        const newParameter = Object.assign({}, oldParameter, patch);
+        const patchedShape = { ...modifier, parameter: newParameter };
+        return O.some(upcastToUnkownParameterModifier(patchedShape));
+      } else {
+        // patch is not applicable
+        return O.none;
+      }
+    });
