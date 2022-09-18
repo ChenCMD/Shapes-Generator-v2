@@ -1,6 +1,6 @@
 import { Modifier } from './Modifier';
 import { ModifierPatch, ShapePatch } from './Patches';
-import { Shape } from './Shape';
+import { ShapeWithUnknownParameter } from './Shape';
 import { SOPM } from './SOPM/ShapeObjectPropertyMap';
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from './Uid';
 
@@ -22,7 +22,7 @@ export type ModifierPipeline = ReadonlyArray<ModifierDefinition>;
 
 export interface ModifiedShape {
   readonly __kind: 'ModifiedShape';
-  readonly shape: Shape<SOPM>;
+  readonly shape: ShapeWithUnknownParameter;
   readonly modifiers: ModifierPipeline;
 }
 

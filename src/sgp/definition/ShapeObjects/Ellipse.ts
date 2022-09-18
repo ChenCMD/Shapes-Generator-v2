@@ -1,11 +1,9 @@
 import { Vector2D } from '../../../types/Vector2D';
-import { patchForUnaryClass } from '../../../utils/ClassPatch';
+import { shapePatchForKind } from '../Patches';
 import { Shape } from '../Shape';
 import { SOPMWith } from '../SOPM/ShapeObjectPropertyMap';
-import { DetailedSOPMScheme, sopmSchemeWith } from '../SOPM/SOPMScheme';
-import { shapePatch } from '../Patches';
+import { sopmSchemeWith } from '../SOPM/SOPMScheme';
 
-type EllipseSOPM = SOPMWith<true, false>;
 export type EllipseParameters = {
   readonly __parameterKind: 'Ellipse';
   readonly pointCount: number;
@@ -17,16 +15,14 @@ export type EllipseParameters = {
   readonly spreadPointsEvenly: boolean;
 };
 
-export class Ellipse implements Shape<EllipseSOPM> {
-  readonly outputSpec: DetailedSOPMScheme<EllipseSOPM> = sopmSchemeWith(true, false);
-  readonly params: EllipseParameters;
-  constructor(params: EllipseParameters) {
-    this.params = params;
-  }
+type EllipseSOPM = SOPMWith<true, false>;
 
-  run(): EllipseSOPM {
+export const Ellipse = (parameter: EllipseParameters): Shape<EllipseParameters, EllipseSOPM> => ({
+  outputSpec: sopmSchemeWith(true, false),
+  parameter,
+  run: (p: EllipseParameters) => {
     throw new Error('Method not implemented.');
   }
-}
+});
 
-export const EllipsePatch = shapePatch(patchForUnaryClass(Ellipse, t => t.params));
+export const EllipsePatch = shapePatchForKind('Ellipse');

@@ -8,13 +8,14 @@ import { modifierRequirementFailed, ModifierTypeCheckPhaseError, modifierTypeErr
 import { pipe } from 'fp-ts/function';
 import { ModifiedShapeDefinition } from '../../definition/SGP';
 import { ShapeObjectDefinitionUid } from '../../definition/Uid';
+import { outputSpecOfUnknownParameterShape } from '../../definition/Shape';
 
 type TypeCheckErrorOrVoid = E.Either<ModifierTypeCheckPhaseError, void>;
 
 function typeCheckPipeline(def: ModifiedShapeDefinition): TypeCheckErrorOrVoid {
   const { definitionUid: shapeDefinitionUid, shapeObject } = def;
 
-  let overallOutput = shapeObject.shape.outputSpec;
+  let overallOutput = outputSpecOfUnknownParameterShape(shapeObject.shape);
   for (const { definitionUid: modifierDefinitionUid, modifier } of shapeObject.modifiers) {
     const output = modifier.outputSpec(overallOutput);
     if (output._tag === 'Left') {

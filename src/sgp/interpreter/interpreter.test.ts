@@ -2,7 +2,7 @@ import * as E from 'fp-ts/lib/Either';
 import { SGPEvaluationResult } from '../definition/SGP';
 import { coerceToModifierUid, coerceToShapeObjectUid, ShapeObjectDefinitionUid } from '../definition/Uid';
 import { DiffPatchedSGP } from './phases/diff-expansion';
-import { Shape } from '../definition/Shape';
+import { Shape, upcastToUnkownParameterShape } from '../definition/Shape';
 import { ShapeObjectPropertyMap, SOPM } from '../definition/SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme, sopmSchemeWith } from '../definition/SOPM/SOPMScheme';
 import { declareVisibility } from '../definition/SOPM/ShapeObjectProperty';
@@ -11,6 +11,7 @@ import * as O from 'fp-ts/lib/Option';
 import { subsetOf } from '../../utils/ReadonlySet';
 import { evaluatePatchedSGP } from './interpreter';
 import { SGPEvaluationPhaseError } from './errors';
+import { EllipseParameters } from '../definition/ShapeObjects/Ellipse';
 
 describe('evaluatePatchedSGP', () => {
   interface TestCase {
@@ -18,24 +19,37 @@ describe('evaluatePatchedSGP', () => {
   }
 
   // #region shape definitions
-  const invisibleEmptyShape = new class implements Shape<SOPM> {
-    readonly outputSpec = sopmSchemeWith(false, false); 
+  const fakeEllipseParameters: EllipseParameters = ({
+    __parameterKind: 'Ellipse',
+    pointCount: 1,
+    center: { x: 0, y: 0 },
+    semiMajorAxis: 1,
+    startAngle: 0,
+    eccentricity: 1,
+    rotation: 0,
+    spreadPointsEvenly: true,  
+  });
+
+  const invisibleEmptyShape = upcastToUnkownParameterShape(new class implements Shape<EllipseParameters, SOPM> {
+    readonly outputSpec = sopmSchemeWith(false, false);
+    readonly parameter = fakeEllipseParameters;
     readonly run = (): ShapeObjectPropertyMap => ({
       particlePoints: [],
       visibility: declareVisibility(false),
       angledVertices: null,
       directedEndpoints: null
     });
-  }();
-  const visibleShapeWithEmptyAngledVertices = new class implements Shape<SOPM> {
+  }());
+  const visibleShapeWithEmptyAngledVertices = upcastToUnkownParameterShape(new class implements Shape<EllipseParameters, SOPM> {
     readonly outputSpec = sopmSchemeWith(true, false); 
+    readonly parameter = fakeEllipseParameters;
     readonly run = (): ShapeObjectPropertyMap => ({
       particlePoints: [],
       visibility: declareVisibility(true),
       angledVertices: [],
       directedEndpoints: null
     });
-  }();
+  }());
   // #endregion
 
   // #region modifier definitions
@@ -133,40 +147,8 @@ describe('evaluatePatchedSGP', () => {
     });
   });
 
-  describe('for a program with a type error', () => {
+  describe('for a program with failing requirements', () => {
     const programsWithTypeError: ReadonlyArray<TestCase> = [
-      // Modifierが自分自身の結果を要求するようなプログラム
-      { program: [
-        {
-          definitionUid: coerceToShapeObjectUid('shape 11'),
-          shapeObject: {
-            __kind: 'ModifiedShape',
-            shape: visibleShapeWithEmptyAngledVertices,
-            modifiers: [
-              {
-                definitionUid: coerceToModifierUid('mod 11'),
-                modifier: identityModifierRequiring(new Set([coerceToShapeObjectUid('shape 11')]))
-              }
-            ]
-          }
-        },
-      ] },
-      // Modifierが存在しない結果を要求するようなプログラム
-      { program: [
-        {
-          definitionUid: coerceToShapeObjectUid('shape 21'),
-          shapeObject: {
-            __kind: 'ModifiedShape',
-            shape: visibleShapeWithEmptyAngledVertices,
-            modifiers: [
-              {
-                definitionUid: coerceToModifierUid('mod 21'),
-                modifier: identityModifierRequiring(new Set([coerceToShapeObjectUid('shape 21')]))
-              }
-            ]
-          }
-        },
-      ] },
       // angledVerticesを要求するModifierがangledVerticesを吐かないshapeについたプログラム
       { program: [
         {
@@ -207,13 +189,60 @@ describe('evaluatePatchedSGP', () => {
     ];
 
     it.each(programsWithTypeError)('must output a Left value for %o', ({ program }) => {
-      expect(evaluatePatchedSGP(program)); 
+      expect(evaluatePatchedSGP(program)._tag).toBe('Left');
     });
 
     it.each(programsWithTypeError)('must output a pre-eval error for %o', ({ program }) => {
       const evalResult = evaluatePatchedSGP(program) as E.Left<SGPEvaluationPhaseError>;
 
-      expect(evalResult.left.__kind).not.toBe('ModifierReturnedNoneWhenEvaluated');
+      expect(evalResult.left.__kind).toContain('ModifierTypeError');
+    });
+  });
+
+  describe('for a program with invalid result references', () => {
+    const programsWithInvalidResultReferences: ReadonlyArray<TestCase> = [
+      // Modifierが自分自身の結果を要求するようなプログラム
+      { program: [
+        {
+          definitionUid: coerceToShapeObjectUid('shape 11'),
+          shapeObject: {
+            __kind: 'ModifiedShape',
+            shape: visibleShapeWithEmptyAngledVertices,
+            modifiers: [
+              {
+                definitionUid: coerceToModifierUid('mod 11'),
+                modifier: identityModifierRequiring(new Set([coerceToShapeObjectUid('shape 11')]))
+              }
+            ]
+          }
+        },
+      ] },
+      // Modifierが存在しない結果を要求するようなプログラム
+      { program: [
+        {
+          definitionUid: coerceToShapeObjectUid('shape 21'),
+          shapeObject: {
+            __kind: 'ModifiedShape',
+            shape: visibleShapeWithEmptyAngledVertices,
+            modifiers: [
+              {
+                definitionUid: coerceToModifierUid('mod 21'),
+                modifier: identityModifierRequiring(new Set([coerceToShapeObjectUid('shape 21')]))
+              }
+            ]
+          }
+        },
+      ] },
+    ];
+
+    it.each(programsWithInvalidResultReferences)('must output a Left value for %o', ({ program }) => {
+      expect(evaluatePatchedSGP(program)._tag).toBe('Left');
+    });
+
+    it.each(programsWithInvalidResultReferences)('must output a pre-eval error for %o', ({ program }) => {
+      const evalResult = evaluatePatchedSGP(program) as E.Left<SGPEvaluationPhaseError>;
+
+      expect(evalResult.left.__kind).toContain('ModifierRequirementFailed');
     });
   });
 });
