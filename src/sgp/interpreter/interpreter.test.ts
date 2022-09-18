@@ -237,7 +237,7 @@ describe('evaluatePatchedSGP', () => {
             modifiers: [
               {
                 definitionUid: coerceToModifierUid('mod 21'),
-                modifier: identityModifierRequiring(new Set([coerceToShapeObjectUid('shape 21')]))
+                modifier: identityModifierRequiring(new Set([coerceToShapeObjectUid('shape 00')]))
               }
             ]
           }
