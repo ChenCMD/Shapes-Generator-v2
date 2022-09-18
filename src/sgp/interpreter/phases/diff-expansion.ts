@@ -159,10 +159,8 @@ function expandCheckedProgram(program: SGP): DiffExpansionPhaseErrorOr<DiffPatch
 
   for (const { definitionUid, shapeObject } of program) {
     if (shapeObject.__kind === 'SynchronizedShape') {
-      const syncDef: SynchronizedShape = shapeObject;
-
       const targetCandidates = expandedDefinitions
-        .filter(d => d.definitionUid === syncDef.targetDefinitionUid)!;
+        .filter(d => d.definitionUid === shapeObject.targetDefinitionUid)!;
       // 事前条件により一意に定まるはず
       assert(targetCandidates.length === 1);
       const target = targetCandidates[0]!;
