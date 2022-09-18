@@ -4,7 +4,7 @@ import * as S from './SOPM/SOPMScheme';
 
 export type ShapeParameters = EllipseParameters | { __parameterKind: 'ABC', someRandomParam: number };
 
-export interface Shape<Parameter extends ShapeParameters, Output extends SOPM> {
+export type Shape<Parameter extends ShapeParameters, Output extends SOPM> = {
   /**
    * {@link run}が出力する{@link SOPM}を型指定する{@link S.DetailedSOPMScheme}。
    * 
@@ -12,6 +12,9 @@ export interface Shape<Parameter extends ShapeParameters, Output extends SOPM> {
    */
   readonly outputSpec: S.DetailedSOPMScheme<Output>
 
+  /**
+   * この{@link Shape}の動作を制御するパラメータ。
+   */
   readonly parameter: Parameter;
 
   /**
@@ -24,7 +27,7 @@ export interface Shape<Parameter extends ShapeParameters, Output extends SOPM> {
    * 「型指定」概念については、{@link S.SOPMScheme}を参照せよ。
    */
   readonly run: (p: Parameter) => Output
-}
+};
 
 export type ShapeWithUnknownParameter = {
   readonly patternMatch: <PatternMatchResult>(
