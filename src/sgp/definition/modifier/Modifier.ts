@@ -84,28 +84,3 @@ export type Modifier<ParameterSet extends ModifierParameterSet> = {
    */
   run(parameters: ParameterSet, partialResult: SGPEvaluationResult, input: SOPM): O.Option<SOPM>
 };
-
-export type ModifierWithUnknownParameter = {
-  readonly patternMatch: <PatternMatchResult>(
-    onType: <Parameter extends ModifierParameterSet>(modifier: Modifier<Parameter>) => PatternMatchResult
-  ) => PatternMatchResult;
-};
-
-export function upcastToUnkownParameterModifier<ParameterSet extends ModifierParameterSet>(modifier: Modifier<ParameterSet>): ModifierWithUnknownParameter {
-  return {
-    patternMatch: <PatternMatchResult>(onType: <P extends ModifierParameterSet>(_modifier: Modifier<P>) => PatternMatchResult) =>
-      onType<ParameterSet>(modifier)
-  };
-}
-
-export function runUnknownParameterModifier(unknownModifier: ModifierWithUnknownParameter, partialResult: SGPEvaluationResult, input: SOPM): O.Option<SOPM> {
-  return unknownModifier.patternMatch(modifier => modifier.run(modifier.parameters, partialResult, input));
-}
-
-export function partialEvaluationResultRequirementsOfUnknownParameterModifier(unknownModifier: ModifierWithUnknownParameter): ReadonlySet<ShapeObjectDefinitionUid> {
-  return unknownModifier.patternMatch(modifier => modifier.partialEvaluationResultRequirements(modifier.parameters));
-}
-
-export function outputSpecOfUnknownParameterModifier(unknownModifier: ModifierWithUnknownParameter, inputScheme: SOPMScheme): E.Either<ModifierTypeCheckError, SOPMScheme> {
-  return unknownModifier.patternMatch(modifier => modifier.outputSpec(inputScheme));
-}

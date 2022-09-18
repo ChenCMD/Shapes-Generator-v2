@@ -1,8 +1,7 @@
 import * as E from 'fp-ts/Either';
-import { runUnknownParameterModifier } from '../../definition/modifier/Modifier';
-
+import { run as runModifier } from '../../definition/modifier/ModifierWithUnknownParameters';
+import { run as runShape } from '../../definition/shape/ShapeWithUnknownParameters';
 import { SGPEvaluationResult, ShapeObjectEvaluationResult } from '../../definition/SGP';
-import { runUnknownParameterShape } from '../../definition/shape/Shape';
 import { EvaluationError, modifierReturnedNoneWhenEvaluated } from '../errors';
 import { DiffPatchedSGP } from './diff-expansion';
 
@@ -18,9 +17,9 @@ export function evaluate(program: DiffPatchedSGP): EvaluationErrorOr<SGPEvaluati
   const resultSoFar: ShapeObjectEvaluationResult[] = [];
 
   for (const { definitionUid: shapeObjectUid, shapeObject } of program) {
-    let outputSopm = runUnknownParameterShape(shapeObject.shape);
+    let outputSopm = runShape(shapeObject.shape);
     for (const { definitionUid: modifierUid, modifier } of shapeObject.modifiers) {
-      const modifierResult = runUnknownParameterModifier(modifier, resultSoFar, outputSopm);
+      const modifierResult = runModifier(modifier, resultSoFar, outputSopm);
 
       if (modifierResult._tag === 'Some') {
         outputSopm = modifierResult.value;
