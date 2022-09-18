@@ -3,7 +3,7 @@ import * as E from 'fp-ts/Either';
 import * as EE from '../../../utils/either';
 
 import { pipe } from 'fp-ts/function';
-import { ModifiedShape, ModifiedShapeDefinition, ModifierPipeline, SGP, SynchronizedShape, SynchronizedShapeDefinition, TargetedModifierPatch } from '../../definition/SGP';
+import { ModifiedShape, ModifiedShapeDefinition, ModifierPipeline, SGP, SynchronizedShapeDefinition, TargetedModifierPatch } from '../../definition/SGP';
 import { DiffExpansionPhaseError, duplicateModifierUid, duplicateShapeObjectUid, modifierPatchTargetNotFound, modifierPatchUnapplicable, shapePatchUnapplicable, syncReferenceIllFormed, WhenWasModifierUidDuplicated } from '../errors';
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from '../../definition/Uid';
 import { assert } from 'console';
