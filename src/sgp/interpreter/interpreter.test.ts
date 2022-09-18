@@ -2,17 +2,17 @@ import * as E from 'fp-ts/lib/Either';
 import { SGPEvaluationResult } from '../definition/SGP';
 import { coerceToModifierUid, coerceToShapeObjectUid, ShapeObjectDefinitionUid } from '../definition/Uid';
 import { DiffPatchedSGP } from './phases/diff-expansion';
-import { Shape, upcastToUnkownParameterShape } from '../definition/Shape';
+import { Shape, upcastToUnkownParameterShape } from '../definition/shape/Shape';
 import { ShapeObjectPropertyMap, SOPM } from '../definition/SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme, sopmSchemeWith } from '../definition/SOPM/SOPMScheme';
 import { declareVisibility } from '../definition/SOPM/ShapeObjectProperty';
-import { insufficientSOPMFields, Modifier, ModifierWithUnknownParameter, upcastToUnkownParameterModifier } from '../definition/Modifier';
+import { insufficientSOPMFields, Modifier, ModifierWithUnknownParameter, upcastToUnkownParameterModifier } from '../definition/modifier/Modifier';
 import * as O from 'fp-ts/lib/Option';
 import { subsetOf } from '../../utils/ReadonlySet';
 import { evaluatePatchedSGP } from './interpreter';
 import { SGPEvaluationPhaseError } from './errors';
-import { EllipseParameters } from '../definition/ShapeObjects/Ellipse';
-import { SetVisibilityParameters } from '../definition/Modifiers/SetVisibility';
+import { EllipseParameters } from '../definition/shape/shapes/Ellipse';
+import { SetVisibilityParameters } from '../definition/modifier/modifiers/SetVisibility';
 
 describe('evaluatePatchedSGP', () => {
   interface TestCase {

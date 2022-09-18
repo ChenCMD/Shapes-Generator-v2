@@ -1,12 +1,12 @@
 import * as E from 'fp-ts/lib/Either';
 import * as O from 'fp-ts/lib/Option';
 import { InsufficientSOPMFields, Modifier } from '../Modifier';
-import { ShapeObjectPropertyMap } from '../SOPM/ShapeObjectPropertyMap';
-import { SOPMScheme } from '../SOPM/SOPMScheme';
-import { SGPEvaluationResult } from '../SGP';
-import { ShapeObjectDefinitionUid } from '../Uid';
-import { modifierPatchForKind } from '../Patches';
-import { Visibility } from '../SOPM/ShapeObjectProperty';
+import { ShapeObjectPropertyMap } from '../../SOPM/ShapeObjectPropertyMap';
+import { SOPMScheme } from '../../SOPM/SOPMScheme';
+import { SGPEvaluationResult } from '../../SGP';
+import { ShapeObjectDefinitionUid } from '../../Uid';
+import { modifierPatchForKind } from '../../Patches';
+import { Visibility } from '../../SOPM/ShapeObjectProperty';
 
 export type SetVisibilityParameters = {
   readonly __parameterKind: 'SetVisibility';

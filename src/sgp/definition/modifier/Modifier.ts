@@ -1,10 +1,10 @@
 import * as E from 'fp-ts/Either';
 import * as O from 'fp-ts/Option';
-import { SetVisibilityParameters } from './Modifiers/SetVisibility';
-import { SGPEvaluationResult } from './SGP';
-import { SOPM } from './SOPM/ShapeObjectPropertyMap';
-import { SOPMScheme } from './SOPM/SOPMScheme';
-import { ShapeObjectDefinitionUid } from './Uid';
+import { SGPEvaluationResult } from '../SGP';
+import { SOPM } from '../SOPM/ShapeObjectPropertyMap';
+import { SOPMScheme } from '../SOPM/SOPMScheme';
+import { ShapeObjectDefinitionUid } from '../Uid';
+import { ModifierParameterSet } from './ParameterSet';
 
 /**
  * {@link SOPM}のキーのうちnullableなものすべて
@@ -24,8 +24,6 @@ export const insufficientSOPMFields = (lackingFields: ReadonlySet<NullableSOPMFi
  * 入力SOPMを指定するスキーマがModifierが予期したものでないときに返されるエラーの型
  */
 export type ModifierTypeCheckError = InsufficientSOPMFields;
-
-export type ModifierParameterSet = SetVisibilityParameters | { readonly __parameterKind: never };
 
 export type Modifier<ParameterSet extends ModifierParameterSet> = {
   /**

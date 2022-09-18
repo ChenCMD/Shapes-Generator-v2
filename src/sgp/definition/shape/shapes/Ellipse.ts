@@ -1,8 +1,8 @@
-import { Vector2D } from '../../../types/Vector2D';
-import { shapePatchForKind } from '../Patches';
+import { Vector2D } from '../../../../types/Vector2D';
+import { shapePatchForKind } from '../../Patches';
 import { Shape } from '../Shape';
-import { SOPMWith } from '../SOPM/ShapeObjectPropertyMap';
-import { sopmSchemeWith } from '../SOPM/SOPMScheme';
+import { SOPMWith } from '../../SOPM/ShapeObjectPropertyMap';
+import { sopmSchemeWith } from '../../SOPM/SOPMScheme';
 
 export type EllipseParameters = {
   readonly __parameterKind: 'Ellipse';

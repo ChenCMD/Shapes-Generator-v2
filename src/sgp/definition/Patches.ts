@@ -1,6 +1,8 @@
-import { ModifierParameterSet, ModifierWithUnknownParameter, upcastToUnkownParameterModifier } from './Modifier';
-import { ShapeParameters, ShapeWithUnknownParameter, upcastToUnkownParameterShape } from './Shape';
+import { ModifierWithUnknownParameter, upcastToUnkownParameterModifier } from './modifier/Modifier';
+import { ShapeWithUnknownParameter, upcastToUnkownParameterShape } from './shape/Shape';
 import * as O from 'fp-ts/Option';
+import { ShapeParameters } from './shape/ParameterSet';
+import { ModifierParameterSet } from './modifier/ParameterSet';
 
 type Patch<Target> = (target: Target) => O.Option<Target>;
 

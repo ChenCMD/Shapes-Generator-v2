@@ -1,8 +1,6 @@
-import { EllipseParameters } from './ShapeObjects/Ellipse';
-import { SOPM } from './SOPM/ShapeObjectPropertyMap';
-import * as S from './SOPM/SOPMScheme';
-
-export type ShapeParameters = EllipseParameters | { __parameterKind: 'ABC', someRandomParam: number };
+import { SOPM } from '../SOPM/ShapeObjectPropertyMap';
+import * as S from '../SOPM/SOPMScheme';
+import { ShapeParameters } from './ParameterSet';
 
 export type Shape<Parameter extends ShapeParameters, Output extends SOPM> = {
   /**
