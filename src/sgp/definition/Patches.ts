@@ -1,8 +1,8 @@
-import { ModifierWithUnknownParameter, upcastToUnkownParameterModifier } from './modifier/Modifier';
-import { ShapeWithUnknownParameter, upcastToUnkownParameterShape } from './shape/Shape';
 import * as O from 'fp-ts/Option';
 import { ShapeParameters } from './shape/ParameterSet';
 import { ModifierParameterSet } from './modifier/ParameterSet';
+import { ModifierWithUnknownParameter, upcast as upcastModifier } from './modifier/ModifierWithUnknownParameters';
+import { ShapeWithUnknownParameter, upcast as upcastShape } from './shape/ShapeWithUnknownParameters';
 
 type Patch<Target> = (target: Target) => O.Option<Target>;
 
@@ -15,7 +15,7 @@ export const shapePatchForKind = <Kind extends ShapeParameters['__parameterKind'
       if (oldParameter.__parameterKind === kind) {
         const newParameter = Object.assign({}, oldParameter, patch);
         const patchedShape = { ...modifier, parameter: newParameter };
-        return O.some(upcastToUnkownParameterShape(patchedShape));
+        return O.some(upcastShape(patchedShape));
       } else {
         // patch is not applicable
         return O.none;
@@ -31,7 +31,7 @@ export const modifierPatchForKind = <Kind extends ModifierParameterSet['__parame
       if (oldParameter.__parameterKind === kind) {
         const newParameter = Object.assign({}, oldParameter, patch);
         const patchedShape = { ...modifier, parameter: newParameter };
-        return O.some(upcastToUnkownParameterModifier(patchedShape));
+        return O.some(upcastModifier(patchedShape));
       } else {
         // patch is not applicable
         return O.none;

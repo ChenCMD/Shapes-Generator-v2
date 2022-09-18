@@ -1,6 +1,6 @@
-import { ModifierWithUnknownParameter } from './modifier/Modifier';
+import { ModifierWithUnknownParameter } from './modifier/ModifierWithUnknownParameters';
 import { ModifierPatch, ShapePatch } from './Patches';
-import { ShapeWithUnknownParameter } from './shape/Shape';
+import { ShapeWithUnknownParameter } from './shape/ShapeWithUnknownParameters';
 import { SOPM } from './SOPM/ShapeObjectPropertyMap';
 import { ModifierDefinitionUid, ShapeObjectDefinitionUid } from './Uid';
 
