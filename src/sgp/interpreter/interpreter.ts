@@ -11,12 +11,14 @@ import { typeCheckModifiers } from './phases/typecheck';
 /**
  * SGPを展開する。
  */
- export { expandDiff } from './phases/diff-expansion';
+export { expandDiff } from './phases/diff-expansion';
 
 /**
  * 展開済みのSGPを型チェックに掛けたうえで実行する。
  */
-export function evaluatePatchedSGP(program: DiffPatchedSGP): SGPEvaluationPhaseErrorOr<SGPEvaluationResult> {
+export function evaluatePatchedSGP(
+  program: DiffPatchedSGP
+): SGPEvaluationPhaseErrorOr<SGPEvaluationResult> {
   return pipe(
     E.right(program),
     EE.chainTapW(typeCheckModifiers),

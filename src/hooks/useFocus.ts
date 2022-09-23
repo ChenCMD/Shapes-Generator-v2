@@ -25,24 +25,24 @@ import { useState, useEffect } from 'react';
  * SOFTWARE.
  */
 const useFocus = (): [boolean, () => void] => {
-    const [active, setActive] = useState(false);
+  const [active, setActive] = useState(false);
 
-    const hider = () => {
-        setActive(false);
+  const hider = () => {
+    setActive(false);
+  };
+
+  useEffect(() => {
+    if (active) {
+      document.body.addEventListener('click', hider);
+      document.body.addEventListener('contextmenu', hider);
+    }
+    return () => {
+      document.body.removeEventListener('click', hider);
+      document.body.removeEventListener('contextmenu', hider);
     };
+  }, [active]);
 
-    useEffect(() => {
-        if (active) {
-            document.body.addEventListener('click', hider);
-            document.body.addEventListener('contextmenu', hider);
-        }
-        return () => {
-            document.body.removeEventListener('click', hider);
-            document.body.removeEventListener('contextmenu', hider);
-        };
-    }, [active]);
-
-    return [active, () => setActive(true)];
+  return [active, () => setActive(true)];
 };
 
 export default useFocus;

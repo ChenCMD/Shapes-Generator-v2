@@ -8,9 +8,11 @@ type Patch<Target> = (target: Target) => O.Option<Target>;
 
 export type ShapePatch = Patch<Shape>;
 
-export const shapePatchForKind = <Kind extends ShapeParameters['__parameterKind']>(kind: Kind) =>
+export const shapePatchForKind =
+  <Kind extends ShapeParameters['__parameterKind']>(kind: Kind) =>
   (patch: Partial<ShapeParameters> & { __parameterKind: Kind }): ShapePatch =>
-    unknownModifier => unknownModifier.patternMatch(modifier => {
+  (unknownModifier) =>
+    unknownModifier.patternMatch((modifier) => {
       const oldParameter = modifier.parameter;
       if (oldParameter.__parameterKind === kind) {
         const newParameter = { ...oldParameter, ...patch };
@@ -24,9 +26,13 @@ export const shapePatchForKind = <Kind extends ShapeParameters['__parameterKind'
 
 export type ModifierPatch = Patch<Modifier>;
 
-export const modifierPatchForKind = <Kind extends ModifierParameterSet['__parameterKind']>(kind: Kind) =>
-  (patch: Partial<ModifierParameterSet> & { __parameterKind: Kind }): ModifierPatch =>
-    unknownModifier => unknownModifier.patternMatch(modifier => {
+export const modifierPatchForKind =
+  <Kind extends ModifierParameterSet['__parameterKind']>(kind: Kind) =>
+  (
+    patch: Partial<ModifierParameterSet> & { __parameterKind: Kind }
+  ): ModifierPatch =>
+  (unknownModifier) =>
+    unknownModifier.patternMatch((modifier) => {
       const oldParameter = modifier.parameters;
       if (oldParameter.__parameterKind === kind) {
         const newParameter = { ...oldParameter, ...patch };
