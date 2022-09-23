@@ -2,7 +2,7 @@ import * as E from 'fp-ts/lib/Either';
 import * as O from 'fp-ts/lib/Option';
 import {
   InsufficientSOPMFields,
-  ParameterizedModifier,
+  ParameterizedModifier
 } from '../ParameterizedModifier';
 import { ShapeObjectPropertyMap } from '../../SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme } from '../../SOPM/SOPMScheme';
@@ -30,7 +30,7 @@ export const SetVisibilityModifier = (
     _partialResult: SGPEvaluationResult,
     input: ShapeObjectPropertyMap
   ): O.Option<ShapeObjectPropertyMap> =>
-    O.some({ ...input, visibility: p.visibility }),
+    O.some({ ...input, visibility: p.visibility })
 });
 
 export const SetVisibilityPatch = modifierPatchForKind('SetVisibility');

@@ -16,7 +16,7 @@ export function createKeyboardEvent(
     ctrlKey,
     shiftKey,
     metaKey: false,
-    bubbles: true,
+    bubbles: true
   });
 }
 

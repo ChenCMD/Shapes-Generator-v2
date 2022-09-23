@@ -108,5 +108,5 @@ export const sopmSchemeWith = <
   particlePoints: true,
   visibility: true,
   angledVertices: angledVerticesPresence,
-  directedEndpoints: directedEndpointsPresence,
+  directedEndpoints: directedEndpointsPresence
 });

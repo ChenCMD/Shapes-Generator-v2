@@ -22,7 +22,7 @@ describe('subsetOf', () => {
   it.each([
     [new Set([1]), new Set([1, 2])],
     [new Set([2]), new Set([1, 2])],
-    [new Set([3]), new Set([3, 2])],
+    [new Set([3]), new Set([3, 2])]
   ])(
     'set must return when containing an element not in the second set',
     (s1, s2) => {

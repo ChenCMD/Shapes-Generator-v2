@@ -12,7 +12,7 @@ export interface Visibility {
 }
 export const declareVisibility = (b: boolean): Visibility => ({
   __type: 'Visibility',
-  visibility: b,
+  visibility: b
 });
 
 export interface AngledVertex {

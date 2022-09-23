@@ -19,7 +19,7 @@ export function upcast<Parameter extends ShapeParameters, Output extends SOPM>(
       onType: <P extends ShapeParameters, O extends SOPM>(
         inner: ParameterizedShape<P, O>
       ) => PatternMatchResult
-    ) => onType<Parameter, Output>(shape),
+    ) => onType<Parameter, Output>(shape)
   };
 }
 

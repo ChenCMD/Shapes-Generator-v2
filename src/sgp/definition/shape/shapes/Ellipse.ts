@@ -24,7 +24,7 @@ export const Ellipse = (
   parameter,
   run: (p: EllipseParameters) => {
     throw new Error('Method not implemented.');
-  },
+  }
 });
 
 export const EllipsePatch = shapePatchForKind('Ellipse');

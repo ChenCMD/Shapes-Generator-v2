@@ -21,7 +21,7 @@ export const insufficientSOPMFields = (
   lackingFields: ReadonlySet<NullableSOPMField>
 ): InsufficientSOPMFields => ({
   __kind: 'InsufficientSOPMFields',
-  lackingFields,
+  lackingFields
 });
 
 /**

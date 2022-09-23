@@ -29,7 +29,7 @@ const useLocalize = (
     // localeは更新時に利用するすべてのコンポーネントを再描画する必要があるためuseCallbackでwrapしない
     locale: (key, ...params) => locale(key, ...params),
     language,
-    setLanguage: setLanguageWrap,
+    setLanguage: setLanguageWrap
   };
 };
 

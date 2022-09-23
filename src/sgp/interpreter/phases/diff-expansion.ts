@@ -9,7 +9,7 @@ import {
   ModifierPipeline,
   SGP,
   SynchronizedShapeDefinition,
-  TargetedModifierPatch,
+  TargetedModifierPatch
 } from '../../definition/SGP';
 import {
   DiffExpansionPhaseError,
@@ -19,11 +19,11 @@ import {
   modifierPatchUnapplicable,
   shapePatchUnapplicable,
   syncReferenceIllFormed,
-  WhenWasModifierUidDuplicated,
+  WhenWasModifierUidDuplicated
 } from '../errors';
 import {
   ModifierDefinitionUid,
-  ShapeObjectDefinitionUid,
+  ShapeObjectDefinitionUid
 } from '../../definition/Uid';
 import { assert } from 'console';
 
@@ -139,7 +139,7 @@ function patchModifierPipeline(
             patch,
             O.map((m) => ({
               definitionUid: patchTarget.definitionUid,
-              modifier: m,
+              modifier: m
             }))
           )
         : O.some(patchTarget)
@@ -198,7 +198,7 @@ function patchShapeObject(
   return E.right({
     __kind: 'ModifiedShape',
     shape: patchedShape.value,
-    modifiers: patchedModifiers.concat(additionalModifiers),
+    modifiers: patchedModifiers.concat(additionalModifiers)
   });
 }
 
@@ -223,13 +223,13 @@ function expandCheckedProgram(
 
       const patchedShapeObject = patchShapeObject(target, {
         definitionUid,
-        shapeObject,
+        shapeObject
       });
 
       if (patchedShapeObject._tag === 'Right') {
         expandedDefinitions.push({
           definitionUid,
-          shapeObject: patchedShapeObject.right,
+          shapeObject: patchedShapeObject.right
         });
       } else {
         return patchedShapeObject as E.Left<DiffExpansionPhaseError>;

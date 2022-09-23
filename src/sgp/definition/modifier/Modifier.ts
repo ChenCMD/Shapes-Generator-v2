@@ -6,7 +6,7 @@ import { SOPMScheme } from '../SOPM/SOPMScheme';
 import { ShapeObjectDefinitionUid } from '../Uid';
 import {
   ParameterizedModifier,
-  ModifierTypeCheckError,
+  ModifierTypeCheckError
 } from './ParameterizedModifier';
 import { ModifierParameterSet } from './ParameterSet';
 
@@ -26,7 +26,7 @@ export function upcast<ParameterSet extends ModifierParameterSet>(
       onType: <P extends ModifierParameterSet>(
         inner: ParameterizedModifier<P>
       ) => PatternMatchResult
-    ) => onType<ParameterSet>(modifier),
+    ) => onType<ParameterSet>(modifier)
   };
 }
 

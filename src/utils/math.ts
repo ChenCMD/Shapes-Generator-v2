@@ -27,7 +27,7 @@ export function rotateMatrix2D({ x, y }: Point, rotation: number): Point {
   const radian = toRadians(rotation);
   return {
     x: x * Math.cos(radian) - y * Math.sin(radian),
-    y: x * Math.sin(radian) + y * Math.cos(radian),
+    y: x * Math.sin(radian) + y * Math.cos(radian)
   };
 }
 
@@ -119,7 +119,7 @@ export function spreadSamplesOver(
 
     return {
       x: ratio * (p2.x - p1.x) + p1.x,
-      y: ratio * (p2.y - p1.y) + p1.y,
+      y: ratio * (p2.y - p1.y) + p1.y
     };
   };
 

@@ -3,7 +3,7 @@ import {
   AngledVertex,
   DirectedEndpoints,
   ParticlePoint,
-  Visibility,
+  Visibility
 } from './ShapeObjectProperty';
 
 /**

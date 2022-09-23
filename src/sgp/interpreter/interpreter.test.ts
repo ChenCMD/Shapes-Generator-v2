@@ -3,24 +3,24 @@ import { SGPEvaluationResult } from '../definition/SGP';
 import {
   coerceToModifierUid,
   coerceToShapeObjectUid,
-  ShapeObjectDefinitionUid,
+  ShapeObjectDefinitionUid
 } from '../definition/Uid';
 import { DiffPatchedSGP } from './phases/diff-expansion';
 import { ParameterizedShape } from '../definition/shape/ParameterizedShape';
 import { upcast as upcastShape } from '../definition/shape/Shape';
 import {
   ShapeObjectPropertyMap,
-  SOPM,
+  SOPM
 } from '../definition/SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme, sopmSchemeWith } from '../definition/SOPM/SOPMScheme';
 import { declareVisibility } from '../definition/SOPM/ShapeObjectProperty';
 import {
   insufficientSOPMFields,
-  ParameterizedModifier,
+  ParameterizedModifier
 } from '../definition/modifier/ParameterizedModifier';
 import {
   Modifier,
-  upcast as upcastModifier,
+  upcast as upcastModifier
 } from '../definition/modifier/Modifier';
 import * as O from 'fp-ts/lib/Option';
 import { subsetOf } from '../../utils/ReadonlySet';
@@ -43,7 +43,7 @@ describe('evaluatePatchedSGP', () => {
     startAngle: 0,
     eccentricity: 1,
     rotation: 0,
-    spreadPointsEvenly: true,
+    spreadPointsEvenly: true
   };
 
   const invisibleEmptyShape = upcastShape(
@@ -54,7 +54,7 @@ describe('evaluatePatchedSGP', () => {
         particlePoints: [],
         visibility: declareVisibility(false),
         angledVertices: null,
-        directedEndpoints: null,
+        directedEndpoints: null
       });
     })()
   );
@@ -66,7 +66,7 @@ describe('evaluatePatchedSGP', () => {
         particlePoints: [],
         visibility: declareVisibility(true),
         angledVertices: [],
-        directedEndpoints: null,
+        directedEndpoints: null
       });
     })()
   );
@@ -75,7 +75,7 @@ describe('evaluatePatchedSGP', () => {
   // #region modifier definitions
   const fakeSetVisibilityParameters: SetVisibilityParameters = {
     __parameterKind: 'SetVisibility',
-    visibility: { __type: 'Visibility', visibility: true },
+    visibility: { __type: 'Visibility', visibility: true }
   };
   const removeAngledVerticesModifier = upcastModifier(
     new (class implements ParameterizedModifier<SetVisibilityParameters> {
@@ -142,12 +142,12 @@ describe('evaluatePatchedSGP', () => {
               modifiers: [
                 {
                   definitionUid: coerceToModifierUid('mod 1'),
-                  modifier: identityModifierRequiring(new Set([])),
-                },
-              ],
-            },
-          },
-        ],
+                  modifier: identityModifierRequiring(new Set([]))
+                }
+              ]
+            }
+          }
+        ]
       },
       // 結果要求が2つめのshapeにあるが、正しく解決されるであろうプログラム
       {
@@ -157,8 +157,8 @@ describe('evaluatePatchedSGP', () => {
             shapeObject: {
               __kind: 'ModifiedShape',
               shape: visibleShapeWithEmptyAngledVertices,
-              modifiers: [],
-            },
+              modifiers: []
+            }
           },
           {
             definitionUid: coerceToShapeObjectUid('shape 2'),
@@ -170,13 +170,13 @@ describe('evaluatePatchedSGP', () => {
                   definitionUid: coerceToModifierUid('mod 1'),
                   modifier: identityModifierRequiring(
                     new Set([coerceToShapeObjectUid('shape 1')])
-                  ),
-                },
-              ],
-            },
-          },
-        ],
-      },
+                  )
+                }
+              ]
+            }
+          }
+        ]
+      }
     ];
 
     it.each(validPrograms)('must output a Right value for %o', ({ program }) =>
@@ -221,12 +221,12 @@ describe('evaluatePatchedSGP', () => {
               modifiers: [
                 {
                   definitionUid: coerceToModifierUid('mod 31'),
-                  modifier: angledVerticesModifier,
-                },
-              ],
-            },
-          },
-        ],
+                  modifier: angledVerticesModifier
+                }
+              ]
+            }
+          }
+        ]
       },
       // angledVerticesを消すModifierの後にangledVerticesを要求するModifierが付いたshapeがあるプログラム
       {
@@ -239,18 +239,18 @@ describe('evaluatePatchedSGP', () => {
               modifiers: [
                 {
                   definitionUid: coerceToModifierUid('mod 41'),
-                  modifier: removeAngledVerticesModifier,
+                  modifier: removeAngledVerticesModifier
                 },
 
                 {
                   definitionUid: coerceToModifierUid('mod 42'),
-                  modifier: angledVerticesModifier,
-                },
-              ],
-            },
-          },
-        ],
-      },
+                  modifier: angledVerticesModifier
+                }
+              ]
+            }
+          }
+        ]
+      }
     ];
 
     it.each(programsWithTypeError)(
@@ -287,12 +287,12 @@ describe('evaluatePatchedSGP', () => {
                   definitionUid: coerceToModifierUid('mod 11'),
                   modifier: identityModifierRequiring(
                     new Set([coerceToShapeObjectUid('shape 11')])
-                  ),
-                },
-              ],
-            },
-          },
-        ],
+                  )
+                }
+              ]
+            }
+          }
+        ]
       },
       // Modifierが存在しない結果を要求するようなプログラム
       {
@@ -307,13 +307,13 @@ describe('evaluatePatchedSGP', () => {
                   definitionUid: coerceToModifierUid('mod 21'),
                   modifier: identityModifierRequiring(
                     new Set([coerceToShapeObjectUid('shape 00')])
-                  ),
-                },
-              ],
-            },
-          },
-        ],
-      },
+                  )
+                }
+              ]
+            }
+          }
+        ]
+      }
     ];
 
     it.each(programsWithInvalidResultReferences)(

@@ -7,7 +7,7 @@ import { DiffPatchedSGP } from './diff-expansion';
 import {
   modifierRequirementFailed,
   ModifierTypeCheckPhaseError,
-  modifierTypeError,
+  modifierTypeError
 } from '../errors';
 import { pipe } from 'fp-ts/function';
 import { ModifiedShapeDefinition } from '../../definition/SGP';
@@ -15,7 +15,7 @@ import { ShapeObjectDefinitionUid } from '../../definition/Uid';
 import { outputSpec as outputSpecOfShape } from '../../definition/shape/Shape';
 import {
   outputSpec as outputSpecOfModifier,
-  partialEvaluationResultRequirements,
+  partialEvaluationResultRequirements
 } from '../../definition/modifier/Modifier';
 
 type TypeCheckErrorOrVoid = E.Either<ModifierTypeCheckPhaseError, void>;
@@ -26,7 +26,7 @@ function typeCheckPipeline(def: ModifiedShapeDefinition): TypeCheckErrorOrVoid {
   let overallOutput = outputSpecOfShape(shapeObject.shape);
   for (const {
     definitionUid: modifierDefinitionUid,
-    modifier,
+    modifier
   } of shapeObject.modifiers) {
     const output = outputSpecOfModifier(modifier, overallOutput);
     if (output._tag === 'Left') {

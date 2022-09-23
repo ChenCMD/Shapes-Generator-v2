@@ -3,13 +3,13 @@ import { camelCaseToSnakeCase } from '../utils/common';
 import enLocale from './en.json';
 
 const locales: Partial<Record<SpecificatedLanguage, Record<string, string>>> = {
-  en: enLocale,
+  en: enLocale
 };
 let language: SpecificatedLanguage = 'en';
 
 export const languageMap: Readonly<Record<SpecificatedLanguage, string>> = {
   en: 'English',
-  ja: '日本語',
+  ja: '日本語'
 } as const;
 
 export function getLanguage(): SpecificatedLanguage {

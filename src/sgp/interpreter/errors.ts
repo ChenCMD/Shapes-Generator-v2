@@ -2,7 +2,7 @@ import * as E from 'fp-ts/Either';
 
 import {
   ModifierDefinitionUid,
-  ShapeObjectDefinitionUid,
+  ShapeObjectDefinitionUid
 } from '../definition/Uid';
 
 // #region diff phase のエラー
@@ -36,7 +36,7 @@ export const syncReferenceIllFormed = (
 ): SyncReferenceIllFormed => ({
   __kind: 'SyncReferenceIllFormed',
   sourceId,
-  reason,
+  reason
 });
 
 /**
@@ -50,7 +50,7 @@ export const duplicateShapeObjectUid = (
   duplicatedId: ShapeObjectDefinitionUid
 ): DuplicateShapeObjectUid => ({
   __kind: 'DuplicateShapeObjectUid',
-  duplicatedId,
+  duplicatedId
 });
 
 /**
@@ -75,7 +75,7 @@ export const duplicateModifierUid = (
   __kind: 'DuplicateModifierUid',
   duplicatedModifierUid,
   modifierOwnerUid,
-  when,
+  when
 });
 
 export interface ShapePatchUnapplicable {
@@ -89,7 +89,7 @@ export const shapePatchUnapplicable = (
 ): ShapePatchUnapplicable => ({
   __kind: 'ShapePatchUnapplicable',
   patchedShapeObjectUid,
-  patchShapeObjectUid,
+  patchShapeObjectUid
 });
 
 export interface ModifierPatchUnapplicable {
@@ -106,7 +106,7 @@ export const modifierPatchUnapplicable = (
   __kind: 'ModifierPatchUnapplicable',
   patchedShapeObjectUid,
   patchedModifierUid,
-  patchShapeObjectUid,
+  patchShapeObjectUid
 });
 
 export interface ModifierPatchTargetNotFound {
@@ -120,7 +120,7 @@ export const modifierPatchTargetNotFound = (
 ): ModifierPatchTargetNotFound => ({
   __kind: 'ModifierPatchTargetNotFound',
   patchTarget,
-  patchSource,
+  patchSource
 });
 
 export type DiffExpansionPhaseError =
@@ -146,7 +146,7 @@ export const modifierTypeError = (
 ): ModifierTypeError => ({
   __kind: 'ModifierTypeError',
   shapeObjectDefinitionUid,
-  modifierDefinitionUid,
+  modifierDefinitionUid
 });
 
 export interface ModifierRequirementFailed {
@@ -160,7 +160,7 @@ export const modifierRequirementFailed = (
 ): ModifierRequirementFailed => ({
   __kind: 'ModifierRequirementFailed',
   shapeObjectDefinitionUid,
-  modifierDefinitionUid,
+  modifierDefinitionUid
 });
 
 export type ModifierTypeCheckPhaseError =
@@ -183,7 +183,7 @@ export const modifierReturnedNoneWhenEvaluated = (
 ): ModifierReturnedNoneWhenEvaluated => ({
   __kind: 'ModifierReturnedNoneWhenEvaluated',
   ownerShapeObjectUid,
-  modifierUid,
+  modifierUid
 });
 
 export type EvaluationError = ModifierReturnedNoneWhenEvaluated;

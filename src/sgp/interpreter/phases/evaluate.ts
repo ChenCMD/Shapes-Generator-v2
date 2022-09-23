@@ -3,7 +3,7 @@ import { run as runModifier } from '../../definition/modifier/Modifier';
 import { run as runShape } from '../../definition/shape/Shape';
 import {
   SGPEvaluationResult,
-  ShapeObjectEvaluationResult,
+  ShapeObjectEvaluationResult
 } from '../../definition/SGP';
 import { EvaluationError, modifierReturnedNoneWhenEvaluated } from '../errors';
 import { DiffPatchedSGP } from './diff-expansion';
@@ -25,7 +25,7 @@ export function evaluate(
     let outputSopm = runShape(shapeObject.shape);
     for (const {
       definitionUid: modifierUid,
-      modifier,
+      modifier
     } of shapeObject.modifiers) {
       const modifierResult = runModifier(modifier, resultSoFar, outputSopm);
 
@@ -40,7 +40,7 @@ export function evaluate(
 
     resultSoFar.push({
       originUid: shapeObjectUid,
-      output: outputSopm,
+      output: outputSopm
     });
   }
 
