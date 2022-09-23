@@ -1,6 +1,6 @@
 import * as E from 'fp-ts/Either';
-import { run as runModifier } from '../../definition/modifier/ModifierWithUnknownParameters';
-import { run as runShape } from '../../definition/shape/ShapeWithUnknownParameters';
+import { run as runModifier } from '../../definition/modifier/Modifier';
+import { run as runShape } from '../../definition/shape/Shape';
 import { SGPEvaluationResult, ShapeObjectEvaluationResult } from '../../definition/SGP';
 import { EvaluationError, modifierReturnedNoneWhenEvaluated } from '../errors';
 import { DiffPatchedSGP } from './diff-expansion';

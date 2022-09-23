@@ -8,8 +8,8 @@ import { modifierRequirementFailed, ModifierTypeCheckPhaseError, modifierTypeErr
 import { pipe } from 'fp-ts/function';
 import { ModifiedShapeDefinition } from '../../definition/SGP';
 import { ShapeObjectDefinitionUid } from '../../definition/Uid';
-import { outputSpec as outputSpecOfShape } from '../../definition/shape/ShapeWithUnknownParameters';
-import { outputSpec as outputSpecOfModifier, partialEvaluationResultRequirements } from '../../definition/modifier/ModifierWithUnknownParameters';
+import { outputSpec as outputSpecOfShape } from '../../definition/shape/Shape';
+import { outputSpec as outputSpecOfModifier, partialEvaluationResultRequirements } from '../../definition/modifier/Modifier';
 
 type TypeCheckErrorOrVoid = E.Either<ModifierTypeCheckPhaseError, void>;
 

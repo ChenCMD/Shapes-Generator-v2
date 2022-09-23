@@ -1,6 +1,6 @@
 import * as E from 'fp-ts/lib/Either';
 import * as O from 'fp-ts/lib/Option';
-import { InsufficientSOPMFields, Modifier } from '../Modifier';
+import { InsufficientSOPMFields, ParameterizedModifier } from '../ParameterizedModifier';
 import { ShapeObjectPropertyMap } from '../../SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme } from '../../SOPM/SOPMScheme';
 import { SGPEvaluationResult } from '../../SGP';
@@ -13,7 +13,7 @@ export type SetVisibilityParameters = {
   readonly visibility: Visibility;
 };
 
-export const SetVisibilityModifier = (parameters: SetVisibilityParameters): Modifier<SetVisibilityParameters> => ({
+export const SetVisibilityModifier = (parameters: SetVisibilityParameters): ParameterizedModifier<SetVisibilityParameters> => ({
   parameters,
   partialEvaluationResultRequirements: (): ReadonlySet<ShapeObjectDefinitionUid> => new Set(),
   outputSpec: (onInput: SOPMScheme): E.Either<InsufficientSOPMFields, SOPMScheme> =>

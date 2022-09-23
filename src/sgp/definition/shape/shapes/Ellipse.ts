@@ -1,6 +1,6 @@
 import { Vector2D } from '../../../../types/Vector2D';
 import { shapePatchForKind } from '../../Patches';
-import { Shape } from '../Shape';
+import { ParameterizedShape } from '../ParameterizedShape';
 import { SOPMWith } from '../../SOPM/ShapeObjectPropertyMap';
 import { sopmSchemeWith } from '../../SOPM/SOPMScheme';
 
@@ -17,7 +17,7 @@ export type EllipseParameters = {
 
 type EllipseSOPM = SOPMWith<true, false>;
 
-export const Ellipse = (parameter: EllipseParameters): Shape<EllipseParameters, EllipseSOPM> => ({
+export const Ellipse = (parameter: EllipseParameters): ParameterizedShape<EllipseParameters, EllipseSOPM> => ({
   outputSpec: sopmSchemeWith(true, false),
   parameter,
   run: (p: EllipseParameters) => {

@@ -1,12 +1,12 @@
 import * as O from 'fp-ts/Option';
 import { ShapeParameters } from './shape/ParameterSet';
 import { ModifierParameterSet } from './modifier/ParameterSet';
-import { ModifierWithUnknownParameter, upcast as upcastModifier } from './modifier/ModifierWithUnknownParameters';
-import { ShapeWithUnknownParameter, upcast as upcastShape } from './shape/ShapeWithUnknownParameters';
+import { Modifier, upcast as upcastModifier } from './modifier/Modifier';
+import { Shape, upcast as upcastShape } from './shape/Shape';
 
 type Patch<Target> = (target: Target) => O.Option<Target>;
 
-export type ShapePatch = Patch<ShapeWithUnknownParameter>;
+export type ShapePatch = Patch<Shape>;
 
 export const shapePatchForKind = <Kind extends ShapeParameters['__parameterKind']>(kind: Kind) =>
   (patch: Partial<ShapeParameters> & { __parameterKind: Kind }): ShapePatch =>
@@ -22,7 +22,7 @@ export const shapePatchForKind = <Kind extends ShapeParameters['__parameterKind'
       }
     });
 
-export type ModifierPatch = Patch<ModifierWithUnknownParameter>;
+export type ModifierPatch = Patch<Modifier>;
 
 export const modifierPatchForKind = <Kind extends ModifierParameterSet['__parameterKind']>(kind: Kind) =>
   (patch: Partial<ModifierParameterSet> & { __parameterKind: Kind }): ModifierPatch =>

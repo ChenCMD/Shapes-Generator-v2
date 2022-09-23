@@ -2,13 +2,13 @@ import * as E from 'fp-ts/lib/Either';
 import { SGPEvaluationResult } from '../definition/SGP';
 import { coerceToModifierUid, coerceToShapeObjectUid, ShapeObjectDefinitionUid } from '../definition/Uid';
 import { DiffPatchedSGP } from './phases/diff-expansion';
-import { Shape } from '../definition/shape/Shape';
-import { upcast as upcastShape } from '../definition/shape/ShapeWithUnknownParameters';
+import { ParameterizedShape } from '../definition/shape/ParameterizedShape';
+import { upcast as upcastShape } from '../definition/shape/Shape';
 import { ShapeObjectPropertyMap, SOPM } from '../definition/SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme, sopmSchemeWith } from '../definition/SOPM/SOPMScheme';
 import { declareVisibility } from '../definition/SOPM/ShapeObjectProperty';
-import { insufficientSOPMFields, Modifier } from '../definition/modifier/Modifier';
-import { ModifierWithUnknownParameter, upcast as upcastModifier } from '../definition/modifier/ModifierWithUnknownParameters';
+import { insufficientSOPMFields, ParameterizedModifier } from '../definition/modifier/ParameterizedModifier';
+import { Modifier, upcast as upcastModifier } from '../definition/modifier/Modifier';
 import * as O from 'fp-ts/lib/Option';
 import { subsetOf } from '../../utils/ReadonlySet';
 import { evaluatePatchedSGP } from './interpreter';
@@ -33,7 +33,7 @@ describe('evaluatePatchedSGP', () => {
     spreadPointsEvenly: true,  
   });
 
-  const invisibleEmptyShape = upcastShape(new class implements Shape<EllipseParameters, SOPM> {
+  const invisibleEmptyShape = upcastShape(new class implements ParameterizedShape<EllipseParameters, SOPM> {
     readonly outputSpec = sopmSchemeWith(false, false);
     readonly parameter = fakeEllipseParameters;
     readonly run = (): ShapeObjectPropertyMap => ({
@@ -43,7 +43,7 @@ describe('evaluatePatchedSGP', () => {
       directedEndpoints: null
     });
   }());
-  const visibleShapeWithEmptyAngledVertices = upcastShape(new class implements Shape<EllipseParameters, SOPM> {
+  const visibleShapeWithEmptyAngledVertices = upcastShape(new class implements ParameterizedShape<EllipseParameters, SOPM> {
     readonly outputSpec = sopmSchemeWith(true, false); 
     readonly parameter = fakeEllipseParameters;
     readonly run = (): ShapeObjectPropertyMap => ({
@@ -60,7 +60,7 @@ describe('evaluatePatchedSGP', () => {
     __parameterKind: 'SetVisibility',
     visibility: { __type: 'Visibility', visibility: true }
   }; 
-  const removeAngledVerticesModifier = upcastModifier(new class implements Modifier<SetVisibilityParameters> {
+  const removeAngledVerticesModifier = upcastModifier(new class implements ParameterizedModifier<SetVisibilityParameters> {
     readonly parameters = fakeSetVisibilityParameters;
     readonly outputSpec = (inputScheme: SOPMScheme) =>
       E.right({ ...inputScheme, angledVertices: false });
@@ -69,7 +69,7 @@ describe('evaluatePatchedSGP', () => {
       O.some({ ...input, angledVertices: null });
   }());
 
-  const angledVerticesModifier = upcastModifier(new class implements Modifier<SetVisibilityParameters> {
+  const angledVerticesModifier = upcastModifier(new class implements ParameterizedModifier<SetVisibilityParameters> {
     readonly parameters = fakeSetVisibilityParameters;
     readonly outputSpec = (inputScheme: SOPMScheme) =>
       inputScheme.angledVertices
@@ -82,8 +82,8 @@ describe('evaluatePatchedSGP', () => {
       : O.none;
   }());
 
-  const identityModifierRequiring = (requirements: ReadonlySet<ShapeObjectDefinitionUid>): ModifierWithUnknownParameter =>
-    upcastModifier(new class implements Modifier<SetVisibilityParameters> {
+  const identityModifierRequiring = (requirements: ReadonlySet<ShapeObjectDefinitionUid>): Modifier =>
+    upcastModifier(new class implements ParameterizedModifier<SetVisibilityParameters> {
       readonly parameters = fakeSetVisibilityParameters;
       readonly outputSpec = (inputScheme: SOPMScheme) => E.right(inputScheme);
       readonly partialEvaluationResultRequirements = () => requirements;
