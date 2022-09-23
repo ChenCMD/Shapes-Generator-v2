@@ -4,12 +4,19 @@ import * as RA from 'fp-ts/ReadonlyArray';
 import { subsetOf } from '../../../utils/ReadonlySet';
 
 import { DiffPatchedSGP } from './diff-expansion';
-import { modifierRequirementFailed, ModifierTypeCheckPhaseError, modifierTypeError } from '../errors';
+import {
+  modifierRequirementFailed,
+  ModifierTypeCheckPhaseError,
+  modifierTypeError,
+} from '../errors';
 import { pipe } from 'fp-ts/function';
 import { ModifiedShapeDefinition } from '../../definition/SGP';
 import { ShapeObjectDefinitionUid } from '../../definition/Uid';
 import { outputSpec as outputSpecOfShape } from '../../definition/shape/Shape';
-import { outputSpec as outputSpecOfModifier, partialEvaluationResultRequirements } from '../../definition/modifier/Modifier';
+import {
+  outputSpec as outputSpecOfModifier,
+  partialEvaluationResultRequirements,
+} from '../../definition/modifier/Modifier';
 
 type TypeCheckErrorOrVoid = E.Either<ModifierTypeCheckPhaseError, void>;
 
@@ -17,10 +24,15 @@ function typeCheckPipeline(def: ModifiedShapeDefinition): TypeCheckErrorOrVoid {
   const { definitionUid: shapeDefinitionUid, shapeObject } = def;
 
   let overallOutput = outputSpecOfShape(shapeObject.shape);
-  for (const { definitionUid: modifierDefinitionUid, modifier } of shapeObject.modifiers) {
+  for (const {
+    definitionUid: modifierDefinitionUid,
+    modifier,
+  } of shapeObject.modifiers) {
     const output = outputSpecOfModifier(modifier, overallOutput);
     if (output._tag === 'Left') {
-      return E.left(modifierTypeError(shapeDefinitionUid, modifierDefinitionUid));
+      return E.left(
+        modifierTypeError(shapeDefinitionUid, modifierDefinitionUid)
+      );
     } else {
       overallOutput = output.right;
     }
@@ -29,7 +41,9 @@ function typeCheckPipeline(def: ModifiedShapeDefinition): TypeCheckErrorOrVoid {
   return E.right(undefined);
 }
 
-function typeCheckPipelinesOfProgram(program: DiffPatchedSGP): TypeCheckErrorOrVoid {
+function typeCheckPipelinesOfProgram(
+  program: DiffPatchedSGP
+): TypeCheckErrorOrVoid {
   return pipe(
     program,
     RA.traverse(E.Applicative)(typeCheckPipeline),
@@ -37,23 +51,35 @@ function typeCheckPipelinesOfProgram(program: DiffPatchedSGP): TypeCheckErrorOrV
   );
 }
 
-function typeCheckModifierRequirements(definitionsSoFar: ReadonlySet<ShapeObjectDefinitionUid>, shape: ModifiedShapeDefinition): TypeCheckErrorOrVoid {
+function typeCheckModifierRequirements(
+  definitionsSoFar: ReadonlySet<ShapeObjectDefinitionUid>,
+  shape: ModifiedShapeDefinition
+): TypeCheckErrorOrVoid {
   return pipe(
     shape.shapeObject.modifiers,
-    RA.traverse(E.Applicative)(({ definitionUid: modifierDefinitionUid, modifier }) =>
-      pipe(
-        partialEvaluationResultRequirements(modifier),
-        subsetOf(definitionsSoFar),
-        (isSubset: boolean) => isSubset
-          ? E.right(undefined)
-          : E.left(modifierRequirementFailed(shape.definitionUid, modifierDefinitionUid))
-      )
+    RA.traverse(E.Applicative)(
+      ({ definitionUid: modifierDefinitionUid, modifier }) =>
+        pipe(
+          partialEvaluationResultRequirements(modifier),
+          subsetOf(definitionsSoFar),
+          (isSubset: boolean) =>
+            isSubset
+              ? E.right(undefined)
+              : E.left(
+                  modifierRequirementFailed(
+                    shape.definitionUid,
+                    modifierDefinitionUid
+                  )
+                )
+        )
     ),
     EE.as(undefined)
   );
 }
 
-function typeCheckModifierRequirementsOfProgram(program: DiffPatchedSGP): TypeCheckErrorOrVoid {
+function typeCheckModifierRequirementsOfProgram(
+  program: DiffPatchedSGP
+): TypeCheckErrorOrVoid {
   const definitionsSoFar: Set<ShapeObjectDefinitionUid> = new Set();
   for (const def of program) {
     const checkResult = typeCheckModifierRequirements(definitionsSoFar, def);
@@ -67,7 +93,9 @@ function typeCheckModifierRequirementsOfProgram(program: DiffPatchedSGP): TypeCh
   return E.right(undefined);
 }
 
-export function typeCheckModifiers(program: DiffPatchedSGP): TypeCheckErrorOrVoid {
+export function typeCheckModifiers(
+  program: DiffPatchedSGP
+): TypeCheckErrorOrVoid {
   return pipe(
     E.right(program),
     EE.chainTap(typeCheckModifierRequirementsOfProgram),

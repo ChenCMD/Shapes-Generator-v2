@@ -1,5 +1,10 @@
 import { LiftBoolToNullability } from '../../../utils/bool-to-nullability';
-import { AngledVertex, DirectedEndpoints, ParticlePoint, Visibility } from './ShapeObjectProperty';
+import {
+  AngledVertex,
+  DirectedEndpoints,
+  ParticlePoint,
+  Visibility,
+} from './ShapeObjectProperty';
 
 /**
  * ShapesGeneratorProgram内の一つのShapeObjectDefinitionから得られる、その定義の実行結果。
@@ -23,6 +28,12 @@ export type SOPMWith<
   AngledVerticesPresence extends boolean,
   DirectedEndpointsPresence extends boolean
 > = SOPM & {
-  readonly angledVertices: LiftBoolToNullability<AngledVerticesPresence, ReadonlyArray<AngledVertex>>
-  readonly directedEndpoints: LiftBoolToNullability<DirectedEndpointsPresence, DirectedEndpoints>
+  readonly angledVertices: LiftBoolToNullability<
+    AngledVerticesPresence,
+    ReadonlyArray<AngledVertex>
+  >;
+  readonly directedEndpoints: LiftBoolToNullability<
+    DirectedEndpointsPresence,
+    DirectedEndpoints
+  >;
 };

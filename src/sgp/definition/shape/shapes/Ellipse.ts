@@ -17,12 +17,14 @@ export type EllipseParameters = {
 
 type EllipseSOPM = SOPMWith<true, false>;
 
-export const Ellipse = (parameter: EllipseParameters): ParameterizedShape<EllipseParameters, EllipseSOPM> => ({
+export const Ellipse = (
+  parameter: EllipseParameters
+): ParameterizedShape<EllipseParameters, EllipseSOPM> => ({
   outputSpec: sopmSchemeWith(true, false),
   parameter,
   run: (p: EllipseParameters) => {
     throw new Error('Method not implemented.');
-  }
+  },
 });
 
 export const EllipsePatch = shapePatchForKind('Ellipse');
