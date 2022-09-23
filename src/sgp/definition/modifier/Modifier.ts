@@ -29,7 +29,7 @@ export type Modifier<ParameterSet extends ModifierParameterSet> = {
   /**
    * この{@link Modifier}の動作を制御するパラメータ集合。
    */
-  parameters: ParameterSet
+  readonly parameters: ParameterSet
 
   /**
    * {@link inputScheme}が型指定する{@link SOPM}が{@link run}に入力された時に
