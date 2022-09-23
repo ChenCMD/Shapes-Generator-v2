@@ -5,7 +5,7 @@ import { ParameterizedShape } from './ParameterizedShape';
 
 export type Shape = {
   readonly patternMatch: <PatternMatchResult>(
-    onType: <Parameter extends ShapeParameters, Output extends SOPM>(shape: ParameterizedShape<Parameter, Output>) => PatternMatchResult
+    onType: <Parameter extends ShapeParameters, Output extends SOPM>(inner: ParameterizedShape<Parameter, Output>) => PatternMatchResult
   ) => PatternMatchResult;
 };
 
@@ -14,15 +14,15 @@ export function upcast<
   Output extends SOPM
 >(shape: ParameterizedShape<Parameter, Output>): Shape {
   return {
-    patternMatch: <PatternMatchResult>(onType: <P extends ShapeParameters, O extends SOPM>(_shape: ParameterizedShape<P, O>) => PatternMatchResult) =>
+    patternMatch: <PatternMatchResult>(onType: <P extends ShapeParameters, O extends SOPM>(inner: ParameterizedShape<P, O>) => PatternMatchResult) =>
       onType<Parameter, Output>(shape)
   };
 }
 
-export function run(unknownParameterShape: Shape): SOPM {
-  return unknownParameterShape.patternMatch(shape => shape.run(shape.parameter));
+export function run(shape: Shape): SOPM {
+  return shape.patternMatch(inner => inner.run(inner.parameter));
 }
 
-export function outputSpec(unknownParameterShape: Shape): S.SOPMScheme {
-  return unknownParameterShape.patternMatch(shape => shape.outputSpec);
+export function outputSpec(shape: Shape): S.SOPMScheme {
+  return shape.patternMatch(inner => inner.outputSpec);
 }

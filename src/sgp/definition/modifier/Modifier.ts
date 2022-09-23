@@ -9,25 +9,25 @@ import { ModifierParameterSet } from './ParameterSet';
 
 export type Modifier = {
   readonly patternMatch: <PatternMatchResult>(
-    onType: <Parameter extends ModifierParameterSet>(modifier: ParameterizedModifier<Parameter>) => PatternMatchResult
+    onType: <Parameter extends ModifierParameterSet>(inner: ParameterizedModifier<Parameter>) => PatternMatchResult
   ) => PatternMatchResult;
 };
 
 export function upcast<ParameterSet extends ModifierParameterSet>(modifier: ParameterizedModifier<ParameterSet>): Modifier {
   return {
-    patternMatch: <PatternMatchResult>(onType: <P extends ModifierParameterSet>(_modifier: ParameterizedModifier<P>) => PatternMatchResult) =>
+    patternMatch: <PatternMatchResult>(onType: <P extends ModifierParameterSet>(inner: ParameterizedModifier<P>) => PatternMatchResult) =>
       onType<ParameterSet>(modifier)
   };
 }
 
-export function run(unknownModifier: Modifier, partialResult: SGPEvaluationResult, input: SOPM): O.Option<SOPM> {
-  return unknownModifier.patternMatch(modifier => modifier.run(modifier.parameters, partialResult, input));
+export function run(modifier: Modifier, partialResult: SGPEvaluationResult, input: SOPM): O.Option<SOPM> {
+  return modifier.patternMatch(inner => inner.run(inner.parameters, partialResult, input));
 }
 
-export function partialEvaluationResultRequirements(unknownModifier: Modifier): ReadonlySet<ShapeObjectDefinitionUid> {
-  return unknownModifier.patternMatch(modifier => modifier.partialEvaluationResultRequirements(modifier.parameters));
+export function partialEvaluationResultRequirements(modifier: Modifier): ReadonlySet<ShapeObjectDefinitionUid> {
+  return modifier.patternMatch(inner => inner.partialEvaluationResultRequirements(inner.parameters));
 }
 
-export function outputSpec(unknownModifier: Modifier, inputScheme: SOPMScheme): E.Either<ModifierTypeCheckError, SOPMScheme> {
-  return unknownModifier.patternMatch(modifier => modifier.outputSpec(inputScheme));
+export function outputSpec(modifier: Modifier, inputScheme: SOPMScheme): E.Either<ModifierTypeCheckError, SOPMScheme> {
+  return modifier.patternMatch(inner => inner.outputSpec(inputScheme));
 }
