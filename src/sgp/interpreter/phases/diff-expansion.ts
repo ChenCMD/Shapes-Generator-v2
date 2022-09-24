@@ -216,10 +216,10 @@ function expandCheckedProgram(
     if (shapeObject.__kind === 'SynchronizedShape') {
       const targetCandidates = expandedDefinitions.filter(
         (d) => d.definitionUid === shapeObject.targetDefinitionUid
-      )!;
+      );
       // 事前条件により一意に定まるはず
       assert(targetCandidates.length === 1);
-      const target = targetCandidates[0]!;
+      const target = targetCandidates[0];
 
       const patchedShapeObject = patchShapeObject(target, {
         definitionUid,
