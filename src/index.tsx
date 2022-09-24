@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './styles/global.scss';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -6,6 +6,7 @@ import {
   chooseFirstRecognizedLanguage,
   LanguageSpecification
 } from './locales/Language';
+import { LanguageContext } from './contexts/Language';
 
 const urlParams = window.location.search
   .substring(1)
@@ -28,14 +29,18 @@ navigator.languages !== undefined &&
   configuredLanguageCandidates.push(...navigator.languages);
 configuredLanguageCandidates.push(navigator.language);
 
+const initialLanguage: LanguageSpecification =
+  chooseFirstRecognizedLanguage(configuredLanguageCandidates) ?? 'en';
+
 const RootComponent = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const initialLanguage: LanguageSpecification =
-    chooseFirstRecognizedLanguage(configuredLanguageCandidates) ?? 'en';
+  const [language, setLanguage] = useState(initialLanguage);
 
   return (
     <>
-      <React.StrictMode></React.StrictMode>
+      <React.StrictMode>
+        <LanguageContext.Provider value={language}></LanguageContext.Provider>
+      </React.StrictMode>
     </>
   );
 };
