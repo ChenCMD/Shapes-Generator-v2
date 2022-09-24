@@ -7,6 +7,7 @@
     "@primer/octicons-react": "^16.2.0",
     "bootstrap": "^5.0.1",
     "fast-deep-equal": "^3.1.3",
+    "fp-ts": "^2.11.8",
     "konva": "^8.0.2",
     "lz-string": "^1.4.4",
     "package.json": "^2.0.1",
@@ -31,7 +32,8 @@
     "test": "jest --passWithNoTests",
     "start": "webpack-dev-server --mode development",
     "start-profiling": "webpack-dev-server --mode production",
-    "lint": "eslint src/** --ext .ts,.tsx --no-error-on-unmatched-pattern --ignore-pattern *.html --ignore-pattern *.d.ts"
+    "lint": "eslint src/** --ext .ts,.tsx --no-error-on-unmatched-pattern --ignore-pattern *.html --ignore-pattern *.d.ts",
+    "format": "prettier --write src/**/*.{js,ts,tsx}"
   },
   "eslintConfig": {
     "extends": [
@@ -69,12 +71,14 @@
     "autoprefixer": "^9.7.4",
     "css-loader": "^3.2.0",
     "eslint": "^7.27.0",
+    "eslint-config-prettier": "8.5.0",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^27.4.7",
     "mini-css-extract-plugin": "^0.9.0",
     "postcss-loader": "^3.0.0",
+    "prettier": "2.7.1",
     "sass": "^1.35.1",
     "sass-loader": "^8.0.0",
     "ts-loader": "^6.2.1",

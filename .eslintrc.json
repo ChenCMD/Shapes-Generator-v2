@@ -13,7 +13,8 @@
         "react-app",
         "plugin:@typescript-eslint/recommended",
         "plugin:react/recommended",
-        "plugin:react-hooks/recommended"
+        "plugin:react-hooks/recommended",
+        "prettier"
     ],
     "settings": {
         "react": {
@@ -138,10 +139,6 @@
             }
         ],
         "arrow-body-style": [
-            "warn",
-            "as-needed"
-        ],
-        "arrow-parens": [
             "warn",
             "as-needed"
         ],
