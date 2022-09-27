@@ -1,4 +1,4 @@
-import { Point } from '../types/Point';
+import { Point } from './types/Point';
 
 export function toRadians(degree: number): number {
   return degree * (Math.PI / 180);

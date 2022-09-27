@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (_, option) => ({
-    entry: path.resolve(__dirname, 'src/index.tsx'),
+    entry: path.resolve(__dirname, 'src/ui/index.tsx'),
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: `bundle-${Date.now()}.js`
@@ -60,7 +60,7 @@ module.exports = (_, option) => ({
         new HtmlWebpackPlugin({
             publicPath: 'dist',
             filename: 'index.html',
-            template: 'src/index.html'
+            template: 'src/ui/index.html'
         }),
         new MiniCssExtractPlugin({
             publicPath: 'dist',

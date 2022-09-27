@@ -23,11 +23,11 @@ import {
   upcast as upcastModifier
 } from '../definition/modifier/Modifier';
 import * as O from 'fp-ts/lib/Option';
-import { subsetOf } from '../../utils/ReadonlySet';
 import { evaluatePatchedSGP } from './interpreter';
 import { SGPEvaluationPhaseError } from './errors';
 import { EllipseParameters } from '../definition/shape/shapes/Ellipse';
 import { SetVisibilityParameters } from '../definition/modifier/modifiers/SetVisibility';
+import { subsetOf } from '../../util/ReadonlySet';
 
 describe('evaluatePatchedSGP', () => {
   interface TestCase {

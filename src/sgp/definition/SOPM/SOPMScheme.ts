@@ -1,4 +1,4 @@
-import { ProjectNullabilityToBool } from '../../../utils/bool-to-nullability';
+import { ProjectNullabilityToBool } from '../../../util/bool-to-nullability';
 import { SOPM } from './ShapeObjectPropertyMap';
 
 /**

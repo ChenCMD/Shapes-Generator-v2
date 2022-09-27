@@ -1,5 +1,5 @@
 import * as E from 'fp-ts/Either';
-import * as EE from '../../utils/either';
+import * as EE from '../../util/either';
 
 import { pipe } from 'fp-ts/function';
 import { SGPEvaluationResult } from '../definition/SGP';

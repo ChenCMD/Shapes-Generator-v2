@@ -1,7 +1,7 @@
 import * as E from 'fp-ts/Either';
-import * as EE from '../../../utils/either';
 import * as RA from 'fp-ts/ReadonlyArray';
-import { subsetOf } from '../../../utils/ReadonlySet';
+import * as EE from '../../../util/either';
+import { subsetOf } from '../../../util/ReadonlySet';
 
 import { DiffPatchedSGP } from './diff-expansion';
 import {
