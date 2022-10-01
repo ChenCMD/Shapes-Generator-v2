@@ -24,7 +24,10 @@ import {
 } from '../../definition/modifier/Modifier';
 import * as O from 'fp-ts/lib/Option';
 import { SGPEvaluationPhaseError } from '../errors';
-import { EllipseParameters } from '../../definition/shape/shapes/Ellipse';
+import {
+  EllipseParameters,
+  defaultEllipseParameters
+} from '../../definition/shape/shapes/Ellipse';
 import { SetVisibilityParameters } from '../../definition/modifier/modifiers/SetVisibility';
 import { subsetOf } from '../../../util/ReadonlySet';
 import { TypeCheckedDiffPatchedSGP, typeCheckModifiers } from './typecheck';
@@ -51,19 +54,10 @@ describe('evaluate', () => {
   }
 
   // #region shape definitions
-  const fakeEllipseParameters: EllipseParameters = {
-    __parameterKind: 'Ellipse',
-    pointCount: 1,
-    semiMajorAxis: 1,
-    startAngleInRadian: 0,
-    eccentricity: 1,
-    spreadPointsEvenly: true
-  };
-
   const invisibleEmptyShape = upcastShape(
     new (class implements ParameterizedShape<EllipseParameters, SOPM> {
       readonly outputSpec = sopmSchemeWith(false, false);
-      readonly parameter = fakeEllipseParameters;
+      readonly parameter = defaultEllipseParameters;
       readonly run = (): ShapeObjectPropertyMap => ({
         particlePoints: [],
         visibility: declareVisibility(false),
@@ -75,7 +69,7 @@ describe('evaluate', () => {
   const visibleShapeWithEmptyAngledVertices = upcastShape(
     new (class implements ParameterizedShape<EllipseParameters, SOPM> {
       readonly outputSpec = sopmSchemeWith(true, false);
-      readonly parameter = fakeEllipseParameters;
+      readonly parameter = defaultEllipseParameters;
       readonly run = (): ShapeObjectPropertyMap => ({
         particlePoints: [],
         visibility: declareVisibility(true),

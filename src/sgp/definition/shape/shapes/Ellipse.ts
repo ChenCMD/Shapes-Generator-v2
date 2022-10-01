@@ -7,9 +7,18 @@ export type EllipseParameters = {
   readonly __parameterKind: 'Ellipse';
   readonly pointCount: number;
   readonly semiMajorAxis: number;
+  readonly minorMajorAxesRatio: number;
   readonly startAngleInRadian: number;
-  readonly eccentricity: number;
   readonly spreadPointsEvenly: boolean;
+};
+
+export const defaultEllipseParameters: EllipseParameters = {
+  __parameterKind: 'Ellipse',
+  pointCount: 12,
+  semiMajorAxis: 1,
+  minorMajorAxesRatio: 1,
+  startAngleInRadian: 0,
+  spreadPointsEvenly: true
 };
 
 type EllipseSOPM = SOPMWith<true, false>;
