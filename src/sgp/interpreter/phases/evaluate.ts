@@ -6,7 +6,7 @@ import {
   ShapeObjectEvaluationResult
 } from '../../definition/SGP';
 import { EvaluationError, modifierReturnedNoneWhenEvaluated } from '../errors';
-import { DiffPatchedSGP } from './diff-expansion';
+import { TypeCheckedDiffPatchedSGP } from './typecheck';
 
 export type EvaluationErrorOr<A> = E.Either<EvaluationError, A>;
 
@@ -17,7 +17,7 @@ export type EvaluationErrorOr<A> = E.Either<EvaluationError, A>;
  * 型チェッカの実装が誤っているような場合のいずれかなので、ユーザーにバグ報告を促すこと。
  */
 export function evaluate(
-  program: DiffPatchedSGP
+  program: TypeCheckedDiffPatchedSGP
 ): EvaluationErrorOr<ShapeObjectsEvaluationResult> {
   const resultSoFar: ShapeObjectEvaluationResult[] = [];
 

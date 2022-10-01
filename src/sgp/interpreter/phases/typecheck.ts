@@ -20,7 +20,7 @@ import {
 
 type TypeCheckErrorOrVoid = E.Either<ModifierTypeCheckPhaseError, void>;
 
-type TypeCheckedDiffPatchedSGP = DiffPatchedSGP & {
+export type TypeCheckedDiffPatchedSGP = DiffPatchedSGP & {
   readonly __tag_typechecked: unique symbol;
 };
 

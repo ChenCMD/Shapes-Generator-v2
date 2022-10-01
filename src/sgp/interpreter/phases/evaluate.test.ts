@@ -1,37 +1,53 @@
 import * as E from 'fp-ts/lib/Either';
-import { ShapeObjectsEvaluationResult } from '../definition/SGP';
+import { ShapeObjectsEvaluationResult } from '../../definition/SGP';
 import {
   coerceToModifierUid,
   coerceToShapeObjectUid,
   ShapeObjectDefinitionUid
-} from '../definition/Uid';
-import { DiffPatchedSGP } from './phases/diff-expansion';
-import { ParameterizedShape } from '../definition/shape/ParameterizedShape';
-import { upcast as upcastShape } from '../definition/shape/Shape';
+} from '../../definition/Uid';
+import { DiffPatchedSGP } from './diff-expansion';
+import { ParameterizedShape } from '../../definition/shape/ParameterizedShape';
+import { upcast as upcastShape } from '../../definition/shape/Shape';
 import {
   ShapeObjectPropertyMap,
   SOPM
-} from '../definition/SOPM/ShapeObjectPropertyMap';
-import { SOPMScheme, sopmSchemeWith } from '../definition/SOPM/SOPMScheme';
-import { declareVisibility } from '../definition/SOPM/ShapeObjectProperty';
+} from '../../definition/SOPM/ShapeObjectPropertyMap';
+import { SOPMScheme, sopmSchemeWith } from '../../definition/SOPM/SOPMScheme';
+import { declareVisibility } from '../../definition/SOPM/ShapeObjectProperty';
 import {
   insufficientSOPMFields,
   ParameterizedModifier
-} from '../definition/modifier/ParameterizedModifier';
+} from '../../definition/modifier/ParameterizedModifier';
 import {
   Modifier,
   upcast as upcastModifier
-} from '../definition/modifier/Modifier';
+} from '../../definition/modifier/Modifier';
 import * as O from 'fp-ts/lib/Option';
-import { evaluatePatchedSGP } from './interpreter';
-import { SGPEvaluationPhaseError } from './errors';
-import { EllipseParameters } from '../definition/shape/shapes/Ellipse';
-import { SetVisibilityParameters } from '../definition/modifier/modifiers/SetVisibility';
-import { subsetOf } from '../../util/ReadonlySet';
+import { SGPEvaluationPhaseError } from '../errors';
+import { EllipseParameters } from '../../definition/shape/shapes/Ellipse';
+import { SetVisibilityParameters } from '../../definition/modifier/modifiers/SetVisibility';
+import { subsetOf } from '../../../util/ReadonlySet';
+import { TypeCheckedDiffPatchedSGP, typeCheckModifiers } from './typecheck';
+import { evaluate } from './evaluate';
 
-describe('evaluatePatchedSGP', () => {
+/**
+ * テストケースとして与えられる{@link DiffPatchedSGP}が型チェックされているかを確認する
+ */
+function typecheckOrThrow(program: DiffPatchedSGP): TypeCheckedDiffPatchedSGP {
+  const result = typeCheckModifiers(program);
+
+  if (result._tag === 'Left') {
+    throw new Error(
+      `The given program did not typecheck: ${JSON.stringify(program)}`
+    );
+  } else {
+    return result.right;
+  }
+}
+
+describe('evaluate', () => {
   interface TestCase {
-    program: DiffPatchedSGP;
+    program: TypeCheckedDiffPatchedSGP;
   }
 
   // #region shape definitions
@@ -130,10 +146,10 @@ describe('evaluatePatchedSGP', () => {
   describe('for a valid patched program', () => {
     const validPrograms: ReadonlyArray<TestCase> = [
       // 空のプログラム
-      { program: [] },
+      { program: typecheckOrThrow([]) },
       // 結果要求の無いModifierが一つ付いたshapeが一つだけあるプログラム
       {
-        program: [
+        program: typecheckOrThrow([
           {
             definitionUid: coerceToShapeObjectUid('shape 1'),
             shapeObject: {
@@ -147,11 +163,11 @@ describe('evaluatePatchedSGP', () => {
               ]
             }
           }
-        ]
+        ])
       },
       // 結果要求が2つめのshapeにあるが、正しく解決されるであろうプログラム
       {
-        program: [
+        program: typecheckOrThrow([
           {
             definitionUid: coerceToShapeObjectUid('shape 1'),
             shapeObject: {
@@ -175,19 +191,19 @@ describe('evaluatePatchedSGP', () => {
               ]
             }
           }
-        ]
+        ])
       }
     ];
 
     it.each(validPrograms)('must output a Right value for %o', ({ program }) =>
-      expect(evaluatePatchedSGP(program)._tag).toBe('Right')
+      expect(evaluate(program)._tag).toBe('Right')
     );
 
     it.each(validPrograms)(
       'must output as many SOPMs as there are definitions for %o',
       ({ program }) => {
         const evalResult = (
-          evaluatePatchedSGP(program) as E.Right<ShapeObjectsEvaluationResult>
+          evaluate(program) as E.Right<ShapeObjectsEvaluationResult>
         ).right;
         expect(evalResult.length === validPrograms.length);
       }
@@ -197,7 +213,7 @@ describe('evaluatePatchedSGP', () => {
       'must output a SOPM for each object definitions for %o',
       ({ program }) => {
         const evalResult = (
-          evaluatePatchedSGP(program) as E.Right<ShapeObjectsEvaluationResult>
+          evaluate(program) as E.Right<ShapeObjectsEvaluationResult>
         ).right;
         const evalResultUids = evalResult.map((r) => r.originUid);
 
@@ -212,7 +228,7 @@ describe('evaluatePatchedSGP', () => {
     const programsWithTypeError: ReadonlyArray<TestCase> = [
       // angledVerticesを要求するModifierがangledVerticesを吐かないshapeについたプログラム
       {
-        program: [
+        program: typecheckOrThrow([
           {
             definitionUid: coerceToShapeObjectUid('shape 31'),
             shapeObject: {
@@ -226,11 +242,11 @@ describe('evaluatePatchedSGP', () => {
               ]
             }
           }
-        ]
+        ])
       },
       // angledVerticesを消すModifierの後にangledVerticesを要求するModifierが付いたshapeがあるプログラム
       {
-        program: [
+        program: typecheckOrThrow([
           {
             definitionUid: coerceToShapeObjectUid('shape 41'),
             shapeObject: {
@@ -249,23 +265,21 @@ describe('evaluatePatchedSGP', () => {
               ]
             }
           }
-        ]
+        ])
       }
     ];
 
     it.each(programsWithTypeError)(
       'must output a Left value for %o',
       ({ program }) => {
-        expect(evaluatePatchedSGP(program)._tag).toBe('Left');
+        expect(evaluate(program)._tag).toBe('Left');
       }
     );
 
     it.each(programsWithTypeError)(
       'must output a pre-eval error for %o',
       ({ program }) => {
-        const evalResult = evaluatePatchedSGP(
-          program
-        ) as E.Left<SGPEvaluationPhaseError>;
+        const evalResult = evaluate(program) as E.Left<SGPEvaluationPhaseError>;
 
         expect(evalResult.left.__kind).toContain('ModifierTypeError');
       }
@@ -276,7 +290,7 @@ describe('evaluatePatchedSGP', () => {
     const programsWithInvalidResultReferences: ReadonlyArray<TestCase> = [
       // Modifierが自分自身の結果を要求するようなプログラム
       {
-        program: [
+        program: typecheckOrThrow([
           {
             definitionUid: coerceToShapeObjectUid('shape 11'),
             shapeObject: {
@@ -292,11 +306,11 @@ describe('evaluatePatchedSGP', () => {
               ]
             }
           }
-        ]
+        ])
       },
       // Modifierが存在しない結果を要求するようなプログラム
       {
-        program: [
+        program: typecheckOrThrow([
           {
             definitionUid: coerceToShapeObjectUid('shape 21'),
             shapeObject: {
@@ -312,23 +326,21 @@ describe('evaluatePatchedSGP', () => {
               ]
             }
           }
-        ]
+        ])
       }
     ];
 
     it.each(programsWithInvalidResultReferences)(
       'must output a Left value for %o',
       ({ program }) => {
-        expect(evaluatePatchedSGP(program)._tag).toBe('Left');
+        expect(evaluate(program)._tag).toBe('Left');
       }
     );
 
     it.each(programsWithInvalidResultReferences)(
       'must output a pre-eval error for %o',
       ({ program }) => {
-        const evalResult = evaluatePatchedSGP(
-          program
-        ) as E.Left<SGPEvaluationPhaseError>;
+        const evalResult = evaluate(program) as E.Left<SGPEvaluationPhaseError>;
 
         expect(evalResult.left.__kind).toContain('ModifierRequirementFailed');
       }
