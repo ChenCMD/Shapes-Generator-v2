@@ -1,5 +1,5 @@
 import * as E from 'fp-ts/lib/Either';
-import { SGPEvaluationResult } from '../definition/SGP';
+import { ShapeObjectsEvaluationResult } from '../definition/SGP';
 import {
   coerceToModifierUid,
   coerceToShapeObjectUid,
@@ -85,7 +85,7 @@ describe('evaluatePatchedSGP', () => {
       readonly partialEvaluationResultRequirements = () => new Set([]);
       readonly run = (
         p: SetVisibilityParameters,
-        partialResult: SGPEvaluationResult,
+        partialResult: ShapeObjectsEvaluationResult,
         input: ShapeObjectPropertyMap
       ) => O.some({ ...input, angledVertices: null });
     })()
@@ -101,7 +101,7 @@ describe('evaluatePatchedSGP', () => {
       readonly partialEvaluationResultRequirements = () => new Set([]);
       readonly run = (
         p: SetVisibilityParameters,
-        partialResult: SGPEvaluationResult,
+        partialResult: ShapeObjectsEvaluationResult,
         input: ShapeObjectPropertyMap
       ) => (input.angledVertices !== null ? O.some(input) : O.none);
     })()
@@ -117,7 +117,7 @@ describe('evaluatePatchedSGP', () => {
         readonly partialEvaluationResultRequirements = () => requirements;
         readonly run = (
           p: SetVisibilityParameters,
-          partialResult: SGPEvaluationResult,
+          partialResult: ShapeObjectsEvaluationResult,
           input: ShapeObjectPropertyMap
         ) =>
           subsetOf(new Set(partialResult.map((r) => r.originUid)))(requirements)
@@ -187,7 +187,7 @@ describe('evaluatePatchedSGP', () => {
       'must output as many SOPMs as there are definitions for %o',
       ({ program }) => {
         const evalResult = (
-          evaluatePatchedSGP(program) as E.Right<SGPEvaluationResult>
+          evaluatePatchedSGP(program) as E.Right<ShapeObjectsEvaluationResult>
         ).right;
         expect(evalResult.length === validPrograms.length);
       }
@@ -197,7 +197,7 @@ describe('evaluatePatchedSGP', () => {
       'must output a SOPM for each object definitions for %o',
       ({ program }) => {
         const evalResult = (
-          evaluatePatchedSGP(program) as E.Right<SGPEvaluationResult>
+          evaluatePatchedSGP(program) as E.Right<ShapeObjectsEvaluationResult>
         ).right;
         const evalResultUids = evalResult.map((r) => r.originUid);
 

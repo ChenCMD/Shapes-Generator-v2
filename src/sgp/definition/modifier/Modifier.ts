@@ -1,6 +1,6 @@
 import * as E from 'fp-ts/Either';
 import * as O from 'fp-ts/Option';
-import { SGPEvaluationResult } from '../SGP';
+import { ShapeObjectsEvaluationResult } from '../SGP';
 import { SOPM } from '../SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme } from '../SOPM/SOPMScheme';
 import { ShapeObjectDefinitionUid } from '../Uid';
@@ -32,7 +32,7 @@ export function upcast<ParameterSet extends ModifierParameterSet>(
 
 export function run(
   modifier: Modifier,
-  partialResult: SGPEvaluationResult,
+  partialResult: ShapeObjectsEvaluationResult,
   input: SOPM
 ): O.Option<SOPM> {
   return modifier.patternMatch((inner) =>

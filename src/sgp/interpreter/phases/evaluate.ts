@@ -2,7 +2,7 @@ import * as E from 'fp-ts/Either';
 import { run as runModifier } from '../../definition/modifier/Modifier';
 import { run as runShape } from '../../definition/shape/Shape';
 import {
-  SGPEvaluationResult,
+  ShapeObjectsEvaluationResult,
   ShapeObjectEvaluationResult
 } from '../../definition/SGP';
 import { EvaluationError, modifierReturnedNoneWhenEvaluated } from '../errors';
@@ -18,7 +18,7 @@ export type EvaluationErrorOr<A> = E.Either<EvaluationError, A>;
  */
 export function evaluate(
   program: DiffPatchedSGP
-): EvaluationErrorOr<SGPEvaluationResult> {
+): EvaluationErrorOr<ShapeObjectsEvaluationResult> {
   const resultSoFar: ShapeObjectEvaluationResult[] = [];
 
   for (const { definitionUid: shapeObjectUid, shapeObject } of program) {

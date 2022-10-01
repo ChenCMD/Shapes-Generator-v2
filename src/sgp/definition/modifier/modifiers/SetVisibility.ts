@@ -6,7 +6,7 @@ import {
 } from '../ParameterizedModifier';
 import { ShapeObjectPropertyMap } from '../../SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme } from '../../SOPM/SOPMScheme';
-import { SGPEvaluationResult } from '../../SGP';
+import { ShapeObjectsEvaluationResult } from '../../SGP';
 import { ShapeObjectDefinitionUid } from '../../Uid';
 import { modifierPatchForKind } from '../../Patches';
 import { Visibility } from '../../SOPM/ShapeObjectProperty';
@@ -27,7 +27,7 @@ export const SetVisibilityModifier = (
   ): E.Either<InsufficientSOPMFields, SOPMScheme> => E.right(onInput),
   run: (
     p: SetVisibilityParameters,
-    _partialResult: SGPEvaluationResult,
+    _partialResult: ShapeObjectsEvaluationResult,
     input: ShapeObjectPropertyMap
   ): O.Option<ShapeObjectPropertyMap> =>
     O.some({ ...input, visibility: p.visibility })

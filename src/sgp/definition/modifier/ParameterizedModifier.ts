@@ -1,6 +1,6 @@
 import * as E from 'fp-ts/Either';
 import * as O from 'fp-ts/Option';
-import { SGPEvaluationResult } from '../SGP';
+import { ShapeObjectsEvaluationResult } from '../SGP';
 import { SOPM } from '../SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme } from '../SOPM/SOPMScheme';
 import { ShapeObjectDefinitionUid } from '../Uid';
@@ -92,7 +92,7 @@ export type ParameterizedModifier<ParameterSet extends ModifierParameterSet> = {
    */
   run(
     parameters: ParameterSet,
-    partialResult: SGPEvaluationResult,
+    partialResult: ShapeObjectsEvaluationResult,
     input: SOPM
   ): O.Option<SOPM>;
 };

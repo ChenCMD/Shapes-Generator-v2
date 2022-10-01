@@ -11,7 +11,8 @@ export type ShapeObjectEvaluationResult = {
   readonly originUid: ShapeObjectDefinitionUid;
   readonly output: SOPM;
 };
-export type SGPEvaluationResult = ReadonlyArray<ShapeObjectEvaluationResult>;
+export type ShapeObjectsEvaluationResult =
+  ReadonlyArray<ShapeObjectEvaluationResult>;
 
 export interface ModifierDefinition {
   readonly definitionUid: ModifierDefinitionUid;
