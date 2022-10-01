@@ -205,7 +205,7 @@ function patchShapeObject(
 /**
  * SGPを展開する。
  *
- * この関数は、事前条件として、同期図形のUid参照が後方参照になっていないことを求める。
+ * この関数は、事前条件として、同期図形のUid参照が前方参照になっていないことを求める。
  */
 function expandCheckedProgram(
   program: SGP
@@ -270,7 +270,7 @@ export function expandDiff(
     EE.chainTap(checkModifierUidUniqueness('onInput')),
     EE.chainTap(checkSyncObjectReferences),
     // この時点で、programの各ShapeObjectDefinitionが一意なUidを持っており、
-    // Modifierの列が一意なUidを持っており、
+    // Modifierが各ShapeObjectDefinition内で一意なUidを持っており、
     // さらに各SynchronizedShapeが有効な参照をしていることが保証されている
     E.chain(expandCheckedProgram),
     // 展開後にModifierの各列がUidの一意性を持っている保証はないので、確認する
