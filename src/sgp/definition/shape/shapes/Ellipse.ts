@@ -2,16 +2,13 @@ import { shapePatchForKind } from '../../Patches';
 import { ParameterizedShape } from '../ParameterizedShape';
 import { SOPMWith } from '../../SOPM/ShapeObjectPropertyMap';
 import { sopmSchemeWith } from '../../SOPM/SOPMScheme';
-import { Vector2D } from '../../../../util/types/Vector2D';
 
 export type EllipseParameters = {
   readonly __parameterKind: 'Ellipse';
   readonly pointCount: number;
-  readonly center: Vector2D;
   readonly semiMajorAxis: number;
-  readonly startAngle: number;
+  readonly startAngleInRadian: number;
   readonly eccentricity: number;
-  readonly rotation: number;
   readonly spreadPointsEvenly: boolean;
 };
 

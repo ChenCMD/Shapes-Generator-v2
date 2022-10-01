@@ -54,11 +54,9 @@ describe('evaluate', () => {
   const fakeEllipseParameters: EllipseParameters = {
     __parameterKind: 'Ellipse',
     pointCount: 1,
-    center: { x: 0, y: 0 },
     semiMajorAxis: 1,
-    startAngle: 0,
+    startAngleInRadian: 0,
     eccentricity: 1,
-    rotation: 0,
     spreadPointsEvenly: true
   };
 
