@@ -20,6 +20,16 @@ import {
 
 type TypeCheckErrorOrVoid = E.Either<ModifierTypeCheckPhaseError, void>;
 
+type TypeCheckedDiffPatchedSGP = DiffPatchedSGP & {
+  readonly __tag_typechecked: unique symbol;
+};
+
+function assertProgramAsTypechecked(
+  program: DiffPatchedSGP
+): TypeCheckedDiffPatchedSGP {
+  return program as TypeCheckedDiffPatchedSGP;
+}
+
 function typeCheckPipeline(def: ModifiedShapeDefinition): TypeCheckErrorOrVoid {
   const { definitionUid: shapeDefinitionUid, shapeObject } = def;
 
@@ -95,11 +105,11 @@ function typeCheckModifierRequirementsOfProgram(
 
 export function typeCheckModifiers(
   program: DiffPatchedSGP
-): TypeCheckErrorOrVoid {
+): E.Either<ModifierTypeCheckPhaseError, TypeCheckedDiffPatchedSGP> {
   return pipe(
     E.right(program),
     EE.chainTap(typeCheckModifierRequirementsOfProgram),
     EE.chainTap(typeCheckPipelinesOfProgram),
-    EE.as(undefined)
+    E.map(assertProgramAsTypechecked)
   );
 }
