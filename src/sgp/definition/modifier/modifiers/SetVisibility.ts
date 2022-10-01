@@ -7,7 +7,6 @@ import {
 import { ShapeObjectPropertyMap } from '../../SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme } from '../../SOPM/SOPMScheme';
 import { ShapeObjectsEvaluationResult } from '../../SGP';
-import { ShapeObjectDefinitionUid } from '../../Uid';
 import { modifierPatchForKind } from '../../Patches';
 import { Visibility } from '../../SOPM/ShapeObjectProperty';
 
@@ -20,17 +19,14 @@ export const SetVisibilityModifier = (
   parameters: SetVisibilityParameters
 ): ParameterizedModifier<SetVisibilityParameters> => ({
   parameters,
-  partialEvaluationResultRequirements:
-    (): ReadonlySet<ShapeObjectDefinitionUid> => new Set(),
-  outputSpec: (
-    onInput: SOPMScheme
-  ): E.Either<InsufficientSOPMFields, SOPMScheme> => E.right(onInput),
+  partialEvaluationResultRequirements: () => new Set(),
+  outputSpec: (onInput: SOPMScheme) => E.right(onInput),
+
   run: (
     p: SetVisibilityParameters,
     _partialResult: ShapeObjectsEvaluationResult,
     input: ShapeObjectPropertyMap
-  ): O.Option<ShapeObjectPropertyMap> =>
-    O.some({ ...input, visibility: p.visibility })
+  ) => O.some({ ...input, visibility: p.visibility })
 });
 
 export const SetVisibilityPatch = modifierPatchForKind('SetVisibility');
