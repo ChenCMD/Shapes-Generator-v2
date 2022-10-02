@@ -26,12 +26,19 @@ export const normSquared = (v: Vector2D): number => v.x * v.x + v.y * v.y;
 
 export const norm = (v: Vector2D): number => Math.sqrt(normSquared(v));
 
+export type NonZeroVector2D = Vector2D & {
+  readonly __tag_nonzero_vector_2d: unique symbol;
+};
+
+export const checkNonZero = (v: Vector2D): v is NonZeroVector2D =>
+  v.x !== 0.0 || v.y !== 0.0;
+
 export type NormalizedVector2D = Vector2D & {
   readonly __tag_normalized_vector_2d: unique symbol;
 };
 
-export const normalize = (v: Vector2D): O.Option<NormalizedVector2D> => {
+export const normalize = (v: NonZeroVector2D): NormalizedVector2D => {
   const vNorm = norm(v);
-  if (vNorm === 0.0) return O.none;
-  return O.some(mult(1 / vNorm, v) as NormalizedVector2D);
+  if (vNorm === 0.0) throw new Error('unreachable');
+  return mult(1 / vNorm, v) as NormalizedVector2D;
 };
