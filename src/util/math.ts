@@ -38,6 +38,11 @@ export interface ParameterizedPoint {
   point: Vector2D;
 }
 
+export type SampleDenselyOptions = {
+  maximumRangeGap?: number;
+  minimumDomainGap?: number;
+};
+
 /**
  * 連続関数 `(xAt, yAt)` の `[0, 1]` 区間上をサンプリングする。
  * 与えられた関数が連続でない場合処理の終了が保証されない。
@@ -51,9 +56,11 @@ export interface ParameterizedPoint {
  */
 export function sampleDensely(
   pointAt: (parameter: number) => Vector2D,
-  maximumRangeGap = 0.1,
-  minimumDomainGap = 0.001
+  options: SampleDenselyOptions = {}
 ): ParameterizedPoint[] {
+  const maximumRangeGap = options.maximumRangeGap ?? 0.1;
+  const minimumDomainGap = options.minimumDomainGap ?? 0.001;
+
   const sampleAt = (parameter: number): ParameterizedPoint => ({
     parameter,
     point: pointAt(parameter)
