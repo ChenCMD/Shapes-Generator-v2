@@ -3,7 +3,12 @@ import { ParameterizedShape } from '../ParameterizedShape';
 import { SOPMWith } from '../../SOPM/ShapeObjectPropertyMap';
 import { sopmSchemeWith } from '../../SOPM/SOPMScheme';
 import { Vector2D, NormalizedVector2D } from '../../../../util/types/Vector2D';
-import { ParameterizedPoint, sampleDensely } from '../../../../util/math';
+import * as E from 'fp-ts/Either';
+import {
+  ParameterizedPoint,
+  sampleDensely,
+  spreadPointsOverPath
+} from '../../../../util/math';
 import {
   ParticlePoint,
   AngledVertex,
@@ -12,6 +17,7 @@ import {
 
 export type EllipseParameters = {
   readonly __parameterKind: 'Ellipse';
+  // 正の整数
   readonly pointCount: number;
   readonly semiMajorAxis: number;
   readonly minorMajorAxesRatio: number;
@@ -56,7 +62,33 @@ export const Ellipse = (
     };
 
     const pointsOnEllipse: Vector2D[] = (() => {
-      const sampledPathNodes = sampleDensely(parameterizedCurve);
+      // parameterizedCurve(0) === parameterizedCurve(1) なので、
+      // そのまま parameterizedCurve を sampleDensely に渡しても
+      // 何もサンプリングされていない結果が返ってくるため、
+      // 曲線を半分ずつに割ってからサンプリングする
+      const firstHalfOfCurve = (t: number) => parameterizedCurve(t / 2);
+      const secondHalfOfCurve = (t: number) =>
+        parameterizedCurve(t / 2 + 1 / 2);
+
+      const sampledPathNodes = [
+        ...sampleDensely(firstHalfOfCurve),
+        ...sampleDensely(secondHalfOfCurve)
+      ];
+
+      const result = spreadPointsOverPath(
+        sampledPathNodes.map((p) => p.point),
+        p.pointCount,
+        false
+      );
+
+      // p.pointCount が正の整数でない場合ここでエラーになるが、
+      // バリデーションが事前に掛かっているはずなので throw する
+      // TODO: p.pointCount 自体を型で縛ってバリデーションが掛かっていることを要求する
+      if (result._tag === 'Left') {
+        throw result.left;
+      } else {
+        return result.right;
+      }
     })();
 
     const particlePoints: ParticlePoint[] = pointsOnEllipse.map((point) => ({
