@@ -13,7 +13,7 @@ import {
   SOPM
 } from '../../definition/SOPM/ShapeObjectPropertyMap';
 import { SOPMScheme, sopmSchemeWith } from '../../definition/SOPM/SOPMScheme';
-import { declareVisibility } from '../../definition/SOPM/ShapeObjectProperty';
+import { visibility } from '../../definition/SOPM/ShapeObjectProperty';
 import {
   insufficientSOPMFields,
   ParameterizedModifier
@@ -60,7 +60,7 @@ describe('evaluate', () => {
       readonly parameter = defaultEllipseParameters;
       readonly run = (): ShapeObjectPropertyMap => ({
         particlePoints: [],
-        visibility: declareVisibility(false),
+        visibility: visibility(false),
         angledVertices: null,
         directedEndpoints: null
       });
@@ -72,7 +72,7 @@ describe('evaluate', () => {
       readonly parameter = defaultEllipseParameters;
       readonly run = (): ShapeObjectPropertyMap => ({
         particlePoints: [],
-        visibility: declareVisibility(true),
+        visibility: visibility(true),
         angledVertices: [],
         directedEndpoints: null
       });

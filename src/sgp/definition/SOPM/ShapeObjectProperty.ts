@@ -1,4 +1,4 @@
-import { Vector2D } from '../../../util/types/Vector2D';
+import { Vector2D, NormalizedVector2D } from '../../../util/types/Vector2D';
 
 export interface ParticlePoint {
   readonly __type: 'ParticlePoint';
@@ -10,16 +10,15 @@ export interface Visibility {
   readonly __type: 'Visibility';
   readonly visibility: boolean;
 }
-export const declareVisibility = (b: boolean): Visibility => ({
+export const visibility = (b: boolean): Visibility => ({
   __type: 'Visibility',
   visibility: b
 });
 
 export interface AngledVertex {
-  readonly __type: 'AngledVertices';
+  readonly __type: 'AngledVertex';
   readonly point: Vector2D;
-  /** 単位ベクトル */
-  readonly direction: Vector2D;
+  readonly direction: NormalizedVector2D;
 }
 
 export interface DirectedEndpoints {
